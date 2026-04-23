@@ -573,18 +573,194 @@
 
     <section id="tab-hazard" class="tab-panel" role="tabpanel" aria-labelledby="nav-hazard">
       <div class="panel-header">
-        <h1>Hazard Assessment</h1>
-        <p class="panel-subtitle">Field hazard identification and controls</p>
+        <h1>Job Specific Hazard Assessment</h1>
+        <p class="panel-subtitle">Field risk identification and controls</p>
       </div>
-      <div class="placeholder-card">
-        <svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M24 6L44 40H4L24 6Z" fill="#E8731A" opacity="0.12" stroke="#E8731A" stroke-width="2" stroke-linejoin="round"/>
-          <line x1="24" y1="19" x2="24" y2="29" stroke="#E8731A" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="24" cy="34.5" r="1.5" fill="#E8731A"/>
-        </svg>
-        <p class="placeholder-title">No Hazard Assessments Yet</p>
-        <p class="placeholder-text">Field hazard assessments and JHAs will appear here.</p>
-      </div>
+
+      <form id="jsha-form" novalidate>
+
+        <!-- ── Site Information ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Site Information</h2>
+
+          <div class="field-group">
+            <label class="field-label" for="jsha-date">Date</label>
+            <input type="date" id="jsha-date" name="date" class="form-input">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="jsha-project">Project Name / Number</label>
+            <input type="text" id="jsha-project" name="project" class="form-input"
+                   placeholder="e.g. Clearwater Survey 2024-07" autocomplete="off">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="jsha-site">Site / Location</label>
+            <input type="text" id="jsha-site" name="site" class="form-input"
+                   placeholder="e.g. Km 34 access road" autocomplete="off">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="jsha-gps">GPS Coordinates</label>
+            <div class="gps-row">
+              <input type="text" id="jsha-gps" name="gps" class="form-input" readonly
+                     placeholder="Tap button to capture location" aria-live="polite">
+              <button type="button" id="jsha-gps-btn" class="btn-gps">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
+                  <path d="M16.24 7.76a6 6 0 0 1 0 8.49"/>
+                  <path d="M7.76 16.24a6 6 0 0 1 0-8.49"/>
+                </svg>
+                <span id="jsha-gps-label">Capture</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="jsha-scope">Scope of Work</label>
+            <textarea id="jsha-scope" name="scope" class="form-textarea" rows="4"
+                      placeholder="Describe the work activities and tasks to be performed…"></textarea>
+          </div>
+        </div>
+
+        <!-- ── Emergency Contacts ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Emergency Contacts</h2>
+
+          <!-- Pre-filled read-only services -->
+          <div class="ec-static-list">
+            <div class="ec-static-row">
+              <span class="ec-static-label">Police / Fire / Ambulance</span>
+              <span class="ec-static-value ec-emergency">911</span>
+            </div>
+            <div class="ec-static-row">
+              <span class="ec-static-label">Poison Control (Atlantic Canada)</span>
+              <span class="ec-static-value">1-800-565-8161</span>
+            </div>
+          </div>
+
+          <!-- Editable contacts -->
+          <div class="field-group">
+            <p class="field-label">Field Crew Contact</p>
+            <div class="ec-pair">
+              <input type="text" id="jsha-crew-name" class="form-input"
+                     placeholder="Name" autocomplete="off">
+              <input type="tel" id="jsha-crew-phone" class="form-input"
+                     placeholder="Phone" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <p class="field-label">Project Manager</p>
+            <div class="ec-pair">
+              <input type="text" id="jsha-pm-name" class="form-input"
+                     placeholder="Name" autocomplete="off">
+              <input type="tel" id="jsha-pm-phone" class="form-input"
+                     placeholder="Phone" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="jsha-hs-rep">Health &amp; Safety Representative</label>
+            <input type="text" id="jsha-hs-rep" class="form-input needs-input"
+                   placeholder="⚠ Needs Company Input" autocomplete="off">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="jsha-hospital">Nearest Hospital / Medical Facility</label>
+            <input type="text" id="jsha-hospital" class="form-input needs-input"
+                   placeholder="⚠ Needs Company Input" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- ── Hazard Identification ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Hazard Identification</h2>
+          <div class="table-wrap">
+            <table class="form-table" id="jsha-hazard-table">
+              <colgroup>
+                <col style="min-width:130px">
+                <col style="width:96px">
+                <col style="min-width:130px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Hazard</th>
+                  <th>Risk Level</th>
+                  <th>Control Measure</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="jsha-hazard-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="jsha-add-hazard-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Hazard Row
+          </button>
+        </div>
+
+        <!-- ── PPE Checklist ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">PPE Checklist</h2>
+          <div class="ppe-list" id="jsha-ppe-list">
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Hard Hat"> Hard Hat</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Hi-Vis Vest"> Hi-Vis Vest</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Steel-Toed Boots"> Steel-Toed Boots</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Safety Glasses"> Safety Glasses</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Gloves"> Gloves</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Bear Spray"> Bear Spray</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="First Aid Kit"> First Aid Kit</label>
+          </div>
+          <div id="jsha-ppe-custom-list"></div>
+          <button type="button" id="jsha-add-ppe-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Custom PPE Item
+          </button>
+        </div>
+
+        <!-- ── Additional Comments ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Additional Comments</h2>
+          <textarea id="jsha-comments" name="comments" class="form-textarea" rows="4"
+                    placeholder="Additional notes, special conditions, or site-specific concerns…"></textarea>
+        </div>
+
+        <!-- ── Actions ── -->
+        <div class="form-actions">
+          <button type="button" id="jsha-save-btn" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Save Submission
+          </button>
+          <button type="button" id="jsha-export-btn" class="btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Export JSON
+          </button>
+        </div>
+
+      </form>
+
+      <div class="toast" id="jsha-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
     </section>
 
     <section id="tab-submissions" class="tab-panel" role="tabpanel" aria-labelledby="nav-submissions">
@@ -656,6 +832,7 @@
 
   <script src="db.js"></script>
   <script src="toolbox.js"></script>
+  <script src="jsha.js"></script>
   <script>
     // Tab switching
     const navItems = document.querySelectorAll('.nav-item[role="tab"]');
