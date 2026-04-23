@@ -4,7 +4,7 @@
    everything else (future API calls, dynamic content).
    ============================================================ */
 
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const SHELL_CACHE   = 'fraxinus-shell-' + CACHE_VERSION;
 
 const SHELL_ASSETS = [
@@ -12,6 +12,7 @@ const SHELL_ASSETS = [
   '/index.html',
   '/style.css',
   '/db.js',
+  '/toolbox.js',
   '/manifest.json',
   'https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap',
 ];

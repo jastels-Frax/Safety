@@ -385,19 +385,190 @@
     <section id="tab-toolbox" class="tab-panel" role="tabpanel" aria-labelledby="nav-toolbox">
       <div class="panel-header">
         <h1>Toolbox Talk</h1>
-        <p class="panel-subtitle">Safety briefings and crew discussions</p>
+        <p class="panel-subtitle">Daily safety briefing</p>
       </div>
-      <div class="placeholder-card">
-        <svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="4" y="20" width="40" height="24" rx="3" fill="#E8731A" opacity="0.12"/>
-          <rect x="4" y="20" width="40" height="24" rx="3" stroke="#E8731A" stroke-width="2"/>
-          <path d="M16 20v-4a8 8 0 0 1 16 0v4" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
-          <line x1="24" y1="28" x2="24" y2="34" stroke="#E8731A" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="21" y1="31" x2="27" y2="31" stroke="#E8731A" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
-        <p class="placeholder-title">No Toolbox Talks Yet</p>
-        <p class="placeholder-text">Safety briefings and toolbox talk records will appear here.</p>
-      </div>
+
+      <form id="toolbox-form" novalidate>
+
+        <!-- ── Site Information ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Site Information</h2>
+
+          <div class="field-group">
+            <label class="field-label" for="tb-date">Date</label>
+            <input type="date" id="tb-date" name="date" class="form-input">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="tb-project">Project Name / Number</label>
+            <input type="text" id="tb-project" name="project" class="form-input"
+                   placeholder="e.g. Clearwater Survey 2024-07" autocomplete="off">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="tb-site">Site / Location</label>
+            <input type="text" id="tb-site" name="site" class="form-input"
+                   placeholder="e.g. Km 34 access road" autocomplete="off">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="tb-gps">GPS Coordinates</label>
+            <div class="gps-row">
+              <input type="text" id="tb-gps" name="gps" class="form-input" readonly
+                     placeholder="Tap button to capture location" aria-live="polite">
+              <button type="button" id="tb-gps-btn" class="btn-gps">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
+                  <path d="M16.24 7.76a6 6 0 0 1 0 8.49"/>
+                  <path d="M7.76 16.24a6 6 0 0 1 0-8.49"/>
+                </svg>
+                <span id="tb-gps-label">Capture</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Crew & Operations ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Crew &amp; Operations</h2>
+
+          <div class="field-group">
+            <label class="field-label" for="tb-crew">Field Crew</label>
+            <textarea id="tb-crew" name="crew" class="form-textarea" rows="3"
+                      placeholder="List crew member names, one per line…"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="tb-scope">Scope of Work</label>
+            <textarea id="tb-scope" name="scope" class="form-textarea" rows="4"
+                      placeholder="Describe today's work activities and objectives…"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="tb-weather">Weather Conditions</label>
+            <input type="text" id="tb-weather" name="weather" class="form-input"
+                   placeholder="e.g. Partly cloudy, 14°C, light SW wind" autocomplete="off">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="tb-comms">Communication Plan</label>
+            <textarea id="tb-comms" name="comms" class="form-textarea" rows="3"
+                      placeholder="Check-in schedule, radio channels, emergency contacts…"></textarea>
+          </div>
+        </div>
+
+        <!-- ── Hazard Identification ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Hazard Identification</h2>
+          <div class="table-wrap">
+            <table class="form-table" id="hazard-table">
+              <colgroup>
+                <col style="min-width:130px">
+                <col style="width:96px">
+                <col style="min-width:130px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Hazard</th>
+                  <th>Risk Level</th>
+                  <th>Control Measure</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="hazard-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="add-hazard-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Hazard Row
+          </button>
+        </div>
+
+        <!-- ── PPE Checklist ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">PPE Checklist</h2>
+          <div class="ppe-list" id="ppe-list">
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Hard Hat"> Hard Hat</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Hi-Vis Vest"> Hi-Vis Vest</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Steel-Toed Boots"> Steel-Toed Boots</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Safety Glasses"> Safety Glasses</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Gloves"> Gloves</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="Bear Spray"> Bear Spray</label>
+            <label class="ppe-item"><input type="checkbox" name="ppe" value="First Aid Kit"> First Aid Kit</label>
+          </div>
+          <div id="ppe-custom-list"></div>
+          <button type="button" id="add-ppe-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Custom PPE Item
+          </button>
+        </div>
+
+        <!-- ── Sign-Off ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Sign-Off</h2>
+          <div class="table-wrap">
+            <table class="form-table" id="signoff-table">
+              <colgroup>
+                <col style="min-width:140px">
+                <col style="width:80px">
+                <col style="width:130px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Initials</th>
+                  <th>Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="signoff-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="add-signoff-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Sign-Off Row
+          </button>
+        </div>
+
+        <!-- ── Actions ── -->
+        <div class="form-actions">
+          <button type="button" id="tb-save-btn" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Save Submission
+          </button>
+          <button type="button" id="tb-export-btn" class="btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Export JSON
+          </button>
+        </div>
+
+      </form>
+
+      <div class="toast" id="tb-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
     </section>
 
     <section id="tab-hazard" class="tab-panel" role="tabpanel" aria-labelledby="nav-hazard">
@@ -484,6 +655,7 @@
   </nav>
 
   <script src="db.js"></script>
+  <script src="toolbox.js"></script>
   <script>
     // Tab switching
     const navItems = document.querySelectorAll('.nav-item[role="tab"]');
@@ -507,6 +679,9 @@
         document.getElementById('main-content').scrollTop = 0;
       });
     });
+
+    // Pre-warm IndexedDB
+    FraxinusDB.initDB().catch(console.error);
 
     // Register service worker
     if ('serviceWorker' in navigator) {

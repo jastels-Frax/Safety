@@ -617,3 +617,435 @@ body {
   font-size: 0.875rem;
   padding: 44px 0 24px;
 }
+
+/* ============================================================
+   Toolbox Talk Form
+   ============================================================ */
+
+/* ── Form cards ─────────────────────────────────────────────── */
+
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 18px 16px 16px;
+  margin-bottom: 12px;
+}
+
+.form-section-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* ── Field groups ───────────────────────────────────────────── */
+
+.field-group {
+  margin-bottom: 14px;
+}
+
+.field-group:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+/* ── Text inputs & textareas ────────────────────────────────── */
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-input {
+  height: 46px;
+  padding: 0 12px;
+}
+
+.form-textarea {
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.55;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(232, 115, 26, 0.14);
+  background: var(--bg-card);
+}
+
+.form-input[readonly] {
+  background: var(--border-light);
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+/* ── GPS row ────────────────────────────────────────────────── */
+
+.gps-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gps-row .form-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-gps {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 46px;
+  padding: 0 14px;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--transition);
+}
+
+.btn-gps:active { opacity: 0.82; }
+.btn-gps:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn-gps svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Table wrapper (horizontal scroll on mobile) ────────────── */
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+}
+
+.form-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.form-table thead th {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 9px 10px 8px;
+  background: var(--bg);
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+  white-space: nowrap;
+}
+
+.form-table tbody tr + tr {
+  border-top: 1px solid var(--border-light);
+}
+
+.form-table td {
+  padding: 7px 6px;
+  vertical-align: middle;
+}
+
+/* ── Table cell inputs ──────────────────────────────────────── */
+
+.tbl-input {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 0 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color var(--transition);
+}
+
+.tbl-input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 2px rgba(232, 115, 26, 0.14);
+}
+
+.initials-input {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+/* ── Risk level select ──────────────────────────────────────── */
+
+.tbl-select {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 0 26px 0 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A09688' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.tbl-select:focus {
+  border-color: var(--orange);
+}
+
+/* Risk level colour coding */
+.risk-low  { background-color: #E8F5E9; color: #2E7D32; border-color: #A5D6A7; }
+.risk-med  { background-color: #FFF8E1; color: #BF6900; border-color: #FFD54F; }
+.risk-high { background-color: #FFEBEE; color: #C62828; border-color: #FFCDD2; }
+
+/* ── Remove row button ──────────────────────────────────────── */
+
+.btn-remove-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.btn-remove-row svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.btn-remove-row:active {
+  background: #FFEBEE;
+  color: #C62828;
+  border-color: #FFCDD2;
+}
+
+/* ── Add row button ─────────────────────────────────────────── */
+
+.btn-add-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  background: none;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--transition), color var(--transition), background var(--transition);
+}
+
+.btn-add-row svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.btn-add-row:active {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: var(--orange-light);
+}
+
+/* ── PPE checklist ──────────────────────────────────────────── */
+
+.ppe-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.ppe-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 6px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--transition);
+}
+
+.ppe-item:active {
+  background: var(--bg);
+}
+
+.ppe-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--orange);
+  cursor: pointer;
+}
+
+#ppe-custom-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ppe-custom-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ppe-custom-cb {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--orange);
+  cursor: pointer;
+}
+
+.ppe-custom-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Form action buttons ────────────────────────────────────── */
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.btn-primary {
+  background: var(--orange);
+  color: #fff;
+}
+
+.btn-primary:active  { opacity: 0.85; transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1.5px solid var(--border);
+}
+
+.btn-secondary:active { background: var(--bg); transform: scale(0.98); }
+
+.btn-primary svg,
+.btn-secondary svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Toast notification ─────────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-height) + var(--safe-bottom) + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: #1C1A16;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 11px 22px;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.22);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 500;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast--error {
+  background: #B71C1C;
+}
