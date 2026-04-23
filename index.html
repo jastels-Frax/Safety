@@ -48,20 +48,338 @@
     <section id="tab-documents" class="tab-panel active" role="tabpanel" aria-labelledby="nav-documents">
       <div class="panel-header">
         <h1>Documents</h1>
-        <p class="panel-subtitle">Field documents and reference materials</p>
+        <p class="panel-subtitle">Policies, procedures, and field references</p>
       </div>
-      <div class="placeholder-card">
-        <svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="8" y="4" width="28" height="36" rx="3" fill="#E8731A" opacity="0.12"/>
-          <rect x="8" y="4" width="28" height="36" rx="3" stroke="#E8731A" stroke-width="2"/>
-          <path d="M20 4v10h16" stroke="#E8731A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <line x1="14" y1="22" x2="34" y2="22" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
-          <line x1="14" y1="28" x2="34" y2="28" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
-          <line x1="14" y1="34" x2="26" y2="34" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
+
+      <!-- Search bar -->
+      <div class="doc-search-wrap">
+        <svg class="doc-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <p class="placeholder-title">No Documents Yet</p>
-        <p class="placeholder-text">Documents and files will appear here once available.</p>
+        <input type="search" id="doc-search" class="doc-search"
+               placeholder="Search documents…" aria-label="Search documents" autocomplete="off">
       </div>
+
+      <!-- Document library -->
+      <div class="doc-library" id="doc-library">
+
+        <!-- ── Health & Safety ── -->
+        <div class="doc-category" data-category="health-safety">
+          <button class="doc-cat-header" aria-expanded="true">
+            <svg class="doc-cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span class="doc-cat-title">Health &amp; Safety</span>
+            <span class="doc-cat-count">3</span>
+            <svg class="doc-cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="doc-cat-body">
+
+            <article class="doc-card"
+              data-text="emergency response plan field personnel workplace emergency evacuation first aid contacts muster fire critical injury">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">Emergency Response Plan</h3>
+                <p class="doc-desc">Outlines the minimum required actions for all field personnel in the event of a workplace emergency.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Purpose</h4>
+                <p>This plan outlines the minimum required response actions for all field and office personnel during an emergency. All personnel must review this document at the start of each field season.</p>
+                <h4>Emergency Contacts</h4>
+                <p class="doc-placeholder-note">Company to insert: site supervisor, project manager, safety officer, and local emergency service numbers for each operating region.</p>
+                <h4>Evacuation Procedures</h4>
+                <p class="doc-placeholder-note">Company to insert: designated muster points, rally procedures, vehicle key locations, and emergency assembly areas by project site.</p>
+                <h4>First Aid Response</h4>
+                <p>All field crews must have at least one valid Standard First Aid / CPR-C certificate holder present at all times. First aid kits must be inspected at the start of each field day and documented on the Field Equipment Log.</p>
+              </div>
+            </article>
+
+            <article class="doc-card"
+              data-text="incident near miss reporting injury lost time critical supervisor safety officer corrective action investigation form submit">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">Incident &amp; Near-Miss Reporting</h3>
+                <p class="doc-desc">Describes how to report workplace incidents, injuries, and near-miss events in a timely manner.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Reporting Timeline</h4>
+                <ul>
+                  <li>Minor injuries and near misses — report to direct supervisor within 24 hours</li>
+                  <li>Lost-time injuries — notify the Safety Officer within 4 hours</li>
+                  <li>Critical injuries or fatalities — call emergency services immediately, then notify management</li>
+                </ul>
+                <h4>How to Report</h4>
+                <p>Complete the Incident Report Form in the Submissions tab. A supervisor review must be completed within 48 hours of submission.</p>
+                <p class="doc-placeholder-note">Company to insert: email address and any additional reporting channels (e.g., online portal, paper form location).</p>
+                <h4>Corrective Actions</h4>
+                <p>The project manager is responsible for investigating root causes and implementing corrective controls within 10 business days. All corrective actions are tracked in the safety log.</p>
+              </div>
+            </article>
+
+            <article class="doc-card"
+              data-text="ppe personal protective equipment hard hat safety footwear boots high visibility vest eyewear gloves inspection site specific chainsaw chaps bear spray">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">PPE Requirements</h3>
+                <p class="doc-desc">Specifies mandatory personal protective equipment for each project type and site condition.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Minimum Requirements — All Sites</h4>
+                <ul>
+                  <li>Hard hat — CSA Z94.1 Class E</li>
+                  <li>Safety-toed footwear — CSA Z195</li>
+                  <li>High-visibility vest or outerwear — Class 2 minimum</li>
+                  <li>UV-protective safety glasses where applicable</li>
+                </ul>
+                <h4>Project-Specific Requirements</h4>
+                <p class="doc-placeholder-note">Company to insert: site-specific PPE matrix by project type (e.g., chainsaw chaps, bear spray, life jackets, half-face respirators, fall-arrest harnesses).</p>
+                <h4>Inspection &amp; Replacement</h4>
+                <p>All PPE must be visually inspected before each use. Damaged or expired equipment must be removed from service immediately, tagged "Out of Service," and reported to the project supervisor.</p>
+              </div>
+            </article>
+
+          </div><!-- /.doc-cat-body -->
+        </div><!-- /.doc-category -->
+
+        <!-- ── Workplace Policies ── -->
+        <div class="doc-category" data-category="workplace-policies">
+          <button class="doc-cat-header" aria-expanded="true">
+            <svg class="doc-cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+            <span class="doc-cat-title">Workplace Policies</span>
+            <span class="doc-cat-count">3</span>
+            <svg class="doc-cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="doc-cat-body">
+
+            <article class="doc-card"
+              data-text="code of conduct professional behaviour standards staff contractors respect workplace harassment social media conflict of interest discipline">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">Code of Conduct</h3>
+                <p class="doc-desc">Sets out the professional and behavioural standards expected of all Fraxinus staff and contractors.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Professional Standards</h4>
+                <p>All personnel are expected to represent Fraxinus Environmental &amp; Geomatics professionally in all client, contractor, and public interactions. This includes punctuality, appearance, and respectful communication.</p>
+                <h4>Workplace Respect</h4>
+                <p>Fraxinus is committed to a harassment-free workplace. Discriminatory language, behaviour, or actions of any kind will not be tolerated and may result in immediate dismissal.</p>
+                <h4>Conflicts of Interest &amp; Confidentiality</h4>
+                <p class="doc-placeholder-note">Company to insert: specific conflict-of-interest disclosures, client confidentiality requirements, and data handling obligations.</p>
+                <h4>Discipline Process</h4>
+                <p class="doc-placeholder-note">Company to insert: progressive discipline steps, HR contact information, and appeals process.</p>
+              </div>
+            </article>
+
+            <article class="doc-card"
+              data-text="drug alcohol policy zero tolerance impairment work site company vehicle substance testing prescription medication cannabis">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">Drug &amp; Alcohol Policy</h3>
+                <p class="doc-desc">Defines the company's zero-tolerance approach to impairment on any work site or in any company vehicle.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Zero-Tolerance Standard</h4>
+                <p>No employee or contractor may report for work, operate equipment, or drive a company or client vehicle while impaired by alcohol, cannabis, or any controlled substance.</p>
+                <h4>Prescription Medications</h4>
+                <p>Personnel taking prescription medications that may cause drowsiness or impaired judgment must disclose this to their supervisor before beginning work involving equipment operation or driving.</p>
+                <h4>Testing &amp; Consequences</h4>
+                <p class="doc-placeholder-note">Company to insert: testing protocols (pre-employment, reasonable cause, post-incident), consequences for violations, and return-to-work conditions.</p>
+              </div>
+            </article>
+
+            <article class="doc-card"
+              data-text="lone worker remote work alone field check-in communication satellite phone buddy system route plan emergency contact safety">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">Lone Worker &amp; Remote Work Policy</h3>
+                <p class="doc-desc">Safety requirements and check-in procedures for personnel working alone or in remote field locations.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Applicability</h4>
+                <p>This policy applies to any Fraxinus employee working where they cannot be directly observed by a co-worker, or where access to emergency services may be delayed by more than 20 minutes.</p>
+                <h4>Check-In Requirements</h4>
+                <ul>
+                  <li>Check in with a designated contact at the start and end of each field day</li>
+                  <li>Missed check-ins trigger escalation after a defined interval</li>
+                  <li>Approved communication devices must be carried at all times in remote areas</li>
+                </ul>
+                <h4>Communication Devices &amp; Route Plans</h4>
+                <p class="doc-placeholder-note">Company to insert: approved satellite communication devices, GPS tracking requirements, and route plan submission process.</p>
+              </div>
+            </article>
+
+          </div><!-- /.doc-cat-body -->
+        </div><!-- /.doc-category -->
+
+        <!-- ── SOPs / Field Procedures ── -->
+        <div class="doc-category" data-category="sops">
+          <button class="doc-cat-header" aria-expanded="true">
+            <svg class="doc-cat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <span class="doc-cat-title">SOPs / Field Procedures</span>
+            <span class="doc-cat-count">3</span>
+            <svg class="doc-cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="doc-cat-body">
+
+            <article class="doc-card"
+              data-text="gps gnss survey setup calibration qc quality control base station rover checklist data export geomatics field equipment firmware battery">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">GPS/GNSS Survey Setup &amp; QC</h3>
+                <p class="doc-desc">Step-by-step setup, calibration, and quality-control checklist for GNSS survey equipment in the field.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Pre-Field Equipment Checklist</h4>
+                <ul>
+                  <li>Receiver firmware version verified and current</li>
+                  <li>Battery charge confirmed ≥ 80% for each unit</li>
+                  <li>Tribrach and tripod inspected for damage</li>
+                  <li>Data cards formatted and labelled per naming convention</li>
+                </ul>
+                <h4>Base Station Setup</h4>
+                <p class="doc-placeholder-note">Company to insert: approved base station monument locations, benchmark identifiers, and coordinate reference system (CRS) requirements by project type.</p>
+                <h4>QC Tolerances</h4>
+                <p class="doc-placeholder-note">Company to insert: acceptable horizontal and vertical accuracy thresholds, minimum observation times, and PDOP limits by project classification.</p>
+                <h4>Data Export &amp; Backup</h4>
+                <p>Raw observation files must be backed up to the field device and cloud storage at the end of each survey day. File naming must follow the project data convention.</p>
+              </div>
+            </article>
+
+            <article class="doc-card"
+              data-text="field data collection protocol recording backup naming convention chain of custody environmental geomatics standards scan paper sheet upload">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">Field Data Collection Protocol</h3>
+                <p class="doc-desc">Standard procedures for collecting, recording, and backing up environmental and geomatics field data.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Data Quality Standards</h4>
+                <p>All field-collected data must be legible, dated, and attributed to a named collector. Corrections must be made with a single strike-through — never use white-out on paper field sheets.</p>
+                <h4>File Naming Convention</h4>
+                <p class="doc-placeholder-note">Company to insert: standard file naming schema (e.g., YYYY-MM-DD_ProjectCode_DataType_Collector) and folder structure for the company server or cloud drive.</p>
+                <h4>Backup Requirements</h4>
+                <ul>
+                  <li>Digital data — backed up daily to a secondary device or cloud storage</li>
+                  <li>Paper field sheets — scanned and uploaded within 48 hours of collection</li>
+                </ul>
+                <h4>Chain of Custody</h4>
+                <p class="doc-placeholder-note">Company to insert: sample labelling, transfer documentation, and laboratory submission procedures for environmental samples.</p>
+              </div>
+            </article>
+
+            <article class="doc-card"
+              data-text="equipment pre-use inspection maintenance checklist defect out of service tagging log field tool vehicle atv generator power tool">
+              <div class="doc-card-head">
+                <span class="doc-badge">⚠ Needs Company Input</span>
+                <h3 class="doc-title">Equipment Pre-Use Inspection</h3>
+                <p class="doc-desc">Describes pre-use inspection requirements and scheduled maintenance intervals for all field equipment.</p>
+                <button class="doc-expand-btn" aria-expanded="false">
+                  <span class="doc-expand-label">View document</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="doc-body" hidden>
+                <h4>Daily Inspection Requirements</h4>
+                <p>All powered equipment (ATVs, generators, power tools, survey instruments) must be visually inspected before first use each day and documented on the Field Equipment Log.</p>
+                <ul>
+                  <li>Check fluid levels, belts, and safety guards</li>
+                  <li>Test all controls and emergency stop functions</li>
+                  <li>Confirm equipment registration and insurance are current</li>
+                </ul>
+                <h4>Defect Reporting</h4>
+                <p>Any defect that could create a safety risk must be reported to the supervisor immediately. Equipment must be tagged "Out of Service" and removed from use until repaired and cleared by a qualified person.</p>
+                <h4>Scheduled Maintenance</h4>
+                <p class="doc-placeholder-note">Company to insert: maintenance schedule by equipment type (engine hours or calendar intervals), service provider contacts, and maintenance log location.</p>
+              </div>
+            </article>
+
+          </div><!-- /.doc-cat-body -->
+        </div><!-- /.doc-category -->
+
+      </div><!-- /#doc-library -->
+
+      <p class="doc-no-results" id="doc-no-results" hidden>No documents match your search.</p>
+
     </section>
 
     <section id="tab-toolbox" class="tab-panel" role="tabpanel" aria-labelledby="nav-toolbox">
@@ -165,6 +483,7 @@
 
   </nav>
 
+  <script src="db.js"></script>
   <script>
     // Tab switching
     const navItems = document.querySelectorAll('.nav-item[role="tab"]');
@@ -196,6 +515,72 @@
           .catch(err => console.warn('Service worker registration failed:', err));
       });
     }
+  </script>
+
+  <script>
+    // ── Document Library ─────────────────────────────────────
+    (function () {
+      const searchInput = document.getElementById('doc-search');
+      const noResults   = document.getElementById('doc-no-results');
+
+      // Accordion — category headers
+      document.querySelectorAll('.doc-cat-header').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', String(!expanded));
+          btn.nextElementSibling.hidden = expanded;
+        });
+      });
+
+      // Expand / collapse individual document bodies
+      document.querySelectorAll('.doc-expand-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          const body     = btn.closest('.doc-card').querySelector('.doc-body');
+          btn.setAttribute('aria-expanded', String(!expanded));
+          btn.querySelector('.doc-expand-label').textContent = expanded ? 'View document' : 'Close';
+          body.hidden = expanded;
+        });
+      });
+
+      // Search — debounced, filters cards and collapses empty categories
+      let timer;
+      searchInput.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(filter, 220);
+      });
+
+      // Clear search when user taps the native × button
+      searchInput.addEventListener('search', filter);
+
+      function filter() {
+        const q = searchInput.value.trim().toLowerCase();
+        let anyVisible = false;
+
+        document.querySelectorAll('.doc-category').forEach(cat => {
+          let catCount = 0;
+          cat.querySelectorAll('.doc-card').forEach(card => {
+            const match = !q || card.dataset.text.includes(q);
+            card.hidden = !match;
+            if (match) catCount++;
+          });
+
+          const hide = q && catCount === 0;
+          cat.hidden = hide;
+
+          // Auto-expand categories that have matching cards
+          if (!hide && q && catCount > 0) {
+            const header = cat.querySelector('.doc-cat-header');
+            header.setAttribute('aria-expanded', 'true');
+            header.nextElementSibling.hidden = false;
+          }
+
+          if (!hide) anyVisible = true;
+        });
+
+        noResults.hidden = anyVisible || !q;
+      }
+    })();
   </script>
 
 </body>
