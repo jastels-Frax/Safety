@@ -1,0 +1,51 @@
+{
+  "name": "Fraxinus Environmental & Geomatics",
+  "short_name": "Fraxinus",
+  "description": "Field application for Fraxinus Environmental & Geomatics — documents, toolbox talks, hazard assessments, and submissions.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#E8731A",
+  "background_color": "#F2EDE6",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Documents",
+      "url": "/?tab=documents",
+      "description": "Open field documents"
+    },
+    {
+      "name": "Hazard Assessment",
+      "url": "/?tab=hazard",
+      "description": "Start a hazard assessment"
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#E8731A">
+  <meta name="description" content="Fraxinus Environmental &amp; Geomatics field application">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Fraxinus">
+  <title>Fraxinus Environmental &amp; Geomatics</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-inner">
+      <svg class="logo-icon" viewBox="0 0 44 52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <!-- Ash (Fraxinus) compound leaf — central rachis with pinnate leaflets + terminal -->
+        <!-- Rachis / stem -->
+        <line x1="22" y1="50" x2="22" y2="6" stroke="rgba(255,255,255,0.95)" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Pair 1 (bottom) -->
+        <ellipse cx="13" cy="40" rx="8" ry="4.2" fill="rgba(255,255,255,0.88)" transform="rotate(-38 13 40)"/>
+        <ellipse cx="31" cy="40" rx="8" ry="4.2" fill="rgba(255,255,255,0.88)" transform="rotate(38 31 40)"/>
+        <!-- Pair 2 (middle) -->
+        <ellipse cx="12" cy="29" rx="8" ry="4.2" fill="rgba(255,255,255,0.88)" transform="rotate(-25 12 29)"/>
+        <ellipse cx="32" cy="29" rx="8" ry="4.2" fill="rgba(255,255,255,0.88)" transform="rotate(25 32 29)"/>
+        <!-- Pair 3 (upper) -->
+        <ellipse cx="14" cy="18" rx="7" ry="3.8" fill="rgba(255,255,255,0.88)" transform="rotate(-14 14 18)"/>
+        <ellipse cx="30" cy="18" rx="7" ry="3.8" fill="rgba(255,255,255,0.88)" transform="rotate(14 30 18)"/>
+        <!-- Terminal leaflet -->
+        <ellipse cx="22" cy="7" rx="5.5" ry="4" fill="rgba(255,255,255,0.95)"/>
+      </svg>
+      <div class="header-title">
+        <span class="company-name">Fraxinus</span>
+        <span class="company-subtitle">Environmental &amp; Geomatics</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main" id="main-content">
+
+    <section id="tab-documents" class="tab-panel active" role="tabpanel" aria-labelledby="nav-documents">
+      <div class="panel-header">
+        <h1>Documents</h1>
+        <p class="panel-subtitle">Field documents and reference materials</p>
+      </div>
+      <div class="placeholder-card">
+        <svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="8" y="4" width="28" height="36" rx="3" fill="#E8731A" opacity="0.12"/>
+          <rect x="8" y="4" width="28" height="36" rx="3" stroke="#E8731A" stroke-width="2"/>
+          <path d="M20 4v10h16" stroke="#E8731A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="14" y1="22" x2="34" y2="22" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
+          <line x1="14" y1="28" x2="34" y2="28" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
+          <line x1="14" y1="34" x2="26" y2="34" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <p class="placeholder-title">No Documents Yet</p>
+        <p class="placeholder-text">Documents and files will appear here once available.</p>
+      </div>
+    </section>
+
+    <section id="tab-toolbox" class="tab-panel" role="tabpanel" aria-labelledby="nav-toolbox">
+      <div class="panel-header">
+        <h1>Toolbox Talk</h1>
+        <p class="panel-subtitle">Safety briefings and crew discussions</p>
+      </div>
+      <div class="placeholder-card">
+        <svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="4" y="20" width="40" height="24" rx="3" fill="#E8731A" opacity="0.12"/>
+          <rect x="4" y="20" width="40" height="24" rx="3" stroke="#E8731A" stroke-width="2"/>
+          <path d="M16 20v-4a8 8 0 0 1 16 0v4" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
+          <line x1="24" y1="28" x2="24" y2="34" stroke="#E8731A" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="21" y1="31" x2="27" y2="31" stroke="#E8731A" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <p class="placeholder-title">No Toolbox Talks Yet</p>
+        <p class="placeholder-text">Safety briefings and toolbox talk records will appear here.</p>
+      </div>
+    </section>
+
+    <section id="tab-hazard" class="tab-panel" role="tabpanel" aria-labelledby="nav-hazard">
+      <div class="panel-header">
+        <h1>Hazard Assessment</h1>
+        <p class="panel-subtitle">Field hazard identification and controls</p>
+      </div>
+      <div class="placeholder-card">
+        <svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M24 6L44 40H4L24 6Z" fill="#E8731A" opacity="0.12" stroke="#E8731A" stroke-width="2" stroke-linejoin="round"/>
+          <line x1="24" y1="19" x2="24" y2="29" stroke="#E8731A" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="24" cy="34.5" r="1.5" fill="#E8731A"/>
+        </svg>
+        <p class="placeholder-title">No Hazard Assessments Yet</p>
+        <p class="placeholder-text">Field hazard assessments and JHAs will appear here.</p>
+      </div>
+    </section>
+
+    <section id="tab-submissions" class="tab-panel" role="tabpanel" aria-labelledby="nav-submissions">
+      <div class="panel-header">
+        <h1>Submissions</h1>
+        <p class="panel-subtitle">Completed forms and submitted records</p>
+      </div>
+      <div class="placeholder-card">
+        <svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M36 28v8a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4h8" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
+          <path d="M32 4l8 8-14 14H18v-8L32 4Z" fill="#E8731A" opacity="0.12" stroke="#E8731A" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <p class="placeholder-title">No Submissions Yet</p>
+        <p class="placeholder-text">Submitted forms and completed records will appear here.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav" role="tablist" aria-label="Main navigation">
+
+    <button class="nav-item active" id="nav-documents" role="tab" aria-selected="true"
+            aria-controls="tab-documents" data-tab="documents">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      <span class="nav-label">Documents</span>
+    </button>
+
+    <button class="nav-item" id="nav-toolbox" role="tab" aria-selected="false"
+            aria-controls="tab-toolbox" data-tab="toolbox">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="2" y="10" width="20" height="12" rx="2"/>
+        <path d="M16 10V8a4 4 0 0 0-8 0v2"/>
+        <line x1="12" y1="14" x2="12" y2="18"/>
+        <line x1="10" y1="16" x2="14" y2="16"/>
+      </svg>
+      <span class="nav-label">Toolbox Talk</span>
+    </button>
+
+    <button class="nav-item" id="nav-hazard" role="tab" aria-selected="false"
+            aria-controls="tab-hazard" data-tab="hazard">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <span class="nav-label">Hazard</span>
+    </button>
+
+    <button class="nav-item" id="nav-submissions" role="tab" aria-selected="false"
+            aria-controls="tab-submissions" data-tab="submissions">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <span class="nav-label">Submissions</span>
+    </button>
+
+  </nav>
+
+  <script>
+    // Tab switching
+    const navItems = document.querySelectorAll('.nav-item[role="tab"]');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    navItems.forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.tab;
+
+        navItems.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach(panel => panel.classList.remove('active'));
+
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+        document.getElementById('tab-' + target).classList.add('active');
+
+        // Scroll content to top on tab switch
+        document.getElementById('main-content').scrollTop = 0;
+      });
+    });
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .catch(err => console.warn('Service worker registration failed:', err));
+      });
+    }
+  </script>
+
+</body>
+</html>

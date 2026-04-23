@@ -1,0 +1,357 @@
+/* ============================================================
+   Fraxinus Environmental & Geomatics — PWA Shell
+   ============================================================ */
+
+:root {
+  --orange:         #E8731A;
+  --orange-dark:    #C95F0E;
+  --orange-light:   #FBE8D6;
+  --green:          #4A7A5A;
+  --green-light:    #EAF2ED;
+  --earth:          #7A6548;
+  --earth-light:    #C4AB88;
+
+  --bg:             #F2EDE6;
+  --bg-card:        #FFFFFF;
+  --text-primary:   #1C1A16;
+  --text-secondary: #6B6457;
+  --text-muted:     #A09688;
+  --border:         #DDD6CC;
+  --border-light:   #EDE8E2;
+
+  --header-height:  60px;
+  --nav-height:     64px;
+  --safe-top:       env(safe-area-inset-top, 0px);
+  --safe-bottom:    env(safe-area-inset-bottom, 0px);
+
+  --radius-card:    14px;
+  --radius-sm:      8px;
+  --shadow-card:    0 1px 6px rgba(0, 0, 0, 0.07), 0 2px 16px rgba(0, 0, 0, 0.04);
+  --shadow-nav:     0 -1px 0 var(--border), 0 -4px 16px rgba(0, 0, 0, 0.06);
+
+  --transition:     0.18s ease;
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+               'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+
+.app-header {
+  position: relative;
+  z-index: 200;
+  flex-shrink: 0;
+  height: calc(var(--header-height) + var(--safe-top));
+  padding-top: var(--safe-top);
+  background: var(--orange);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--header-height);
+  padding: 0 18px;
+}
+
+.logo-icon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 36px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.company-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.company-subtitle {
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── Main scroll area ───────────────────────────────────────── */
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  /* Reserve space below for bottom nav + safe area */
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 8px);
+}
+
+/* ── Tab panels ─────────────────────────────────────────────── */
+
+.tab-panel {
+  display: none;
+  padding: 24px 16px 16px;
+  min-height: 100%;
+  animation: fadeIn 0.18s ease;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Panel header ───────────────────────────────────────────── */
+
+.panel-header {
+  margin-bottom: 20px;
+}
+
+.panel-header h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+}
+
+.panel-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  letter-spacing: 0.01em;
+}
+
+/* ── Placeholder card ───────────────────────────────────────── */
+
+.placeholder-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  padding: 52px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.placeholder-icon {
+  width: 52px;
+  height: 52px;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+
+.placeholder-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.placeholder-text {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  max-width: 260px;
+  line-height: 1.55;
+}
+
+/* ── Bottom navigation ──────────────────────────────────────── */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-nav);
+  /* Account for iOS home indicator */
+  padding-bottom: var(--safe-bottom);
+  height: calc(var(--nav-height) + var(--safe-bottom));
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 44px; /* WCAG touch target */
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 8px 6px 6px;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--transition);
+  position: relative;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 40px;
+  height: 3px;
+  background: var(--orange);
+  border-radius: 0 0 3px 3px;
+  transition: transform var(--transition);
+}
+
+.nav-item.active {
+  color: var(--orange);
+}
+
+.nav-item.active::before {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  transition: transform var(--transition);
+}
+
+.nav-item.active .nav-icon {
+  transform: translateY(-1px);
+}
+
+.nav-label {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* ── Tablet / large phone ───────────────────────────────────── */
+
+@media (min-width: 600px) {
+  .tab-panel {
+    padding: 28px 24px 24px;
+  }
+
+  .panel-header h1 {
+    font-size: 2rem;
+  }
+
+  .placeholder-card {
+    padding: 64px 40px;
+  }
+}
+
+/* ── Landscape phone ────────────────────────────────────────── */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .app-header {
+    height: 50px;
+  }
+
+  .header-inner {
+    height: 50px;
+  }
+
+  .company-name {
+    font-size: 1.1rem;
+  }
+
+  .logo-icon {
+    width: 24px;
+    height: 28px;
+  }
+
+  .tab-panel {
+    padding: 16px;
+  }
+
+  .panel-header {
+    margin-bottom: 12px;
+  }
+
+  .placeholder-card {
+    padding: 28px 24px;
+  }
+
+  .placeholder-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel {
+    animation: none;
+  }
+
+  .nav-item,
+  .nav-item::before,
+  .nav-icon {
+    transition: none;
+  }
+}
+
+/* ── High contrast / forced colors ─────────────────────────── */
+
+@media (forced-colors: active) {
+  .app-header {
+    background: ButtonFace;
+    border-bottom: 2px solid ButtonText;
+  }
+
+  .nav-item.active {
+    color: Highlight;
+  }
+}
