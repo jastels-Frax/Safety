@@ -2,8 +2,8 @@
    documents.js — Document Library Data + Renderer
    Fraxinus Environmental & Geomatics
    Add new documents by appending entries to the DOCUMENTS array.
-   highlight: true  → orange left border on that section.
-   placeholder: true → ⚠ Needs Company Input badge on that section.
+   highlight: true flags a section for visual emphasis in the app.
+   placeholder: true shows a ⚠ Needs Company Input badge.
    ============================================================ */
 
 const DOCUMENTS = [
@@ -123,7 +123,85 @@ const DOCUMENTS = [
       },
       {
         heading: "Approval Sign-Off",
-        content: "Supervisor, Safety Lead, and Program Manager signatures required.",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
+  },
+
+  // -------------------------------------------------------
+
+  {
+    category: "SOPs / Field Procedures",
+    id: "swp-002",
+    title: "Safe Work Practice #2 — Vegetation & Botanical Surveys",
+    description: "Minimum safety requirements for vegetation and botanical fieldwork including flora surveys, rare plant surveys, vegetation plot sampling, and habitat description. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Scope",
+        content: "This SWP defines the minimum safety requirements for vegetation and botanical fieldwork, including: plant identification (flora surveys), rare plant and species-at-risk surveys, vegetation plot sampling, transect-based ecological surveys, and habitat description and community classification.\n\nThis SWP must be used in conjunction with the Core Environmental Fieldwork SWP (#1) and all applicable task-specific SWPs (Wetland & Watercourse Assessment, Remote Fieldwork, etc.)."
+      },
+      {
+        heading: "2. Additional Hazards",
+        content: "In addition to core field hazards, vegetation surveys may involve:\n• Tick exposure (including Lyme disease risk)\n• Dense vegetation limiting visibility and increasing trip hazards\n• Poisonous or irritant plants (e.g., giant hogweed, poison ivy, stinging nettle)\n• Sharp vegetation (thorns, woody stems, slash)\n• Reduced situational awareness due to focus on sampling\n• Overexertion from repetitive plot sampling or transect work",
+        highlight: true
+      },
+      {
+        heading: "3. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "3.1 Tick & Insect Exposure Prevention",
+            content: "• Conduct daily full-body tick checks (end of day minimum).\n• Perform interim checks during breaks in high-risk habitat.\n• Treat clothing with repellents where appropriate (e.g., permethrin-treated gear where permitted).\n• Tuck pants into socks/gaiters in high-risk areas.\n• Immediately report and follow safe removal procedures for attached ticks.",
+            highlight: true
+          },
+          {
+            heading: "3.2 Vegetation Navigation & Awareness",
+            content: "• Maintain slow, deliberate movement in dense cover.\n• Use caution when stepping into obscured ground (roots, holes, blowdown).\n• Maintain visual spacing between crew members where possible.\n• Communicate hazards clearly (e.g., deadfall, steep drop-offs, dense patches)."
+          },
+          {
+            heading: "3.3 Poisonous Plant Avoidance",
+            content: "• All workers must be able to identify key hazardous species in the region.\n• Avoid contact with unknown plants where possible.\n• Wash exposed skin after suspected contact.\n• Report significant exposures or rashes immediately.",
+            highlight: true
+          },
+          {
+            heading: "3.4 Plotting, Flagging, and Navigation",
+            content: "• Use minimal and consistent flagging to reduce environmental disturbance.\n• Avoid over-marking sensitive habitats.\n• GPS-enabled devices must be used as the primary navigation tool, with backup maps/compass.\n• Double-check plot coordinates before entry."
+          }
+        ]
+      },
+      {
+        heading: "4. PPE Additions",
+        content: "In addition to Core SWP PPE requirements, vegetation surveys require:\n• Gaiters — recommended or required in dense vegetation or tick habitat.\n• Insect-protective clothing or bug jackets — seasonal requirement.\n• Gloves — when handling unknown vegetation or thorny species."
+      },
+      {
+        heading: "5. Field Tools and Equipment Safety",
+        content: "Common tools include: clinometers, DBH tapes, measuring tapes, quadrats, flagging tape, and GPS units/tablets.",
+        subsections: [
+          {
+            heading: "Safe Handling Requirements",
+            content: "• Carry tools in a controlled manner to avoid snagging or injury.\n• Secure sharp or rigid tools during movement.\n• Avoid leaving tools hidden in vegetation or high-risk trip areas.\n• Ensure quadrats and stakes are clearly visible when deployed."
+          }
+        ]
+      },
+      {
+        heading: "6. Additional Operational Controls",
+        content: "• Maintain awareness of fatigue during repetitive sampling.\n• Rotate roles where possible to reduce repetitive strain.\n• Take scheduled breaks in safe, open areas.\n• Ensure communication remains active during dispersed sampling (where applicable)."
+      },
+      {
+        heading: "7. Documentation and Reporting",
+        content: "Workers must ensure all vegetation and botanical survey activities are accurately documented. At minimum:\n• Complete all required field data sheets in real time or at point of collection.\n• Record GPS coordinates accurately for all plots, transects, and rare species observations.\n• Document site conditions relevant to ecological interpretation (e.g., disturbance, canopy cover).\n• Report all hazards, near-misses, and safety concerns encountered in the field.\n• Note any deviations from planned sampling methodology.\n\nAll records must be legible, complete, and attributable to the field crew, submitted or backed up according to project data management procedures, and stored to ensure traceability and long-term accessibility."
+      },
+      {
+        heading: "8. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Company Health and Safety Program & Applicable OHS Legislation\n• Regional botanical survey standards or protocols (where applicable)\n• Species-at-risk identification guides and conservation databases (e.g., ACCDC where relevant)\n• Task-specific SWPs (Wetlands, Electrofishing, Roadside Work, Remote Fieldwork)"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
         placeholder: true
       }
     ]
@@ -132,16 +210,7 @@ const DOCUMENTS = [
   // -------------------------------------------------------
   // ADD ADDITIONAL DOCUMENTS BELOW IN THE SAME FORMAT
   // -------------------------------------------------------
-  // {
-  //   category: "Health & Safety",   // or "Workplace Policies" / "SOPs / Field Procedures"
-  //   id: "hs-001",
-  //   title: "...",
-  //   description: "...",
-  //   version: "REV00",
-  //   lastUpdated: "...",
-  //   author: "...",
-  //   sections: [ ... ]
-  // }
+
 ];
 
 // ── Renderer ─────────────────────────────────────────────────
@@ -193,7 +262,7 @@ const DOCUMENTS = [
     }
 
     if (section.placeholder) {
-      html += '<span class="doc-placeholder-badge">⚠ Needs Company Input</span>';
+      html += '<span class="doc-placeholder-badge">⚠ Needs Company Input</span>';
     }
 
     if (section.content && section.content.trim()) {
