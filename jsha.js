@@ -185,6 +185,98 @@
     }
   });
 
+  // ── Export PDF ───────────────────────────────────────────────
+
+  $('jsha-pdf-btn').addEventListener('click', () => {
+    const view = buildPrintView('Job Specific Hazard Assessment', buildJSHAContent(collectData()));
+    document.body.appendChild(view);
+    window.print();
+    view.remove();
+  });
+
+  function pvEsc(s) {
+    if (s == null || s === '') return '<em class="pv-empty">—</em>';
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
+  }
+
+  function buildPrintView(title, contentHtml) {
+    const div = document.createElement('div');
+    div.id = 'print-view';
+    div.innerHTML =
+      '<div class="pv-letterhead">' +
+        '<div class="pv-company">Fraxinus Environmental &amp; Geomatics</div>' +
+        '<div class="pv-form-title">' + title + '</div>' +
+      '</div>' +
+      contentHtml +
+      '<div class="pv-footer">Printed: ' + new Date().toLocaleString() + '</div>';
+    return div;
+  }
+
+  function buildJSHAContent(d) {
+    const ec = d.emergencyContacts;
+
+    let html =
+      '<section class="pv-section">' +
+        '<h2>Site Information</h2>' +
+        '<dl class="pv-dl">' +
+          '<dt>Date</dt><dd>' + pvEsc(d.date) + '</dd>' +
+          '<dt>Project Name / Number</dt><dd>' + pvEsc(d.project) + '</dd>' +
+          '<dt>Site / Location</dt><dd>' + pvEsc(d.site) + '</dd>' +
+          '<dt>GPS Coordinates</dt><dd>' + pvEsc(d.gps) + '</dd>' +
+          '<dt>Scope of Work</dt><dd>' + pvEsc(d.scope) + '</dd>' +
+        '</dl>' +
+      '</section>';
+
+    const crewEntry  = ec.crewContactName  + (ec.crewContactPhone  ? ' — ' + ec.crewContactPhone  : '');
+    const pmEntry    = ec.projectManagerName + (ec.projectManagerPhone ? ' — ' + ec.projectManagerPhone : '');
+
+    html +=
+      '<section class="pv-section">' +
+        '<h2>Emergency Contacts</h2>' +
+        '<dl class="pv-dl">' +
+          '<dt>Police / Fire / Ambulance</dt><dd>911</dd>' +
+          '<dt>Poison Control</dt><dd>1-800-565-8161</dd>' +
+          '<dt>Field Crew Contact</dt><dd>' + pvEsc(crewEntry || '') + '</dd>' +
+          '<dt>Project Manager</dt><dd>' + pvEsc(pmEntry || '') + '</dd>' +
+          '<dt>Health &amp; Safety Rep</dt><dd>' + pvEsc(ec.healthSafetyRep) + '</dd>' +
+          '<dt>Nearest Hospital</dt><dd>' + pvEsc(ec.nearestHospital) + '</dd>' +
+        '</dl>' +
+      '</section>';
+
+    html += '<section class="pv-section"><h2>Hazard Identification</h2>';
+    if (d.hazards.length) {
+      html += '<table class="pv-table"><thead><tr><th>Hazard</th><th>Risk Level</th><th>Control Measure</th></tr></thead><tbody>';
+      d.hazards.forEach(h => {
+        const riskClass = 'pv-risk-' + (h.risk || 'none').toLowerCase();
+        html += '<tr><td>' + pvEsc(h.hazard) + '</td>' +
+                '<td class="pv-risk ' + riskClass + '">' + pvEsc(h.risk || '—') + '</td>' +
+                '<td>' + pvEsc(h.control) + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    } else {
+      html += '<p class="pv-empty">No hazards recorded.</p>';
+    }
+    html += '</section>';
+
+    html += '<section class="pv-section"><h2>PPE Checklist</h2>';
+    if (d.ppe.length) {
+      html += '<ul class="pv-ppe">';
+      d.ppe.forEach(item => { html += '<li>' + pvEsc(item) + '</li>'; });
+      html += '</ul>';
+    } else {
+      html += '<p class="pv-empty">No PPE items selected.</p>';
+    }
+    html += '</section>';
+
+    if (d.comments) {
+      html += '<section class="pv-section"><h2>Additional Comments</h2><p>' + pvEsc(d.comments) + '</p></section>';
+    }
+
+    return html;
+  }
+
   // ── Export JSON ──────────────────────────────────────────────
 
   $('jsha-export-btn').addEventListener('click', () => {

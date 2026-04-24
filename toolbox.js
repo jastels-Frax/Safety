@@ -215,6 +215,96 @@
     }
   });
 
+  // ── Export PDF ───────────────────────────────────────────────
+
+  $('tb-pdf-btn').addEventListener('click', () => {
+    const view = buildPrintView('Toolbox Talk', buildTBContent(collectData()));
+    document.body.appendChild(view);
+    window.print();
+    view.remove();
+  });
+
+  function pvEsc(s) {
+    if (s == null || s === '') return '<em class="pv-empty">—</em>';
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
+  }
+
+  function buildPrintView(title, contentHtml) {
+    const div = document.createElement('div');
+    div.id = 'print-view';
+    div.innerHTML =
+      '<div class="pv-letterhead">' +
+        '<div class="pv-company">Fraxinus Environmental &amp; Geomatics</div>' +
+        '<div class="pv-form-title">' + title + '</div>' +
+      '</div>' +
+      contentHtml +
+      '<div class="pv-footer">Printed: ' + new Date().toLocaleString() + '</div>';
+    return div;
+  }
+
+  function buildTBContent(d) {
+    let html =
+      '<section class="pv-section">' +
+        '<h2>Site Information</h2>' +
+        '<dl class="pv-dl">' +
+          '<dt>Date</dt><dd>' + pvEsc(d.date) + '</dd>' +
+          '<dt>Project Name / Number</dt><dd>' + pvEsc(d.project) + '</dd>' +
+          '<dt>Site / Location</dt><dd>' + pvEsc(d.site) + '</dd>' +
+          '<dt>GPS Coordinates</dt><dd>' + pvEsc(d.gps) + '</dd>' +
+        '</dl>' +
+      '</section>' +
+      '<section class="pv-section">' +
+        '<h2>Crew &amp; Operations</h2>' +
+        '<dl class="pv-dl">' +
+          '<dt>Field Crew</dt><dd>' + pvEsc(d.crew) + '</dd>' +
+          '<dt>Scope of Work</dt><dd>' + pvEsc(d.scope) + '</dd>' +
+          '<dt>Weather Conditions</dt><dd>' + pvEsc(d.weather) + '</dd>' +
+          '<dt>Communication Plan</dt><dd>' + pvEsc(d.comms) + '</dd>' +
+        '</dl>' +
+      '</section>';
+
+    html += '<section class="pv-section"><h2>Hazard Identification</h2>';
+    if (d.hazards.length) {
+      html += '<table class="pv-table"><thead><tr><th>Hazard</th><th>Risk Level</th><th>Control Measure</th></tr></thead><tbody>';
+      d.hazards.forEach(h => {
+        const riskClass = 'pv-risk-' + (h.risk || 'none').toLowerCase();
+        html += '<tr><td>' + pvEsc(h.hazard) + '</td>' +
+                '<td class="pv-risk ' + riskClass + '">' + pvEsc(h.risk || '—') + '</td>' +
+                '<td>' + pvEsc(h.control) + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    } else {
+      html += '<p class="pv-empty">No hazards recorded.</p>';
+    }
+    html += '</section>';
+
+    html += '<section class="pv-section"><h2>PPE Checklist</h2>';
+    if (d.ppe.length) {
+      html += '<ul class="pv-ppe">';
+      d.ppe.forEach(item => { html += '<li>' + pvEsc(item) + '</li>'; });
+      html += '</ul>';
+    } else {
+      html += '<p class="pv-empty">No PPE items selected.</p>';
+    }
+    html += '</section>';
+
+    html += '<section class="pv-section"><h2>Sign-Off</h2>';
+    if (d.signoffs.length) {
+      html += '<table class="pv-table"><thead><tr><th>Name</th><th>Initials</th><th>Date</th></tr></thead><tbody>';
+      d.signoffs.forEach(s => {
+        html += '<tr><td>' + pvEsc(s.name) + '</td><td>' + pvEsc(s.initials) + '</td><td>' + pvEsc(s.date) + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    } else {
+      html += '<p class="pv-empty">No sign-offs recorded.</p>';
+    }
+    html += '</section>';
+
+    return html;
+  }
+
   // ── Export JSON ──────────────────────────────────────────────
 
   $('tb-export-btn').addEventListener('click', () => {
