@@ -4,7 +4,7 @@
    everything else (future API calls, dynamic content).
    ============================================================ */
 
-const CACHE_VERSION = 'v8';
+const CACHE_VERSION = 'v9';
 const SHELL_CACHE   = 'fraxinus-shell-' + CACHE_VERSION;
 
 const SHELL_ASSETS = [
@@ -51,6 +51,15 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const { request } = event;
+
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      caches.match('/safety/index.html').then(function(response) {
+        return response || fetch(event.request);
+      })
+    );
+    return;
+  }
 
   // Only handle GET requests
   if (request.method !== 'GET') return;
