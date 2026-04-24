@@ -4,19 +4,19 @@
    everything else (future API calls, dynamic content).
    ============================================================ */
 
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v8';
 const SHELL_CACHE   = 'fraxinus-shell-' + CACHE_VERSION;
 
 const SHELL_ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/db.js',
-  '/toolbox.js',
-  '/jsha.js',
-  '/submissions.js',
-  '/documents.js',
-  '/manifest.json',
+  '/safety/',
+  '/safety/index.html',
+  '/safety/style.css',
+  '/safety/db.js',
+  '/safety/toolbox.js',
+  '/safety/jsha.js',
+  '/safety/submissions.js',
+  '/safety/documents.js',
+  '/safety/manifest.json',
   'https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap',
 ];
 
@@ -87,7 +87,7 @@ async function cacheFirst(request) {
   } catch {
     // Offline and not in cache — return a minimal offline page for navigation
     if (request.mode === 'navigate') {
-      const cached = await caches.match('/index.html');
+      const cached = await caches.match('/safety/index.html');
       if (cached) return cached;
     }
     return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });

@@ -2,8 +2,8 @@
   "name": "Fraxinus Environmental & Geomatics",
   "short_name": "Fraxinus",
   "description": "Field application for Fraxinus Environmental & Geomatics — documents, toolbox talks, hazard assessments, and submissions.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/safety/",
+  "scope": "/safety/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#E8731A",
@@ -39,12 +39,12 @@
   "shortcuts": [
     {
       "name": "Documents",
-      "url": "/?tab=documents",
+      "url": "/safety/?tab=documents",
       "description": "Open field documents"
     },
     {
       "name": "Hazard Assessment",
-      "url": "/?tab=hazard",
+      "url": "/safety/?tab=hazard",
       "description": "Start a hazard assessment"
     }
   ]

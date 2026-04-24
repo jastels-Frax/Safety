@@ -864,7 +864,7 @@
     // Register service worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
+        navigator.serviceWorker.register('/safety/service-worker.js', { scope: '/safety/' })
           .catch(err => console.warn('Service worker registration failed:', err));
       });
     }
