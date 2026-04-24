@@ -8,7 +8,7 @@
 
 const DOCUMENTS = [
   {
-    category: "SOPs / Field Procedures",
+    category: "SWPs / Field Procedures",
     id: "swp-001",
     title: "Safe Work Practice #1 — General Environmental Fieldwork",
     description: "Minimum health and safety requirements for all environmental fieldwork. All task-specific SWPs must be read in conjunction with this document.",
@@ -132,7 +132,7 @@ const DOCUMENTS = [
   // -------------------------------------------------------
 
   {
-    category: "SOPs / Field Procedures",
+    category: "SWPs / Field Procedures",
     id: "swp-002",
     title: "Safe Work Practice #2 — Vegetation & Botanical Surveys",
     description: "Minimum safety requirements for vegetation and botanical fieldwork including flora surveys, rare plant surveys, vegetation plot sampling, and habitat description. Must be used with SWP #1.",
@@ -202,6 +202,59 @@ const DOCUMENTS = [
       {
         heading: "Approval Sign-Off",
         content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
+  },
+
+  // -------------------------------------------------------
+  // SWP #3 — Wetland & Watercourse Assessment
+  // -------------------------------------------------------
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-003",
+    title: "SWP #3 — Wetland & Watercourse Assessment",
+    description: "Minimum safety requirements for wetland and aquatic fieldwork. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Scope",
+        content: "Applies to wetland boundary delineation, hydrological feature identification, stream and watercourse classification, aquatic habitat assessments, and fish habitat observations. Must be used with SWP #1."
+      },
+      {
+        heading: "2. Hazards",
+        content: "Soft or unstable substrates, entrapment or submersion risk, cold water exposure and hypothermia, sudden depth changes, slippery substrates, remote access and delayed response, waterborne pathogens.",
+        highlight: true
+      },
+      {
+        heading: "3. Movement & Substrate Safety",
+        content: "Probe substrate ahead of each step. Avoid unknown depths or unconsolidated organic mats. Maintain slow deliberate movement. Establish no-go zones in unstable areas.",
+        highlight: true
+      },
+      {
+        heading: "4. Working in Pairs",
+        content: "Two-person minimum strongly recommended. Do not enter deep or unstable substrates alone under any circumstances.",
+        highlight: true
+      },
+      {
+        heading: "5. PPE Additions",
+        content: "Chest or hip waders with integrated belt — mandatory when entering water. PFD required when depth exceeds knee height or flow presents instability risk. Wading staff recommended.",
+        highlight: true
+      },
+      {
+        heading: "6. Decontamination",
+        content: "Clean boots, waders, and equipment before moving between waterbodies. Remove visible organic material. Do not transport material between watersheds.",
+        highlight: true
+      },
+      {
+        heading: "7. Emergency Response",
+        content: "Prioritize retrieval from water. Move to stable dry location. Initiate first aid and warming. Contact emergency services. Notify supervisor and document incident."
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — signatures required.",
         placeholder: true
       }
     ]
@@ -334,7 +387,7 @@ const DOCUMENTS = [
   }
 
   const CAT_SLUG = {
-    'SOPs / Field Procedures': 'sops',
+    'SWPs / Field Procedures': 'sops',
     'Health & Safety':          'health-safety',
     'Workplace Policies':       'workplace-policies',
   };
