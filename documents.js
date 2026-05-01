@@ -440,6 +440,125 @@ const DOCUMENTS = [
         placeholder: true
       }
     ]
+  },
+
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-005",
+    title: "SWP #5 — Roadside & Right-of-Way Work",
+    description: "Minimum safety requirements for environmental fieldwork in roadside and right-of-way environments. Inherent risk: HIGH. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Purpose and Scope",
+        content: "This SWP defines minimum safety requirements for conducting environmental fieldwork in roadside and right-of-way (ROW) environments. It applies to: roadside vegetation surveys, culvert and watercourse inspections, wildlife observations adjacent to roads, and general data collection within transportation corridors.\n\nMust be used in conjunction with the Core Environmental Fieldwork SWP (#1)."
+      },
+      {
+        heading: "2. Worker Rights and Responsibilities",
+        content: "Workers must remain continuously aware of traffic conditions. Workers have full authority to stop work if traffic conditions become unsafe.",
+        highlight: true
+      },
+      {
+        heading: "3. Hazards",
+        content: "Primary hazards include:\n• Moving vehicles (high-speed traffic)\n• Distracted or impaired drivers\n• Limited sightlines (curves, hills, vegetation)\n• Narrow shoulders or unstable ground\n• Noise limiting communication\n• Weather-related visibility reduction (fog, rain, snow)\n• Entering/exiting vehicles near active traffic",
+        highlight: true
+      },
+      {
+        heading: "4. Risk Assessment",
+        content: "Inherent Risk Level: HIGH. Traffic exposure is a leading cause of serious injury and fatality in fieldwork.\n\nRisk increases with: higher traffic speed and volume, reduced visibility conditions, urban or congested roadways, and night or low-light operations.",
+        highlight: true
+      },
+      {
+        heading: "5. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Traffic Control Planning",
+            content: "A traffic control plan must be developed for all roadside work. Work must comply with applicable provincial traffic control standards. Determine if additional controls (signage, cones, spotters) are required.",
+            highlight: true
+          },
+          {
+            heading: "5.2 Worker Positioning",
+            content: "• Always face oncoming traffic when possible.\n• Maintain a safe distance from active travel lanes.\n• Avoid turning back to traffic unless protected by barriers or spotters.\n• Establish clear safe zones for standing and equipment staging.",
+            highlight: true
+          },
+          {
+            heading: "5.3 Spotter Requirements",
+            content: "A dedicated spotter must be assigned where visibility is limited, traffic speed is high, or workers are near active lanes. The spotter must maintain continuous observation of traffic and warn the crew of hazards."
+          },
+          {
+            heading: "5.4 Vehicle Controls",
+            content: "• Use hazard lights at all times when parked roadside.\n• Position vehicles to maximize visibility to oncoming traffic.\n• Use vehicles as physical barriers where safe and appropriate.\n• Do not park on blind corners, hills, or narrow shoulders."
+          },
+          {
+            heading: "5.5 Work Duration and Exposure",
+            content: "Minimize time spent within roadside hazard zones. Plan work to reduce repeated entry/exit from the roadway. Consolidate tasks where possible."
+          }
+        ]
+      },
+      {
+        heading: "6. PPE",
+        content: "In addition to Core SWP PPE:\n• High-visibility apparel (CSA-compliant) — mandatory at all times.\n• Hard hat (where required by site or client).\n• Safety footwear suitable for uneven roadside terrain.\n\nHigh-visibility apparel must be clean and visible, worn as the outermost layer, and appropriate for lighting conditions (day/night).",
+        highlight: true
+      },
+      {
+        heading: "7. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 Arrival and Setup",
+            content: "Assess the site for traffic hazards before exiting the vehicle. Identify a safe parking location. Deploy cones or warning devices if required. Conduct a tailgate safety briefing."
+          },
+          {
+            heading: "7.2 Active Work",
+            content: "Maintain continuous awareness of traffic. Keep tools and equipment clear of the road. Avoid sudden movements toward traffic. Maintain communication between the crew."
+          },
+          {
+            heading: "7.3 Demobilization",
+            content: "Remove all equipment and signage safely. Re-enter vehicles only when safe to do so. Perform final visual sweep of the site before departure."
+          }
+        ]
+      },
+      {
+        heading: "8. Communication and Supervision",
+        content: "Maintain clear communication between crew members at all times. Use radios where noise levels limit verbal communication. The supervisor must assess and approve traffic control measures prior to work. All workers retain stop-work authority."
+      },
+      {
+        heading: "9. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "9.1 Key Emergency Scenarios",
+            content: "Worker struck by a vehicle, near-miss traffic incidents, and vehicle collision at the work site.",
+            highlight: true
+          },
+          {
+            heading: "9.2 Response Procedures",
+            content: "Move to a safe location immediately. Provide first aid as required. Secure the scene to prevent further incidents. Notify supervisor as soon as possible. Contact emergency services immediately. Document the incident and conditions."
+          }
+        ]
+      },
+      {
+        heading: "10. Environmental and Weather Conditions",
+        content: "Suspend work during low visibility conditions (fog, heavy rain, snow). Avoid roadside work during extreme weather where driver control may be impaired. Adjust traffic control measures based on lighting and weather.",
+        highlight: true
+      },
+      {
+        heading: "11. Documentation and Reporting",
+        content: "Workers must: document site conditions and traffic hazards, record any traffic control measures implemented, report all near-misses involving vehicles immediately, and complete required field and safety documentation."
+      },
+      {
+        heading: "12. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Provincial traffic control standards\n• Occupational Health and Safety legislation\n• Company Health and Safety Program\n• Applicable task-specific SWPs"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
   }
 
 ];
