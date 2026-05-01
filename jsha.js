@@ -111,9 +111,10 @@
 
   function collectData() {
     const data = {
-      date:    $('jsha-date').value,
-      project: $('jsha-project').value.trim(),
-      site:    $('jsha-site').value.trim(),
+      date:     $('jsha-date').value,
+      project:  $('jsha-project').value.trim(),
+      initials: $('jsha-initials').value.trim().toUpperCase(),
+      site:     $('jsha-site').value.trim(),
       gps:     $('jsha-gps').value.trim(),
       scope:   $('jsha-scope').value.trim(),
 
@@ -190,8 +191,18 @@
   $('jsha-pdf-btn').addEventListener('click', () => {
     const data = collectData();
     const doc  = buildJSHAPDF(data);
-    doc.save('Fraxinus_HazardAssessment_' + new Date().toISOString().slice(0, 10) + '.pdf');
+    doc.save(pdfFilename('HazardAssessment', data));
   });
+
+  function pdfFilename(type, data) {
+    const date = data.date || todayISO();
+    const proj = (data.project || '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+    const init = (data.initials || '').replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 6);
+    const parts = ['Fraxinus', type, date];
+    if (proj) parts.push(proj);
+    if (init) parts.push(init);
+    return parts.join('_') + '.pdf';
+  }
 
   function buildJSHAPDF(d) {
     const { jsPDF } = window.jspdf;

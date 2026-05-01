@@ -253,16 +253,22 @@
 
   // ── Export PDF ────────────────────────────────────────────────
 
+  function pdfFilename(type, d) {
+    const date = d.date || new Date().toISOString().slice(0, 10);
+    const proj = (d.project || '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+    const init = (d.initials || '').replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 6);
+    const parts = ['Fraxinus', type, date];
+    if (proj) parts.push(proj);
+    if (init) parts.push(init);
+    return parts.join('_') + '.pdf';
+  }
+
   function exportPDF(rec) {
-    const d    = rec.data || {};
-    const date = d.date || new Date(rec.id).toISOString().slice(0, 10);
-    let doc;
+    const d = rec.data || {};
     if (rec.type === 'toolbox') {
-      doc = buildToolboxPDF(d);
-      doc.save('Fraxinus_ToolboxTalk_' + date + '.pdf');
+      buildToolboxPDF(d).save(pdfFilename('ToolboxTalk', d));
     } else if (rec.type === 'jsha') {
-      doc = buildJSHAPDF(d);
-      doc.save('Fraxinus_HazardAssessment_' + date + '.pdf');
+      buildJSHAPDF(d).save(pdfFilename('HazardAssessment', d));
     }
   }
 

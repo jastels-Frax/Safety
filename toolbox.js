@@ -143,6 +143,7 @@
     const data = {
       date:     $('tb-date').value,
       project:  $('tb-project').value.trim(),
+      initials: $('tb-initials').value.trim().toUpperCase(),
       site:     $('tb-site').value.trim(),
       gps:      $('tb-gps').value.trim(),
       crew:     $('tb-crew').value.trim(),
@@ -220,8 +221,18 @@
   $('tb-pdf-btn').addEventListener('click', () => {
     const data = collectData();
     const doc  = buildToolboxPDF(data);
-    doc.save('Fraxinus_ToolboxTalk_' + new Date().toISOString().slice(0, 10) + '.pdf');
+    doc.save(pdfFilename('ToolboxTalk', data));
   });
+
+  function pdfFilename(type, data) {
+    const date = data.date || todayISO();
+    const proj = (data.project || '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+    const init = (data.initials || '').replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 6);
+    const parts = ['Fraxinus', type, date];
+    if (proj) parts.push(proj);
+    if (init) parts.push(init);
+    return parts.join('_') + '.pdf';
+  }
 
   function buildToolboxPDF(d) {
     const { jsPDF } = window.jspdf;
