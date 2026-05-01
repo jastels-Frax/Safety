@@ -319,11 +319,128 @@ const DOCUMENTS = [
         placeholder: true
       }
     ]
-  }
+  },
 
   // -------------------------------------------------------
   // ADD ADDITIONAL DOCUMENTS BELOW IN THE SAME FORMAT
   // -------------------------------------------------------
+
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-004",
+    title: "SWP #4 — Electrofishing",
+    description: "Minimum safety requirements for electrofishing operations in freshwater environments. Inherent risk: HIGH. Only certified personnel may participate. Must be used with SWP #1 and SWP #3.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Purpose and Scope",
+        content: "This SWP defines minimum safety requirements for electrofishing operations in freshwater environments. It applies to backpack electrofishing, boat electrofishing (if applicable), fish capture for scientific sampling, and any habitat or fish community assessments using electrical capture methods.\n\nMust be used in conjunction with SWP #1 (Core) and SWP #3 (Wetland & Watercourse)."
+      },
+      {
+        heading: "2. Worker Rights and Responsibilities",
+        content: "Workers involved in electrofishing have an elevated responsibility to:\n• Confirm understanding of electrical hazards prior to deployment.\n• Immediately report unsafe equipment conditions.\n• Stop work if any uncertainty exists regarding electrical integrity or safety.\n\nOnly certified personnel may participate in electrofishing activities.",
+        highlight: true
+      },
+      {
+        heading: "3. Hazards",
+        content: "Electrofishing introduces high-risk hazards, including:\n• Electrical shock (potentially fatal)\n• Loss of muscle control in water\n• Drowning risk following incapacitation\n• Slips, trips, and falls\n• Equipment malfunction\n• Fatigue-related errors\n• Poor communication in noisy conditions",
+        highlight: true
+      },
+      {
+        heading: "4. Risk Assessment",
+        content: "Inherent Risk Level: HIGH. Electrical exposure combined with an aquatic environment creates high consequence potential. No electrofishing activity shall proceed without full control implementation and qualified supervision.\n\nRisk increases with: high-conductivity water, deep or fast-moving water, poor visibility or complex substrate, and fatigue or environmental stress.",
+        highlight: true
+      },
+      {
+        heading: "5. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Personnel Requirements",
+            content: "Only trained and authorized personnel may operate electrofishing equipment. A designated team leader must be assigned for each operation. Minimum crew must be maintained as per equipment specifications.",
+            highlight: true
+          },
+          {
+            heading: "5.2 Equipment Safety Controls",
+            content: "• Pre-use inspection of all electrofishing equipment is mandatory.\n• All safety interlocks and deadman switches must be tested before entry into water.\n• Equipment must be grounded and operated according to manufacturer specifications.\n• No modifications to electrical systems are permitted in the field.",
+            highlight: true
+          },
+          {
+            heading: "5.3 Operational Controls",
+            content: "• Maintain clear communication signals at all times (hand/verbal).\n• Establish and maintain exclusion zones around active electrodes.\n• Do not activate current until all personnel are confirmed in safe positions.\n• Maintain controlled sweep patterns to avoid unintended exposure."
+          },
+          {
+            heading: "5.4 Shutdown Protocol (Critical Control)",
+            content: "Immediate shutdown required if: any crew member enters unsafe proximity to energized equipment, loss of communication occurs, equipment malfunction is suspected, or uncontrolled movement or instability in water occurs.",
+            highlight: true
+          }
+        ]
+      },
+      {
+        heading: "6. PPE",
+        content: "In addition to Core SWP PPE:\n• Non-conductive chest waders (mandatory).\n• Insulated rubber gloves rated for electrical work.\n• Personal flotation device (PFD) where water depth or flow requires.\n• Whistle or emergency signalling device.\n\nAll PPE must be inspected before use.",
+        highlight: true
+      },
+      {
+        heading: "7. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 Pre-Deployment",
+            content: "Conduct full safety briefing (hazards, roles, signals). Inspect all electrical equipment and connections. Confirm communication devices are functional. Establish exclusion zones and crew positioning."
+          },
+          {
+            heading: "7.2 Operational Deployment",
+            content: "Only operate equipment when all personnel are confirmed clear. Maintain controlled movement and consistent sweep patterns. Continuously monitor crew positioning and water conditions. Pause operations if conditions change or uncertainty arises."
+          },
+          {
+            heading: "7.3 Post-Operation",
+            content: "Ensure equipment is fully powered down. Conduct decontamination procedures. Inspect equipment for damage or wear. Debrief crew on safety or procedural issues."
+          }
+        ]
+      },
+      {
+        heading: "8. Communication and Supervision",
+        content: "Continuous communication required between all crew members. Clear verbal or visual signals must be established before activation. A designated safety lead must maintain operational oversight at all times. Immediate stop-work authority applies to all crew members.",
+        highlight: true
+      },
+      {
+        heading: "9. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "9.1 Key Emergency Scenarios",
+            content: "Electrical shock incident, loss of consciousness in water, drowning or near-drowning, and equipment malfunction during operation.",
+            highlight: true
+          },
+          {
+            heading: "9.2 Response Procedures",
+            content: "In the event of an incident: immediately cease all electrical output, remove affected personnel from the water, initiate CPR or first aid as required, activate emergency services immediately, notify supervisor, and secure and document equipment conditions."
+          }
+        ]
+      },
+      {
+        heading: "10. Environmental and Weather Conditions",
+        content: "Do not operate in lightning or electrical storm conditions. Suspend operations in high-flow or flood conditions. Avoid deployment in extreme cold where hypothermia risk is elevated. Reassess water conditions continuously during operation.",
+        highlight: true
+      },
+      {
+        heading: "11. Documentation and Reporting",
+        content: "Workers must: record all sampling data accurately and in real time, document equipment settings and operational conditions, report any incidents, near misses, or equipment faults immediately, and maintain chain-of-custody or project documentation requirements where applicable."
+      },
+      {
+        heading: "12. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Wetland & Watercourse SWP (#3)\n• Manufacturer's electrofishing equipment manuals\n• Applicable Occupational Health and Safety legislation\n• Internal company safety and training protocols"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
+  }
 
 ];
 
