@@ -316,54 +316,48 @@
           return;
         }
 
-        const cols = [CW * 0.38, CW * 0.18, CW * 0.44];
-        const hdrs = ['Hazard', 'Risk Level', 'Control Measure'];
-        guard(10);
+        const C1 = 14, C2 = 100, C3 = 136, W3 = 60;
+        const ROW_H = 14;
+        guard(ROW_H + 4);
 
-        doc.setFillColor(...BGRAY);
-        doc.rect(ML, y - 4, CW, 6, 'F');
+        doc.setFillColor(230, 230, 230);
+        doc.rect(C1, y - 5, (C3 + W3) - C1, 7, 'F');
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(8);
         doc.setTextColor(...DARK);
-        let x = ML;
-        hdrs.forEach((h, i) => { doc.text(h, x + 2, y); x += cols[i]; });
-        doc.setDrawColor(...LGRAY);
+        doc.text('Hazard',          C1 + 2, y);
+        doc.text('Risk Level',      C2 + 2, y);
+        doc.text('Control Measure', C3 + 2, y);
+        doc.setDrawColor(200, 200, 200);
         doc.setLineWidth(0.25);
-        doc.line(ML, y + 2, ML + CW, y + 2);
-        y += 6;
+        doc.line(C1, y + 2, C3 + W3, y + 2);
+        y += ROW_H;
 
         hazards.forEach(h => {
-          const hl   = doc.splitTextToSize(h.hazard  || '—', cols[0] - 4);
-          const cl   = doc.splitTextToSize(h.control || '—', cols[2] - 4);
-          const rowH = Math.max(hl.length, cl.length) * 4.5 + 3;
-          guard(rowH + 2);
+          guard(ROW_H);
 
-          x = ML;
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8.5);
           doc.setTextColor(...DARK);
-          doc.text(hl, x + 2, y);
-          x += cols[0];
+          doc.text(h.hazard || '—', C1 + 2, y);
 
           const risk = h.risk || '';
-          const rc   = risk === 'High' ? [180, 30,  30]
-                     : risk === 'Med'  ? [150, 90,   0]
-                     : risk === 'Low'  ? [30,  110, 30]
+          const rc   = risk === 'High' ? [204,   0,   0]
+                     : risk === 'Med'  ? [232, 115,  26]
+                     : risk === 'Low'  ? [ 74, 124,  89]
                      : DARK;
           doc.setFont('helvetica', 'bold');
           doc.setTextColor(...rc);
-          doc.text(risk || '—', x + 2, y);
-          x += cols[1];
+          doc.text(risk || '—', C2 + 2, y);
 
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(...DARK);
-          doc.text(cl, x + 2, y);
+          doc.text(h.control || '—', C3 + 2, y);
 
-          y += rowH;
-          doc.setDrawColor(...LGRAY);
+          doc.setDrawColor(200, 200, 200);
           doc.setLineWidth(0.15);
-          doc.line(ML, y, ML + CW, y);
-          y += 1;
+          doc.line(C1, y + 2, C3 + W3, y + 2);
+          y += ROW_H;
         });
 
         y += 2;
@@ -380,20 +374,25 @@
           return;
         }
 
-        const COLS = 3;
-        const colW = CW / COLS;
+        const colX = [14, 80, 146];
         let col = 0;
 
         ppe.forEach(item => {
-          if (col === 0) guard(6);
+          if (col === 0) guard(10);
+          const x = colX[col];
+          doc.setDrawColor(100, 100, 100);
+          doc.setLineWidth(0.3);
+          doc.rect(x, y - 3, 4, 4);
+          doc.line(x,     y - 3, x + 4, y + 1);
+          doc.line(x + 4, y - 3, x,     y + 1);
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(9);
           doc.setTextColor(...DARK);
-          doc.text('✓  ' + item, ML + col * colW, y);
+          doc.text(item, x + 7, y);
           col++;
-          if (col >= COLS) { col = 0; y += 5.5; }
+          if (col >= 3) { col = 0; y += 10; }
         });
-        if (col > 0) y += 5.5;
+        if (col > 0) y += 10;
         y += 2;
       },
 
