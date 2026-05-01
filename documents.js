@@ -803,6 +803,126 @@ const DOCUMENTS = [
         placeholder: true
       }
     ]
+  },
+
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-008",
+    title: "SWP #8 — Construction Monitoring & Active Worksites",
+    description: "Minimum safety requirements for environmental monitoring and inspection at active construction sites. Inherent risk: HIGH. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Purpose and Scope",
+        content: "This SWP defines minimum safety requirements for environmental monitoring and inspection activities at active construction sites. It applies to: environmental inspection and compliance monitoring, erosion and sediment control (ESC) inspections, watercourse and wetland monitoring during construction, site visits to active infrastructure or development projects, and coordination with contractors and site supervisors.\n\nMust be used in conjunction with the Core Environmental Fieldwork SWP (#1) and applicable task-specific SWPs."
+      },
+      {
+        heading: "2. Worker Rights and Responsibilities",
+        content: "Additional responsibilities:\n• Workers must comply with all site-specific safety rules and orientations.\n• Workers must follow direction from the site supervisor or prime contractor regarding site safety.\n• Workers must not enter restricted or controlled areas without authorization.\n• Workers retain the right to stop their work if unsafe conditions are observed.",
+        highlight: true
+      },
+      {
+        heading: "3. Hazards",
+        content: "Construction sites present elevated and dynamic hazards, including:\n• Heavy equipment (excavators, trucks)\n• Moving vehicles and reversing equipment\n• Blind spots and limited operator visibility\n• Excavations, trenches, and unstable ground\n• Falling objects or overhead work\n• Noise limiting communication\n• Dust, debris, and airborne particulates\n• Slips, trips, and uneven terrain\n• Interaction with multiple contractors\n• Changing site conditions",
+        highlight: true
+      },
+      {
+        heading: "4. Risk Assessment",
+        content: "Inherent Risk Level: HIGH. Risk is driven by dynamic conditions and heavy equipment interaction.\n\nRisk increases with: active excavation or earthworks, high equipment density, poor visibility (weather, dust, lighting), lack of site orientation or supervision, and working near operating machinery.",
+        highlight: true
+      },
+      {
+        heading: "5. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Site Orientation and Authorization",
+            content: "Workers must complete all required site safety orientations prior to entering the worksite. Sign-in/out procedures must be followed where required. Obtain approval from the site supervisor before accessing work areas.",
+            highlight: true
+          },
+          {
+            heading: "5.2 Communication and Coordination",
+            content: "Establish communication with the site supervisor upon arrival. Confirm active work zones and restricted areas. Maintain communication with equipment operators when working nearby. Use radios or agreed signals where required."
+          },
+          {
+            heading: "5.3 Equipment Interaction Controls",
+            content: "• Maintain a safe distance from all operating equipment.\n• Never enter equipment blind spots.\n• Make eye contact with operators before approaching.\n• Do not assume operators can see you.\n• Stay clear of swing radius and travel paths.",
+            highlight: true
+          },
+          {
+            heading: "5.4 Work Zone Awareness",
+            content: "Identify hazards before entering work area. Avoid walking under suspended loads. Stay clear of active excavation edges. Follow designated walkways where provided.",
+            highlight: true
+          },
+          {
+            heading: "5.5 Stop-Work Authority",
+            content: "Work must be stopped if: unsafe equipment operation is observed, communication with operators is impossible, site conditions change unexpectedly, or required controls are not in place.",
+            highlight: true
+          }
+        ]
+      },
+      {
+        heading: "6. PPE",
+        content: "In addition to Core SWP PPE:\n• CSA-approved high-visibility apparel — mandatory.\n• Hard hat — mandatory on active sites.\n• Steel-toe safety boots — mandatory.\n• Safety glasses (where required).\n• Hearing protection (where required).\n\nAll PPE must meet site-specific requirements.",
+        highlight: true
+      },
+      {
+        heading: "7. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 Site Arrival",
+            content: "Report to the site supervisor. Complete sign-in and orientation. Review site hazards and current activities. Confirm safe access routes."
+          },
+          {
+            heading: "7.2 Active Monitoring",
+            content: "Maintain continuous awareness of equipment and site activity. Position yourself in safe, visible locations. Conduct inspections without interfering with construction activities. Communicate with operators before entering active work zones."
+          },
+          {
+            heading: "7.3 Demobilization",
+            content: "Exit site using designated safe routes. Sign out as required. Report any hazards or incidents observed. Debrief with supervisor if necessary."
+          }
+        ]
+      },
+      {
+        heading: "8. Communication and Supervision",
+        content: "Maintain communication with the site supervisor at all times. Follow all site-specific communication protocols. Ensure at least one point of contact is identified on-site. All workers retain stop-work authority."
+      },
+      {
+        heading: "9. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "9.1 Key Emergency Scenarios",
+            content: "Worker struck by equipment, trench collapse or ground failure, falling object injury, and vehicle collision on site.",
+            highlight: true
+          },
+          {
+            heading: "9.2 Response Procedures",
+            content: "Move to a safe location if possible. Alert site personnel immediately. Follow the site's emergency procedures. Provide first aid as required. Contact emergency services if necessary. Notify supervisor. Document the incident and site conditions."
+          }
+        ]
+      },
+      {
+        heading: "10. Environmental and Weather Conditions",
+        content: "Monitor weather impacts on site safety (rain, wind, freezing conditions). Be aware of increased hazards due to mud, ice, or reduced visibility. Adjust positioning and movement accordingly."
+      },
+      {
+        heading: "11. Documentation and Reporting",
+        content: "Workers must: complete all monitoring and inspection records, document environmental conditions and compliance observations, report safety hazards and near-misses observed on site, and record any interactions affecting safety or compliance."
+      },
+      {
+        heading: "12. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Roadside & Right-of-Way SWP (#5)\n• Wetland & Watercourse SWP (#3) (if applicable)\n• Company Health and Safety Program\n• Occupational Health and Safety legislation\n• Site-specific safety plans\n• All relevant contractor documentation"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
   }
 
 ];
