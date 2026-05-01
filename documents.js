@@ -684,6 +684,125 @@ const DOCUMENTS = [
         placeholder: true
       }
     ]
+  },
+
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-007",
+    title: "SWP #7 — Wildlife Surveys & Tracking",
+    description: "Minimum safety requirements for wildlife surveys and tracking activities including camera traps, moose surveys, acoustic monitoring, and incidental wildlife observations. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Purpose and Scope",
+        content: "This SWP defines minimum safety requirements for conducting wildlife surveys and tracking activities. It applies to: camera trap installation and monitoring, moose surveys (PGIs, winter tracking), acoustic monitoring (e.g., birds, bats), incidental wildlife observations, and wildlife habitat assessments.\n\nMust be used in conjunction with the Core Environmental Fieldwork SWP (#1) and applicable task-specific SWPs."
+      },
+      {
+        heading: "2. Worker Rights and Responsibilities",
+        content: "Additional responsibilities:\n• Workers must maintain safe and respectful distances from all wildlife.\n• Workers must not intentionally approach, feed, or interact with wildlife.\n• Workers must immediately report aggressive or unusual wildlife behaviour.\n• Workers retain the right to stop work if wildlife conditions present a safety risk.",
+        highlight: true
+      },
+      {
+        heading: "3. Hazards",
+        content: "Wildlife-related hazards may include:\n• Encounters with large mammals (e.g., bears, moose)\n• Aggressive or defensive animal behavior\n• Nesting or territorial birds\n• Bites, scratches, or trampling injuries\n• Zoonotic disease exposure (e.g., ticks)\n• Distraction leading to reduced awareness",
+        highlight: true
+      },
+      {
+        heading: "4. Risk Assessment",
+        content: "Inherent Risk Level: MODERATE (can escalate to HIGH depending on species and context).\n\nRisk increases with: presence of large mammals or predators, breeding/nesting seasons, food attractants (intentional or unintentional), limited visibility environments (dense vegetation, dusk/dawn), and remote locations with delayed emergency response."
+      },
+      {
+        heading: "5. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Wildlife Awareness and Avoidance",
+            content: "• Maintain continuous situational awareness for signs of wildlife.\n• Make noise when moving through dense vegetation to avoid surprise encounters.\n• Avoid areas with fresh signs of large or potentially dangerous wildlife (tracks, scat, carcasses).\n• Do not approach wildlife under any circumstances.",
+            highlight: true
+          },
+          {
+            heading: "5.2 Safe Distance Protocol",
+            content: "Maintain an appropriate distance from all wildlife. Increase distance for large mammals or animals exhibiting alert or defensive behaviour. Use binoculars or remote tools instead of approaching animals."
+          },
+          {
+            heading: "5.3 Attractant Management",
+            content: "Do not leave food or waste accessible in the field. Store food securely and away from work areas. Avoid carrying strong attractants.",
+            highlight: true
+          },
+          {
+            heading: "5.4 Species-Specific Awareness",
+            content: "Workers must be familiar with common regional wildlife and associated risks. Adjust behaviour based on species encountered. Follow established encounter protocols (see Section 7)."
+          }
+        ]
+      },
+      {
+        heading: "6. PPE",
+        content: "In addition to Core SWP PPE:\n• Bear spray or wildlife deterrent (where applicable and permitted) — must be readily accessible, not stored in packs, and used only by trained personnel.\n• Gloves (for handling equipment or indirect contact with wildlife materials).\n• Tick protection measures (as per SWP #2 and SWP #11).",
+        highlight: true
+      },
+      {
+        heading: "7. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 General Wildlife Encounter Protocol",
+            content: "If wildlife is encountered: stop and assess the situation, do not approach or provoke the animal, slowly increase distance while maintaining awareness, maintain visual contact without direct confrontation, and leave the area if the animal does not vacate.",
+            highlight: true
+          },
+          {
+            heading: "7.2 Large Mammal Encounter (e.g., Bear, Moose)",
+            content: "• Do not run.\n• Avoid sudden movements.\n• Speak calmly and back away slowly.\n• Use a deterrent (e.g., bear spray) only if the animal approaches aggressively.\n• Disengage and leave the area immediately.",
+            highlight: true
+          },
+          {
+            heading: "7.3 Aggressive or Escalating Behaviour",
+            content: "Stop all work. Create distance immediately. Group together if in a crew. Prepare deterrent if necessary. Exit the area and reassess the work plan."
+          },
+          {
+            heading: "7.4 Camera Trap and Equipment Handling",
+            content: "Approach cameras cautiously, scanning for nearby wildlife. Avoid placing equipment in areas of high wildlife traffic when possible. Minimize scent and disturbance at monitoring sites."
+          }
+        ]
+      },
+      {
+        heading: "8. Communication and Supervision",
+        content: "Inform crew members of wildlife presence. Report high-risk wildlife encounters to the supervisor. Adjust work plans based on wildlife activity. Maintain communication in areas of reduced visibility."
+      },
+      {
+        heading: "9. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "9.1 Key Emergency Scenarios",
+            content: "Animal attack or injury, bite or scratch with infection risk, and exposure to zoonotic disease.",
+            highlight: true
+          },
+          {
+            heading: "9.2 Response Procedures",
+            content: "Move to a safe location immediately. Provide first aid as required. Seek medical attention as necessary. Report incident to supervisor as soon as possible. Document circumstances and species involved."
+          }
+        ]
+      },
+      {
+        heading: "10. Environmental and Weather Conditions",
+        content: "Increased wildlife activity may occur during dawn, dusk, and seasonal transitions. Adjust fieldwork timing and approach accordingly. Exercise increased caution in low visibility conditions."
+      },
+      {
+        heading: "11. Documentation and Reporting",
+        content: "Workers must: document wildlife observations relevant to the project scope, report all significant wildlife encounters, report aggressive or unusual behaviour, and record any incidents, near-misses, or deterrent use."
+      },
+      {
+        heading: "12. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Vegetation & Botanical Surveys SWP (#2)\n• Remote / Backcountry Fieldwork SWP (#6)\n• Tick Safety & Lyme Disease Prevention SWP (#11)\n• Company Health and Safety Program\n• Occupational Health and Safety legislation"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
   }
 
 ];
