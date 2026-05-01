@@ -923,6 +923,130 @@ const DOCUMENTS = [
         placeholder: true
       }
     ]
+  },
+
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-009",
+    title: "SWP #9 — Vehicle Use & Travel",
+    description: "Minimum safety requirements for operating vehicles during fieldwork and travel between sites, including highway, rural, and off-road conditions. Inherent risk: HIGH. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Purpose and Scope",
+        content: "This SWP defines minimum safety requirements for operating vehicles during fieldwork and travel between sites. It applies to: company and personal vehicles used for work purposes, travel to and from field sites, driving on highways, rural roads, and off-road conditions, and transport of personnel and equipment.\n\nMust be used in conjunction with the Core Environmental Fieldwork SWP (#1)."
+      },
+      {
+        heading: "2. Worker Rights and Responsibilities",
+        content: "Additional responsibilities:\n• Drivers must hold a valid license appropriate for the vehicle class.\n• Drivers must be fit for duty and free from impairment or fatigue.\n• Workers have the right to refuse travel in unsafe conditions.",
+        highlight: true
+      },
+      {
+        heading: "3. Hazards",
+        content: "Vehicle operation hazards include:\n• Motor vehicle collisions\n• Fatigue and long-distance driving\n• Poor weather conditions (snow, ice, fog)\n• Wildlife collisions\n• Poor road conditions (gravel, logging roads)\n• Mechanical failure\n• Distraction while driving",
+        highlight: true
+      },
+      {
+        heading: "4. Risk Assessment",
+        content: "Inherent Risk Level: HIGH. Driving is one of the leading causes of workplace incidents.\n\nRisk increases with: winter driving conditions, long travel durations, remote or poorly maintained roads, and night driving.",
+        highlight: true
+      },
+      {
+        heading: "5. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Driver Requirements",
+            content: "Drivers must be authorized and competent. No use of mobile devices while driving. Follow all traffic laws and regulations.",
+            highlight: true
+          },
+          {
+            heading: "5.2 Pre-Trip Inspection",
+            content: "Before departure: check tires, lights, brakes, and fluid levels, ensure sufficient fuel for the trip, and confirm emergency equipment is present."
+          },
+          {
+            heading: "5.3 Safe Driving Practices",
+            content: "Adjust speed to road and weather conditions. Maintain safe following distances. Avoid aggressive or distracted driving. Use headlights appropriately."
+          },
+          {
+            heading: "5.4 Fatigue Management",
+            content: "Take breaks at regular intervals. Avoid excessive driving hours in a single day. Rotate drivers where possible. Do not drive if fatigued.",
+            highlight: true
+          },
+          {
+            heading: "5.5 Off-Road and Rural Driving",
+            content: "Use appropriate vehicles for terrain. Drive cautiously on gravel or dirt roads. Watch for wildlife and other road users. Avoid driving in unsafe conditions."
+          },
+          {
+            heading: "5.6 Emergency Preparedness",
+            content: "Vehicles must carry: first aid kit, spare tire and tools, emergency supplies (seasonal), and communication device.",
+            highlight: true
+          }
+        ]
+      },
+      {
+        heading: "6. PPE",
+        content: "• Seatbelts must be worn at all times.\n• High-visibility apparel when exiting the vehicle roadside.\n• Weather-appropriate clothing for emergency situations.",
+        highlight: true
+      },
+      {
+        heading: "7. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 Pre-Travel",
+            content: "Plan the route and travel time. Check the weather and road conditions. Inform others of travel plans where required."
+          },
+          {
+            heading: "7.2 During Travel",
+            content: "Drive defensively and remain alert. Avoid unnecessary stops in unsafe locations. Monitor vehicle performance."
+          },
+          {
+            heading: "7.3 Post-Travel",
+            content: "Report any vehicle issues or hazards. Refuel and prepare vehicle for next use. Document incidents or near-misses."
+          }
+        ]
+      },
+      {
+        heading: "8. Communication and Supervision",
+        content: "Maintain communication when traveling to remote sites. Follow check-in procedures where required. Notify supervisor of delays or issues."
+      },
+      {
+        heading: "9. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "9.1 Key Emergency Scenarios",
+            content: "Motor vehicle collision, vehicle breakdown in a remote area, and becoming stranded due to weather.",
+            highlight: true
+          },
+          {
+            heading: "9.2 Response Procedures",
+            content: "Move to a safe location if possible. Activate hazard lights. Contact emergency services if required. Notify supervisor. Remain with the vehicle unless it is unsafe."
+          }
+        ]
+      },
+      {
+        heading: "10. Environmental and Weather Conditions",
+        content: "Avoid travel during severe weather conditions. Adjust driving practices for seasonal hazards. Be prepared for rapidly changing conditions.",
+        highlight: true
+      },
+      {
+        heading: "11. Documentation and Reporting",
+        content: "Workers must: complete vehicle inspection records where required, report all incidents, near-misses, and mechanical issues, and document travel plans where applicable."
+      },
+      {
+        heading: "12. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Roadside & Right-of-Way SWP (#5)\n• Company Vehicle Policy\n• Occupational Health and Safety legislation"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
   }
 
 ];
