@@ -214,47 +214,108 @@ const DOCUMENTS = [
     category: "SWPs / Field Procedures",
     id: "swp-003",
     title: "SWP #3 — Wetland & Watercourse Assessment",
-    description: "Minimum safety requirements for wetland and aquatic fieldwork. Must be used with SWP #1.",
+    description: "Minimum safety requirements for fieldwork in wetland and aquatic environments including boundary delineation, hydrological assessments, and stream classification. Must be used with SWP #1.",
     version: "REV00",
     lastUpdated: "April 23, 2026",
     author: "Jason Astels",
     sections: [
       {
         heading: "1. Scope",
-        content: "Applies to wetland boundary delineation, hydrological feature identification, stream and watercourse classification, aquatic habitat assessments, and fish habitat observations. Must be used with SWP #1."
+        content: "This SWP defines minimum safety requirements for fieldwork in wetland and aquatic environments, including: wetland boundary delineation, hydrological feature identification, stream and watercourse classification, aquatic habitat assessments, and fish habitat observations (visual/passive).\n\nMust be used in conjunction with the Core Environmental Fieldwork SWP (#1)."
       },
       {
-        heading: "2. Hazards",
-        content: "Soft or unstable substrates, entrapment or submersion risk, cold water exposure and hypothermia, sudden depth changes, slippery substrates, remote access and delayed response, waterborne pathogens.",
+        heading: "2. Additional Hazards",
+        content: "Wetland and watercourse environments introduce elevated hazards, including:\n• Soft or unstable substrates\n• Entrapment or submersion risk\n• Cold water exposure and hypothermia\n• Reduced visibility under water or vegetation\n• Sudden depth changes or hidden channels\n• Slippery substrates (algae, clay, etc.)\n• Remote access and delayed response\n• Waterborne pathogens or contaminants",
         highlight: true
       },
       {
-        heading: "3. Movement & Substrate Safety",
-        content: "Probe substrate ahead of each step. Avoid unknown depths or unconsolidated organic mats. Maintain slow deliberate movement. Establish no-go zones in unstable areas.",
+        heading: "3. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "3.1 Movement & Substrate Safety",
+            content: "• Probe the substrate ahead of each step before weight transfer.\n• Avoid stepping into unknown depths or unconsolidated organic mats.\n• Maintain slow, deliberate movement in all wetland zones.\n• Identify and use stable travel corridors where possible.\n• Establish and communicate 'no-go' zones in deep or unstable areas.",
+            highlight: true
+          },
+          {
+            heading: "3.2 Working in Pairs",
+            content: "A two-person minimum is strongly recommended. Maintain visual or verbal contact at all times where possible. Do not enter deep or unstable substrates alone under any circumstances.",
+            highlight: true
+          },
+          {
+            heading: "3.3 Water Hazard Awareness",
+            content: "• Assess flow velocity, depth, and temperature before entry.\n• Avoid crossing watercourses where depth or velocity is unknown.\n• Treat all flowing water as a potential drowning hazard.\n• Identify safe entry and exit points prior to fieldwork."
+          },
+          {
+            heading: "3.4 Cold Water Protection",
+            content: "• Limit exposure time in cold water environments.\n• Rotate personnel where prolonged exposure is required.\n• Exit water immediately if signs of cold stress appear.\n• Carry dry clothing and thermal layers for post-exposure warming.",
+            highlight: true
+          }
+        ]
+      },
+      {
+        heading: "4. PPE Additions",
+        content: "In addition to Core SWP PPE:\n• Chest or hip waders with integrated belt — mandatory when entering water.\n• Personal Flotation Device (PFD) — required when water depth exceeds knee height, flow velocity presents an instability risk, or the supervisor determines an elevated hazard condition.\n• Insulated base layers (cold conditions).\n• Wading staff or pole — recommended for substrate probing.",
         highlight: true
       },
       {
-        heading: "4. Working in Pairs",
-        content: "Two-person minimum strongly recommended. Do not enter deep or unstable substrates alone under any circumstances.",
+        heading: "5. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Entry and Exit Planning",
+            content: "Identify safe entry and exit points before entering the wetland or watercourse. Avoid repeated entry/exit through unstable margins. Minimize disturbance to sensitive wetland edges where possible."
+          },
+          {
+            heading: "5.2 Delineation and Assessment Practices",
+            content: "Conduct boundary identification using conservative interpretation principles. Document vegetation, hydrology, and soil indicators systematically. Avoid excessive disturbance of wetland substrate during sampling. Use established protocols for hydrological classification where applicable."
+          },
+          {
+            heading: "5.3 Decontamination (Invasive Species Control)",
+            content: "• Clean boots, waders, and equipment before moving between waterbodies.\n• Remove visible organic material and sediment.\n• Follow site-specific invasive species prevention protocols.\n• Do not transport material between watersheds.",
+            highlight: true
+          }
+        ]
+      },
+      {
+        heading: "6. Communication and Supervision",
+        content: "Maintain check-in procedures as per Core SWP. Ensure all crew members are aware of terrain hazards before entry. Establish clear verbal signals when working in low-visibility conditions. The supervisor must confirm risk conditions prior to wetland entry in complex terrain."
+      },
+      {
+        heading: "7. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 Key Emergency Risks",
+            content: "Submersion or entrapment, hypothermia from prolonged exposure, and slips leading to water entry or injury.",
+            highlight: true
+          },
+          {
+            heading: "7.2 Response Procedures",
+            content: "In the event of an incident: prioritize worker retrieval from water or unstable substrate, move the individual to a stable dry location immediately, initiate first aid and warming procedures, contact emergency services if required, notify supervisor, and document the incident."
+          }
+        ]
+      },
+      {
+        heading: "8. Environmental and Weather Conditions",
+        content: "Do not enter wetland systems during heavy precipitation or flooding conditions. Suspend work during lightning or severe weather events. Reassess substrate stability following weather changes. Adjust work methods in response to seasonal water level fluctuations.",
         highlight: true
       },
       {
-        heading: "5. PPE Additions",
-        content: "Chest or hip waders with integrated belt — mandatory when entering water. PFD required when depth exceeds knee height or flow presents instability risk. Wading staff recommended.",
-        highlight: true
+        heading: "9. Vehicle and Access Safety",
+        content: "Park in stable, non-flood-prone access locations. Avoid driving on saturated soils or wetland margins. Carry recovery equipment where vehicle access is marginal. Plan access routes to minimize environmental disturbance."
       },
       {
-        heading: "6. Decontamination",
-        content: "Clean boots, waders, and equipment before moving between waterbodies. Remove visible organic material. Do not transport material between watersheds.",
-        highlight: true
+        heading: "10. Documentation and Reporting",
+        content: "Workers must: record wetland boundaries and observations accurately, document any unsafe conditions encountered, report near-misses or substrate failures immediately, and complete required field data sheets and safety logs."
       },
       {
-        heading: "7. Emergency Response",
-        content: "Prioritize retrieval from water. Move to stable dry location. Initiate first aid and warming. Contact emergency services. Notify supervisor and document incident."
+        heading: "11. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Applicable wetland classification manuals or provincial standards\n• Invasive species prevention protocols\n• Occupational Health and Safety legislation\n• Task-Specific SWPs (Electrofishing, Remote Fieldwork, etc.)"
       },
       {
         heading: "Approval Sign-Off",
-        content: "⚠ Needs Company Input — signatures required.",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
         placeholder: true
       }
     ]
