@@ -559,6 +559,131 @@ const DOCUMENTS = [
         placeholder: true
       }
     ]
+  },
+
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-006",
+    title: "SWP #6 — Remote / Backcountry Fieldwork",
+    description: "Minimum safety requirements for fieldwork outside reliable cellular coverage, including long-distance access, helicopter-supported work, and multi-day deployments. Inherent risk: HIGH. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Purpose and Scope",
+        content: "This SWP defines minimum safety requirements for fieldwork in remote or backcountry environments. It applies to: fieldwork outside reliable cellular coverage, long-distance hiking or difficult terrain access, helicopter-supported access (where applicable), multi-hour or multi-day field deployments, and work in areas with delayed emergency response capability.\n\nMust be used with the Core Environmental Fieldwork SWP (#1) and relevant task-specific SWPs."
+      },
+      {
+        heading: "2. Worker Rights and Responsibilities",
+        content: "Additional responsibilities:\n• Workers must understand and follow trip plans and communication schedules.\n• Workers must not deviate from planned routes without notifying designated contacts.\n• All workers have the authority to turn back if conditions become unsafe.",
+        highlight: true
+      },
+      {
+        heading: "3. Hazards",
+        content: "Remote fieldwork introduces hazards including:\n• Isolation and delayed emergency response\n• Lack of reliable communication (no service)\n• Navigation errors or becoming lost\n• Injury without immediate assistance\n• Rapid weather changes and exposure\n• Fatigue from travel or difficult terrain\n• Wildlife encounters\n• Limited access to shelter, food, or water",
+        highlight: true
+      },
+      {
+        heading: "4. Risk Assessment",
+        content: "Inherent Risk Level: HIGH. Risk is driven primarily by response time, not just hazard exposure.\n\nRisk increases with: distance from access points or roads, lack of communication capability, severe or rapidly changing weather, solo or widely dispersed work, and complex terrain or navigation difficulty.",
+        highlight: true
+      },
+      {
+        heading: "5. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Trip Planning (Critical Control)",
+            content: "Prior to deployment, prepare a trip plan including: work location(s) and access routes, planned travel routes, expected timeline, crew members and roles, and emergency contact information.",
+            highlight: true
+          },
+          {
+            heading: "5.2 Communication Systems",
+            content: "Carry reliable communication devices such as: satellite messenger (e.g., InReach) and radio (where applicable). Establish a check-in/check-out schedule prior to departure. Failure to check in must trigger a predefined escalation procedure.",
+            highlight: true
+          },
+          {
+            heading: "5.3 Navigation Controls",
+            content: "• Carry a GPS-enabled device and backup navigation tools (map and compass).\n• Ensure at least one crew member is proficient in navigation.\n• Track movement relative to the planned route.\n• Avoid unnecessary deviation from planned travel corridors."
+          },
+          {
+            heading: "5.4 Crew Structure",
+            content: "Solo work in remote environments is not recommended and must be approved by a supervisor. Maintain visual or communication contact between crew members. Establish regroup points and timelines if working in dispersed areas.",
+            highlight: true
+          },
+          {
+            heading: "5.5 Time and Fatigue Management",
+            content: "Establish turnaround time and adhere to it. Plan sufficient time for safe return travel. Take regular breaks to reduce fatigue-related risk. Do not continue work if fatigue compromises safety."
+          },
+          {
+            heading: "5.6 Emergency Supplies",
+            content: "All crews must carry: first aid kit, emergency shelter (e.g., bivy, tarp), extra food and water, fire-starting materials (where appropriate), and weather-appropriate spare clothing.",
+            highlight: true
+          }
+        ]
+      },
+      {
+        heading: "6. PPE",
+        content: "In addition to Core SWP PPE:\n• Weather-appropriate outerwear.\n• Sturdy footwear suitable for extended travel.\n• High-visibility clothing.\n• Personal emergency kit."
+      },
+      {
+        heading: "7. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 Pre-Deployment",
+            content: "Complete trip plan. Check weather forecast. Confirm communication devices are working. Conduct safety briefing with full crew."
+          },
+          {
+            heading: "7.2 Active Fieldwork",
+            content: "Follow the planned route and schedule. Maintain awareness of time, weather, and conditions. Conduct periodic check-ins as scheduled. Adjust plans as needed while maintaining safety margins."
+          },
+          {
+            heading: "7.3 Return and Check-Out",
+            content: "Confirm safe return with designated contact. Report any deviations from the plan. Report hazards or near-misses encountered."
+          }
+        ]
+      },
+      {
+        heading: "8. Communication and Supervision",
+        content: "A designated contact person must monitor the field crew status. The communication schedule must be clearly defined before departure. Escalation procedure must be in place for missed check-ins. Supervisor approval required for high-risk remote deployments.",
+        highlight: true
+      },
+      {
+        heading: "9. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "9.1 Key Emergency Scenarios",
+            content: "Lost or disoriented personnel, injury in a remote location, severe weather exposure, communication failure, ATV accident, and equipment failure.",
+            highlight: true
+          },
+          {
+            heading: "9.2 Response Procedures",
+            content: "Stop work and assess situation. Provide first aid as required. Establish communication using available devices. Activate emergency response. Shelter in place if evacuation is not feasible. Follow escalation protocol if contact is lost."
+          }
+        ]
+      },
+      {
+        heading: "10. Environmental and Weather Conditions",
+        content: "Monitor weather before and during fieldwork. Do not proceed into remote areas under severe weather warnings. Adjust plans based on real-time conditions. Be prepared for rapid environmental changes.",
+        highlight: true
+      },
+      {
+        heading: "11. Documentation and Reporting",
+        content: "Workers must: complete and file trip plans prior to deployment, document routes, conditions, and deviations, report all incidents, near-misses, and communication failures, and maintain records of check-in/check-out communications."
+      },
+      {
+        heading: "12. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• All task-specific SWPs\n• Company Health and Safety Program\n• Occupational Health and Safety legislation\n• Emergency response procedures"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
   }
 
 ];
