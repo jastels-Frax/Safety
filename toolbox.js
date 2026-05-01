@@ -226,7 +226,7 @@
 
   function pdfFilename(type, data) {
     const date = data.date || todayISO();
-    const proj = (data.project || '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+    const proj = (data.project || '').replace(/\b\d{4}(-\d{2}(-\d{2})?)?\b/g, '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
     const init = (data.initials || '').replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 6);
     const parts = ['Fraxinus', type, date];
     if (proj) parts.push(proj);

@@ -4,7 +4,7 @@
    everything else (future API calls, dynamic content).
    ============================================================ */
 
-const CACHE_VERSION = 'v13';
+const CACHE_VERSION = 'v14';
 const SHELL_CACHE   = 'fraxinus-shell-' + CACHE_VERSION;
 
 const SHELL_ASSETS = [

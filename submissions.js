@@ -255,7 +255,7 @@
 
   function pdfFilename(type, d) {
     const date = d.date || new Date().toISOString().slice(0, 10);
-    const proj = (d.project || '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+    const proj = (d.project || '').replace(/\b\d{4}(-\d{2}(-\d{2})?)?\b/g, '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
     const init = (d.initials || '').replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 6);
     const parts = ['Fraxinus', type, date];
     if (proj) parts.push(proj);
