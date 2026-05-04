@@ -1047,6 +1047,114 @@ const DOCUMENTS = [
         placeholder: true
       }
     ]
+  },
+
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-010",
+    title: "SWP #10 — Public Interaction & Landowner Engagement",
+    description: "Minimum safety and conduct requirements for interacting with members of the public, landowners, and stakeholders during fieldwork. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Purpose and Scope",
+        content: "This SWP defines minimum safety and conduct requirements for interacting with members of the public, landowners, and stakeholders during fieldwork. It applies to: work conducted on or near private property, interactions with landowners or residents, encounters with the general public, and situations involving questions, concerns, or conflict.\n\nMust be used in conjunction with the Core Environmental Fieldwork SWP (#1)."
+      },
+      {
+        heading: "2. Worker Rights and Responsibilities",
+        content: "Additional responsibilities:\n• Workers must act professionally and respectfully at all times.\n• Workers must not engage in confrontation or escalation.\n• Workers have the right to disengage from unsafe interactions.",
+        highlight: true
+      },
+      {
+        heading: "3. Hazards",
+        content: "Public interaction hazards include:\n• Verbal confrontation or conflict\n• Aggressive or threatening individuals\n• Misunderstanding of the project purpose\n• Unauthorized access to private property\n• Reputational risk to the company\n• Distraction from field hazards"
+      },
+      {
+        heading: "4. Risk Assessment",
+        content: "Inherent Risk Level: MODERATE.\n\nRisk increases with: work on private or contested land, rural or isolated locations, lack of prior landowner communication, and working alone."
+      },
+      {
+        heading: "5. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Pre-Field Preparation",
+            content: "Confirm land access permissions before site entry. Carry identification and project information. Understand project scope and purpose.",
+            highlight: true
+          },
+          {
+            heading: "5.2 Professional Conduct",
+            content: "Be courteous, calm, and respectful. Clearly identify yourself and your purpose if approached. Do not argue or engage in disputes."
+          },
+          {
+            heading: "5.3 Conflict Avoidance",
+            content: "Avoid escalating situations. Do not respond to aggression with confrontation. Remove yourself from situations that feel unsafe.",
+            highlight: true
+          },
+          {
+            heading: "5.4 Property Respect",
+            content: "Do not enter private property without permission. Respect gates, signage, and boundaries. Leave sites as found."
+          }
+        ]
+      },
+      {
+        heading: "6. PPE",
+        content: "• High-visibility apparel (where appropriate).\n• Company identification (recommended)."
+      },
+      {
+        heading: "7. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 Initial Interaction",
+            content: "Greet individuals calmly. Identify yourself and your organization. Provide a brief explanation of the work."
+          },
+          {
+            heading: "7.2 If Concerns Are Raised",
+            content: "Listen respectfully. Provide general information only. Refer detailed concerns to the supervisor or project lead."
+          },
+          {
+            heading: "7.3 If Conflict Escalates",
+            content: "Disengage immediately. Leave the area if necessary. Do not continue work in unsafe conditions. Report the incident to the supervisor.",
+            highlight: true
+          }
+        ]
+      },
+      {
+        heading: "8. Communication and Supervision",
+        content: "Notify supervisor of any significant interactions. Report access issues or denied entry. Seek guidance for ongoing concerns."
+      },
+      {
+        heading: "9. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "9.1 Key Emergency Scenarios",
+            content: "Threatening or aggressive individual, physical confrontation, and harassment or intimidation.",
+            highlight: true
+          },
+          {
+            heading: "9.2 Response Procedures",
+            content: "Remove yourself from the situation immediately. Move to a safe location. Contact emergency services if required. Notify supervisor. Document the incident."
+          }
+        ]
+      },
+      {
+        heading: "10. Documentation and Reporting",
+        content: "Workers must: document significant public interactions, report conflicts, complaints, or denied access, and record any incidents or near-misses."
+      },
+      {
+        heading: "11. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Remote / Backcountry SWP (#6)\n• Company Code of Conduct\n• Occupational Health and Safety legislation"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
   }
 
 ];
