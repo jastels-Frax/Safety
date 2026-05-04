@@ -1155,6 +1155,120 @@ const DOCUMENTS = [
         placeholder: true
       }
     ]
+  },
+
+  {
+    category: "SWPs / Field Procedures",
+    id: "swp-011",
+    title: "SWP #11 — Tick Safety & Lyme Disease Prevention",
+    description: "Minimum safety requirements for preventing, identifying, and responding to tick exposure during fieldwork. Applies to all field activities in environments where ticks may be present. Must be used with SWP #1.",
+    version: "REV00",
+    lastUpdated: "April 23, 2026",
+    author: "Jason Astels",
+    sections: [
+      {
+        heading: "1. Purpose and Scope",
+        content: "This SWP defines minimum safety requirements for preventing, identifying, and responding to tick exposure during fieldwork. It applies to all field activities in environments where ticks may be present, including: vegetation surveys, wetland and riparian work, wildlife surveys, remote/backcountry fieldwork, and roadside and right-of-way work.\n\nMust be used in conjunction with the Core Environmental Fieldwork SWP (#1)."
+      },
+      {
+        heading: "2. Worker Rights and Responsibilities",
+        content: "Additional responsibilities:\n• Workers must actively follow tick prevention measures.\n• Workers must perform required tick checks.\n• Workers must report tick bites and symptoms promptly.\n• Workers must seek medical attention where necessary.",
+        highlight: true
+      },
+      {
+        heading: "3. Hazards",
+        content: "Tick-related hazards include:\n• Tick bites\n• Exposure to tick-borne diseases (Lyme disease)\n• Delayed detection of attached ticks\n• Infection from improper tick removal\n• Increased exposure in dense vegetation and leaf litter",
+        highlight: true
+      },
+      {
+        heading: "4. Risk Assessment",
+        content: "Inherent Risk Level: MODERATE to HIGH (seasonal and location-dependent).\n\nRisk increases with: dense vegetation and tall grass, leaf litter and forest edges, warm seasons (spring through fall), and extended time in tick-prone habitats."
+      },
+      {
+        heading: "5. Control Measures",
+        content: "",
+        subsections: [
+          {
+            heading: "5.1 Avoidance Strategies",
+            content: "Stay on established paths where possible. Avoid walking through tall grass and dense vegetation when feasible. Minimize unnecessary contact with vegetation."
+          },
+          {
+            heading: "5.2 Protective Clothing",
+            content: "• Wear long sleeves and long pants.\n• Tuck pants into socks or gaiters.\n• Wear light-colored clothing for tick visibility.\n• Use gaiters in high-risk areas.",
+            highlight: true
+          },
+          {
+            heading: "5.3 Repellents",
+            content: "Apply insect repellent containing DEET or Icaridin to exposed skin. Use treated clothing (e.g., permethrin-treated gear) where permitted. Follow manufacturer instructions for all products.",
+            highlight: true
+          },
+          {
+            heading: "5.4 Field Awareness",
+            content: "Conduct periodic tick checks during breaks. Pay attention to high-risk areas (legs, waistline, neck). Work in pairs where possible to assist with visibility checks."
+          }
+        ]
+      },
+      {
+        heading: "6. PPE",
+        content: "In addition to Core SWP PPE:\n• Gaiters (recommended in high-risk areas).\n• Long, durable field clothing.\n• Insect repellent.\n• Tick removal kit (tweezers or tick key)."
+      },
+      {
+        heading: "7. Field Procedures",
+        content: "",
+        subsections: [
+          {
+            heading: "7.1 Tick Check Protocol",
+            content: "Workers must perform tick checks at a minimum at the end of each field day, and during breaks in high-risk environments.\n\nProper tick check includes full-body inspection using a mirror or buddy system where necessary. Focus on: behind knees, groin area, waistline, armpits, neck and hairline, and behind ears.",
+            highlight: true
+          },
+          {
+            heading: "7.2 Tick Removal Procedure",
+            content: "If a tick is found attached:\n• Use fine-tipped tweezers.\n• Grasp the tick as close to the skin as possible.\n• Pull upward slowly and steadily — do not twist.\n• Do not crush or squeeze the tick's body.\n• Clean the area with soap and water or an antiseptic.\n• Wash your hands thoroughly.\n\nDo NOT: burn the tick, apply petroleum jelly or chemicals, or twist/jerk the tick.",
+            highlight: true
+          },
+          {
+            heading: "7.3 Post-Removal Actions",
+            content: "• Record date and location of bite.\n• Monitor for symptoms over the following weeks.\n• Retain the tick (optional, in a sealed container) for identification."
+          }
+        ]
+      },
+      {
+        heading: "8. Communication and Supervision",
+        content: "Report tick bites to the supervisor. Inform crew members of high tick activity areas. Supervisors must reinforce compliance with tick protocols."
+      },
+      {
+        heading: "9. Emergency Preparedness and Response",
+        content: "",
+        subsections: [
+          {
+            heading: "9.1 When to Seek Medical Attention",
+            content: "Workers must seek medical attention if: a tick has been attached for an unknown or extended period, a rash develops (especially an expanding or 'bullseye' pattern), flu-like symptoms occur (fever, fatigue, joint pain), or signs of infection at the bite site appear.",
+            highlight: true
+          },
+          {
+            heading: "9.2 Response Procedures",
+            content: "Notify supervisor. Seek medical evaluation promptly. Provide details of exposure. Follow medical guidance."
+          }
+        ]
+      },
+      {
+        heading: "10. Environmental and Weather Conditions",
+        content: "Tick activity is highest in warmer months (spring–fall). Risk increases in humid and vegetated environments. Adjust prevention measures based on seasonal conditions."
+      },
+      {
+        heading: "11. Documentation and Reporting",
+        content: "Workers must: report all tick bites and exposures, document location and conditions of exposure, report symptoms or medical follow-up, and participate in incident tracking if required."
+      },
+      {
+        heading: "12. References and Related Documents",
+        content: "• Core Environmental Fieldwork SWP (#1)\n• Vegetation & Botanical Surveys SWP (#2)\n• Wildlife Surveys & Tracking SWP (#7)\n• Provincial public health guidance on tick-borne diseases\n• Occupational Health and Safety legislation"
+      },
+      {
+        heading: "Approval Sign-Off",
+        content: "⚠ Needs Company Input — Supervisor, Safety Lead, and Program Manager signatures required.",
+        placeholder: true
+      }
+    ]
   }
 
 ];
