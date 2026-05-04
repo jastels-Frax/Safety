@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hepatica">
+  <link rel="apple-touch-icon" href="/safety/icons/icon-192.png">
+  <link rel="manifest" href="/safety/hepatica/manifest.json">
+  <title>Hepatica Survey</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── Screen: Home ─────────────────────────────────────────── -->
+<div id="screen-home" class="screen">
+  <header class="app-header">
+    <div class="app-header-title">
+      <span class="app-logo">🌿</span>
+      <h1>Hepatica Survey</h1>
+    </div>
+    <p class="app-subtitle"><em>Hepatica americana</em> Monitoring</p>
+  </header>
+
+  <main class="home-content">
+    <div class="field-group">
+      <label class="field-label" for="sel-year">Survey Year</label>
+      <select id="sel-year" class="fld-select fld-select--lg"></select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Patch</label>
+      <div class="btn-grid btn-grid-4">
+        <button class="sel-btn patch-btn" data-patch="A">A</button>
+        <button class="sel-btn patch-btn" data-patch="B1">B1</button>
+        <button class="sel-btn patch-btn" data-patch="B2">B2</button>
+        <button class="sel-btn patch-btn" data-patch="C">C</button>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Quadrat</label>
+      <div class="btn-grid btn-grid-2">
+        <button class="sel-btn quad-btn" data-quad="Q1">Q1</button>
+        <button class="sel-btn quad-btn" data-quad="Q2">Q2</button>
+      </div>
+    </div>
+
+    <div class="home-actions">
+      <button id="btn-start" class="btn-primary btn-lg" disabled>
+        Begin Survey →
+      </button>
+      <button id="btn-view-records" class="btn-ghost btn-lg">
+        View Saved Records
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- ── Screen: Draft Resume ──────────────────────────────────── -->
+<div id="screen-draft" class="screen" hidden>
+  <div class="draft-modal-wrap">
+    <div class="draft-modal">
+      <h2>Resume Draft?</h2>
+      <p>An unsaved draft was found for:</p>
+      <p id="draft-context" class="draft-context"></p>
+      <p>Would you like to resume where you left off, or start a new survey?</p>
+      <div class="draft-actions">
+        <button id="btn-resume" class="btn-primary btn-lg">Resume Draft</button>
+        <button id="btn-fresh"  class="btn-ghost  btn-lg">Start Fresh</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Screen: Form ──────────────────────────────────────────── -->
+<div id="screen-form" class="screen" hidden>
+
+  <!-- Always-visible context bar -->
+  <div class="context-bar">
+    <div class="ctx-left">
+      <span class="ctx-patch-quad" id="ctx-patch-quad"></span>
+      <span class="ctx-year" id="ctx-year"></span>
+    </div>
+    <span class="ctx-step" id="ctx-step"></span>
+  </div>
+
+  <!-- Step 1: Date & H. americana Status -->
+  <div id="step-1" class="step-panel" hidden>
+    <div class="step-content">
+      <h2 class="step-title">Date &amp; Status</h2>
+
+      <div class="field-group">
+        <label class="field-label" for="f-date">Survey Date</label>
+        <input type="date" id="f-date" class="fld-input fld-input--lg">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">
+          <em>H. americana</em> Flowering Status
+        </label>
+        <div class="radio-group">
+          <label class="radio-item">
+            <input type="radio" name="f-flowering" value="Flowering">
+            <span>Flowering</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="f-flowering" value="Not flowering">
+            <span>Not flowering</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="f-flowering" value="Not observed">
+            <span>Not observed</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">
+          <em>H. americana</em> General Health
+        </label>
+        <div class="radio-group">
+          <label class="radio-item">
+            <input type="radio" name="f-health" value="Good">
+            <span>Good</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="f-health" value="Fair">
+            <span>Fair</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="f-health" value="Poor">
+            <span>Poor</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="f-health" value="Not observed">
+            <span>Not observed</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Species Cover -->
+  <div id="step-2" class="step-panel" hidden>
+    <div class="step-content">
+      <h2 class="step-title">Species Cover</h2>
+      <p class="step-hint">Enter cover % and stem count (optional) per species.</p>
+
+      <div class="species-table-wrap">
+        <table class="species-table">
+          <thead>
+            <tr>
+              <th class="th-species">Species</th>
+              <th class="th-cover">Cover</th>
+              <th class="th-stems">Stems</th>
+              <th class="th-del"></th>
+            </tr>
+          </thead>
+          <tbody id="species-tbody"></tbody>
+        </table>
+      </div>
+
+      <button id="btn-add-species" class="btn-add-row">
+        + Add species
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 3: Invasive Species -->
+  <div id="step-3" class="step-panel" hidden>
+    <div class="step-content">
+      <h2 class="step-title">Invasive Species</h2>
+      <p class="step-hint">Tap to select any invasives observed in or near the quadrat.</p>
+
+      <div id="invasives-list" class="inv-list"></div>
+
+      <div class="inv-custom-row">
+        <input type="text" id="inv-custom-input" class="fld-input"
+               placeholder="Add unlisted invasive…" autocomplete="off">
+        <button id="btn-add-invasive" class="btn-add-inline">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Site Observations -->
+  <div id="step-4" class="step-panel" hidden>
+    <div class="step-content">
+      <h2 class="step-title">Site Observations</h2>
+
+      <div class="field-group field-group--toggle">
+        <label class="toggle-label">
+          <input type="checkbox" id="f-flood" class="toggle-cb">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-text">Flood / water level observed</span>
+        </label>
+        <div id="flood-notes-wrap" class="flood-notes-wrap" hidden>
+          <label class="field-label" for="f-flood-notes">Flood notes</label>
+          <textarea id="f-flood-notes" class="fld-textarea" rows="2"
+                    placeholder="Describe water level, extent, conditions…"></textarea>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="f-ground-cover">Ground Cover Notes</label>
+        <textarea id="f-ground-cover" class="fld-textarea" rows="3"
+                  placeholder="Dominant surrounding species, relative abundance, site context…"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="f-observations">General Observations</label>
+        <textarea id="f-observations" class="fld-textarea" rows="3"
+                  placeholder="Any other notes about this quadrat or visit…"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="f-photos">Photo Reference Numbers</label>
+        <input type="text" id="f-photos" class="fld-input"
+               placeholder="e.g. IMG_3401–3408, frame 12" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <!-- Form navigation -->
+  <div class="form-nav">
+    <button id="btn-prev"   class="btn-ghost btn-nav">← Cancel</button>
+    <button id="btn-next"   class="btn-primary btn-nav">Next →</button>
+    <button id="btn-save"   class="btn-primary btn-nav btn-save" hidden>Save Survey</button>
+    <button id="btn-cancel-form" hidden></button>
+  </div>
+</div>
+
+<!-- ── Screen: Records ───────────────────────────────────────── -->
+<div id="screen-records" class="screen" hidden>
+  <header class="app-header app-header--sub">
+    <button id="btn-back-home" class="btn-icon-text">← Home</button>
+    <h1>Saved Surveys</h1>
+    <button id="btn-export-csv" class="btn-export">Export CSV</button>
+  </header>
+
+  <div class="records-toolbar">
+    <label class="sort-label" for="sort-select">Sort:</label>
+    <select id="sort-select" class="fld-select">
+      <option value="date-desc">Newest first</option>
+      <option value="date-asc">Oldest first</option>
+      <option value="patch">By patch</option>
+    </select>
+  </div>
+
+  <div id="records-list" class="records-list"></div>
+</div>
+
+<!-- ── Record Detail Modal ───────────────────────────────────── -->
+<div id="detail-modal" class="modal-overlay" role="dialog"
+     aria-modal="true" aria-labelledby="detail-title" hidden aria-hidden="true">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h2 id="detail-title" class="modal-title"></h2>
+      <button id="detail-close" class="modal-close" aria-label="Close">✕</button>
+    </div>
+    <div id="detail-body" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- ── Toast ─────────────────────────────────────────────────── -->
+<div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script src="db.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
