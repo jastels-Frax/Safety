@@ -1100,6 +1100,18 @@ body {
   flex-shrink: 0;
 }
 
+/* ── Canopy species multi-row list ────────────────────────── */
+
+.canopy-species-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+
+.canopy-sp-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.canopy-sp-row .fld-input { flex: 1; }
+
 /* ── Photo-point form ─────────────────────────────────────── */
 
 .photo-form {

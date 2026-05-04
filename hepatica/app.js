@@ -72,7 +72,7 @@
   function freshPatchForm() {
     return {
       canopy_cover:         '',
-      canopy_species:       '',
+      canopy_species:       [],
       litter_depth:         '',
       site_health:          '',
       deer_browse:          '',
@@ -581,17 +581,45 @@
   }
 
   function renderPatchStep1() {
-    $('p-canopy-cover').value   = state.patchForm.canopy_cover   || '';
-    $('p-canopy-species').value = state.patchForm.canopy_species || '';
-    $('p-litter-depth').value   = state.patchForm.litter_depth   || '';
+    $('p-canopy-cover').value = state.patchForm.canopy_cover || '';
+    $('p-litter-depth').value = state.patchForm.litter_depth || '';
     setRadio('p-site-health', state.patchForm.site_health);
 
-    [$('p-canopy-cover'), $('p-canopy-species'), $('p-litter-depth')].forEach(el =>
+    [$('p-canopy-cover'), $('p-litter-depth')].forEach(el =>
       el.addEventListener('input', schedulePatchDraftSave)
     );
     qsa('input[name="p-site-health"]').forEach(r => r.addEventListener('change', () => {
       state.patchForm.site_health = r.value; schedulePatchDraftSave();
     }));
+
+    const csList = $('canopy-species-list');
+    csList.innerHTML = '';
+    const existing = normalizeCanopySpecies(state.patchForm.canopy_species);
+    (existing.length ? existing : ['']).forEach(sp => addCanopySpeciesRow(csList, sp));
+    $('btn-add-canopy-species').onclick = () => {
+      addCanopySpeciesRow(csList, '');
+      schedulePatchDraftSave();
+    };
+  }
+
+  function normalizeCanopySpecies(val) {
+    if (Array.isArray(val)) return val.filter(Boolean);
+    if (typeof val === 'string' && val.trim()) return [val.trim()];
+    return [];
+  }
+
+  function addCanopySpeciesRow(list, value) {
+    const row = document.createElement('div');
+    row.className = 'canopy-sp-row';
+    row.innerHTML =
+      '<input type="text" class="fld-input canopy-sp-input" ' +
+        'placeholder="Species name…" autocomplete="off" value="' + esc(value || '') + '">' +
+      '<button type="button" class="btn-del-row" aria-label="Remove">✕</button>';
+    row.querySelector('.btn-del-row').addEventListener('click', () => {
+      row.remove(); schedulePatchDraftSave();
+    });
+    row.querySelector('input').addEventListener('input', schedulePatchDraftSave);
+    list.appendChild(row);
   }
 
   function renderPatchStep2() {
@@ -621,7 +649,8 @@
 
   function collectPatchStep1() {
     state.patchForm.canopy_cover   = $('p-canopy-cover').value;
-    state.patchForm.canopy_species = $('p-canopy-species').value.trim();
+    state.patchForm.canopy_species = qsa('.canopy-sp-input', $('canopy-species-list'))
+      .map(i => i.value.trim()).filter(Boolean);
     state.patchForm.litter_depth   = $('p-litter-depth').value.trim();
     state.patchForm.site_health    = getRadio('p-site-health');
   }
@@ -1035,7 +1064,7 @@
     patchRecs.forEach(rec => {
       parts.push([
         rec.id, rec.year, rec.surveyRound || '', rec.patch, rec.date,
-        rec.canopy_cover || '', rec.canopy_species || '', rec.litter_depth || '',
+        rec.canopy_cover || '', normalizeCanopySpecies(rec.canopy_species).join('; '), rec.litter_depth || '',
         rec.site_health || '', rec.deer_browse || '', rec.soil_moisture || '',
         rec.competitive_pressure || '', rec.patch_notes || '', rec.savedAt || '',
       ].map(csvCell).join(','));
