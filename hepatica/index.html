@@ -24,9 +24,32 @@
   </header>
 
   <main class="home-content">
+    <div class="field-row">
+      <div class="field-group field-group--half">
+        <label class="field-label" for="sel-year">Year</label>
+        <select id="sel-year" class="fld-select fld-select--lg"></select>
+      </div>
+      <div class="field-group field-group--half">
+        <label class="field-label">Round</label>
+        <div class="radio-inline">
+          <label class="radio-item radio-item--sm">
+            <input type="radio" name="survey-round" value="Spring" checked>
+            <span>Spring</span>
+          </label>
+          <label class="radio-item radio-item--sm">
+            <input type="radio" name="survey-round" value="Other">
+            <span>Other</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
     <div class="field-group">
-      <label class="field-label" for="sel-year">Survey Year</label>
-      <select id="sel-year" class="fld-select fld-select--lg"></select>
+      <label class="field-label" for="home-date">Survey Date</label>
+      <input type="date" id="home-date" class="fld-input fld-input--lg">
+      <p id="season-warning" class="season-warning" hidden>
+        ⚠ Primary monitoring window is May–June. This date is outside that range.
+      </p>
     </div>
 
     <div class="field-group">
@@ -48,17 +71,17 @@
     </div>
 
     <div class="home-actions">
-      <button id="btn-start" class="btn-primary btn-lg" disabled>
-        Begin Survey →
+      <button id="btn-patch-form" class="btn-secondary btn-lg" disabled>
+        Patch Data…
       </button>
-      <button id="btn-view-records" class="btn-ghost btn-lg">
-        View Saved Records
+      <button id="btn-start" class="btn-primary btn-lg" disabled>
+        Begin Quadrat Survey →
       </button>
     </div>
   </main>
 </div>
 
-<!-- ── Screen: Draft Resume ──────────────────────────────────── -->
+<!-- ── Screen: Quadrat Draft ─────────────────────────────────── -->
 <div id="screen-draft" class="screen" hidden>
   <div class="draft-modal-wrap">
     <div class="draft-modal">
@@ -74,10 +97,121 @@
   </div>
 </div>
 
-<!-- ── Screen: Form ──────────────────────────────────────────── -->
+<!-- ── Screen: Patch Draft ───────────────────────────────────── -->
+<div id="screen-patch-draft" class="screen" hidden>
+  <div class="draft-modal-wrap">
+    <div class="draft-modal">
+      <h2>Resume Patch Draft?</h2>
+      <p>An unsaved patch-level draft was found for:</p>
+      <p id="patch-draft-context" class="draft-context"></p>
+      <p>Would you like to resume where you left off, or start fresh?</p>
+      <div class="draft-actions">
+        <button id="btn-patch-resume" class="btn-primary btn-lg">Resume Draft</button>
+        <button id="btn-patch-fresh"  class="btn-ghost  btn-lg">Start Fresh</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Screen: Patch Form ────────────────────────────────────── -->
+<div id="screen-patch-form" class="screen" hidden>
+
+  <div class="context-bar">
+    <div class="ctx-left">
+      <span class="ctx-patch-quad" id="ctx-patch-only"></span>
+      <span class="ctx-year" id="ctx-patch-year"></span>
+    </div>
+    <span class="ctx-step" id="ctx-patch-step"></span>
+  </div>
+
+  <!-- Patch Step 1: Vegetation & Canopy -->
+  <div id="patch-step-1" class="step-panel" hidden>
+    <div class="step-content">
+      <h2 class="step-title">Vegetation &amp; Canopy</h2>
+
+      <div class="field-row">
+        <div class="field-group field-group--half">
+          <label class="field-label" for="p-canopy-cover">Canopy Cover</label>
+          <div class="input-unit-wrap">
+            <input type="number" id="p-canopy-cover" class="fld-input" min="0" max="100" step="1" placeholder="0">
+            <span class="input-unit-suffix">%</span>
+          </div>
+        </div>
+        <div class="field-group field-group--half">
+          <label class="field-label" for="p-litter-depth">Litter Depth</label>
+          <input type="text" id="p-litter-depth" class="fld-input" placeholder="e.g. 2–3 cm">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="p-canopy-species">Canopy Species</label>
+        <input type="text" id="p-canopy-species" class="fld-input"
+               placeholder="Dominant canopy species…" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Overall Site Health</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="p-site-health" value="Good"><span>Good</span></label>
+          <label class="radio-item"><input type="radio" name="p-site-health" value="Fair"><span>Fair</span></label>
+          <label class="radio-item"><input type="radio" name="p-site-health" value="Poor"><span>Poor</span></label>
+          <label class="radio-item"><input type="radio" name="p-site-health" value="Not assessed"><span>Not assessed</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patch Step 2: Pressures & Conditions -->
+  <div id="patch-step-2" class="step-panel" hidden>
+    <div class="step-content">
+      <h2 class="step-title">Pressures &amp; Conditions</h2>
+
+      <div class="field-group">
+        <label class="field-label">Deer Browse Pressure</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="p-deer-browse" value="None"><span>None</span></label>
+          <label class="radio-item"><input type="radio" name="p-deer-browse" value="Light"><span>Light</span></label>
+          <label class="radio-item"><input type="radio" name="p-deer-browse" value="Moderate"><span>Moderate</span></label>
+          <label class="radio-item"><input type="radio" name="p-deer-browse" value="Heavy"><span>Heavy</span></label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Soil Moisture</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="p-soil-moisture" value="Dry"><span>Dry</span></label>
+          <label class="radio-item"><input type="radio" name="p-soil-moisture" value="Moist"><span>Moist</span></label>
+          <label class="radio-item"><input type="radio" name="p-soil-moisture" value="Saturated"><span>Saturated</span></label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Competitive Vegetation Pressure</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="p-comp-pressure" value="Low"><span>Low</span></label>
+          <label class="radio-item"><input type="radio" name="p-comp-pressure" value="Moderate"><span>Moderate</span></label>
+          <label class="radio-item"><input type="radio" name="p-comp-pressure" value="High"><span>High</span></label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="p-patch-notes">Patch Notes</label>
+        <textarea id="p-patch-notes" class="fld-textarea" rows="4"
+                  placeholder="Any patch-level observations, context, or management notes…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-nav">
+    <button id="btn-patch-prev" class="btn-ghost btn-nav">← Cancel</button>
+    <button id="btn-patch-next" class="btn-primary btn-nav">Next →</button>
+    <button id="btn-patch-save" class="btn-primary btn-nav btn-save" hidden>Save Patch Data</button>
+  </div>
+</div>
+
+<!-- ── Screen: Quadrat Form ──────────────────────────────────── -->
 <div id="screen-form" class="screen" hidden>
 
-  <!-- Always-visible context bar -->
   <div class="context-bar">
     <div class="ctx-left">
       <span class="ctx-patch-quad" id="ctx-patch-quad"></span>
@@ -86,15 +220,10 @@
     <span class="ctx-step" id="ctx-step"></span>
   </div>
 
-  <!-- Step 1: Date & H. americana Status -->
+  <!-- Step 1: H. americana Status, Phenology, Herbivory -->
   <div id="step-1" class="step-panel" hidden>
     <div class="step-content">
-      <h2 class="step-title">Date &amp; Status</h2>
-
-      <div class="field-group">
-        <label class="field-label" for="f-date">Survey Date</label>
-        <input type="date" id="f-date" class="fld-input fld-input--lg">
-      </div>
+      <h2 class="step-title">Status &amp; Phenology</h2>
 
       <div class="field-group">
         <label class="field-label">
@@ -137,6 +266,46 @@
             <input type="radio" name="f-health" value="Not observed">
             <span>Not observed</span>
           </label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Phenology Stage</label>
+        <div class="phenology-grid">
+          <label class="pheno-item">
+            <input type="checkbox" name="f-phenology" value="Dormant">
+            <span>Dormant</span>
+          </label>
+          <label class="pheno-item">
+            <input type="checkbox" name="f-phenology" value="Leaves emerging">
+            <span>Leaves emerging</span>
+          </label>
+          <label class="pheno-item">
+            <input type="checkbox" name="f-phenology" value="Fully leafed">
+            <span>Fully leafed</span>
+          </label>
+          <label class="pheno-item">
+            <input type="checkbox" name="f-phenology" value="Flowering">
+            <span>Flowering</span>
+          </label>
+          <label class="pheno-item">
+            <input type="checkbox" name="f-phenology" value="Fruiting">
+            <span>Fruiting</span>
+          </label>
+          <label class="pheno-item">
+            <input type="checkbox" name="f-phenology" value="Senescent">
+            <span>Senescent</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Herbivory Observed</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="f-herbivory" value="None"><span>None</span></label>
+          <label class="radio-item"><input type="radio" name="f-herbivory" value="Light"><span>Light</span></label>
+          <label class="radio-item"><input type="radio" name="f-herbivory" value="Moderate"><span>Moderate</span></label>
+          <label class="radio-item"><input type="radio" name="f-herbivory" value="Heavy"><span>Heavy</span></label>
         </div>
       </div>
     </div>
@@ -191,14 +360,27 @@
 
       <div class="field-group field-group--toggle">
         <label class="toggle-label">
-          <input type="checkbox" id="f-flood" class="toggle-cb">
+          <input type="checkbox" id="f-disturbance" class="toggle-cb">
           <span class="toggle-track"><span class="toggle-thumb"></span></span>
-          <span class="toggle-text">Flood / water level observed</span>
+          <span class="toggle-text">Disturbance / flood observed</span>
         </label>
-        <div id="flood-notes-wrap" class="flood-notes-wrap" hidden>
-          <label class="field-label" for="f-flood-notes">Flood notes</label>
-          <textarea id="f-flood-notes" class="fld-textarea" rows="2"
-                    placeholder="Describe water level, extent, conditions…"></textarea>
+        <div id="disturbance-notes-wrap" class="flood-notes-wrap" hidden>
+          <label class="field-label" for="f-disturbance-notes">Disturbance notes</label>
+          <textarea id="f-disturbance-notes" class="fld-textarea" rows="2"
+                    placeholder="Describe water level, disturbance type, extent…"></textarea>
+        </div>
+      </div>
+
+      <div class="field-group field-group--toggle">
+        <label class="toggle-label">
+          <input type="checkbox" id="f-erosion" class="toggle-cb">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-text">Erosion or physical disturbance observed</span>
+        </label>
+        <div id="erosion-notes-wrap" class="flood-notes-wrap" hidden>
+          <label class="field-label" for="f-erosion-notes">Erosion notes</label>
+          <textarea id="f-erosion-notes" class="fld-textarea" rows="2"
+                    placeholder="Describe erosion extent, soil exposure, rill formation…"></textarea>
         </div>
       </div>
 
@@ -222,19 +404,16 @@
     </div>
   </div>
 
-  <!-- Form navigation -->
   <div class="form-nav">
     <button id="btn-prev"   class="btn-ghost btn-nav">← Cancel</button>
     <button id="btn-next"   class="btn-primary btn-nav">Next →</button>
     <button id="btn-save"   class="btn-primary btn-nav btn-save" hidden>Save Survey</button>
-    <button id="btn-cancel-form" hidden></button>
   </div>
 </div>
 
 <!-- ── Screen: Records ───────────────────────────────────────── -->
 <div id="screen-records" class="screen" hidden>
-  <header class="app-header app-header--sub">
-    <button id="btn-back-home" class="btn-icon-text">← Home</button>
+  <header class="app-header app-header--simple">
     <h1>Saved Surveys</h1>
     <button id="btn-export-csv" class="btn-export">Export CSV</button>
   </header>
@@ -251,6 +430,84 @@
   <div id="records-list" class="records-list"></div>
 </div>
 
+<!-- ── Screen: Photos ────────────────────────────────────────── -->
+<div id="screen-photos" class="screen" hidden>
+  <header class="app-header app-header--simple">
+    <h1>Photo-Points</h1>
+    <button id="btn-add-photo-point" class="btn-export">+ Add</button>
+  </header>
+
+  <div id="photo-point-form" class="photo-form" hidden>
+    <div class="photo-form-inner">
+      <h3 class="photo-form-title" id="photo-form-title">Add Photo-Point</h3>
+      <div class="field-row">
+        <div class="field-group field-group--half">
+          <label class="field-label" for="pp-id">Point ID</label>
+          <input type="text" id="pp-id" class="fld-input" placeholder="e.g. A-N1" autocomplete="off">
+        </div>
+        <div class="field-group field-group--half">
+          <label class="field-label" for="pp-patch">Patch</label>
+          <select id="pp-patch" class="fld-select">
+            <option value="">—</option>
+            <option value="A">A</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C">C</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group field-group--half">
+          <label class="field-label" for="pp-direction">Direction</label>
+          <select id="pp-direction" class="fld-select">
+            <option value="">—</option>
+            <option value="N">N</option>
+            <option value="NE">NE</option>
+            <option value="E">E</option>
+            <option value="SE">SE</option>
+            <option value="S">S</option>
+            <option value="SW">SW</option>
+            <option value="W">W</option>
+            <option value="NW">NW</option>
+          </select>
+        </div>
+        <div class="field-group field-group--half">
+          <label class="field-label" for="pp-frame">Frame / Range</label>
+          <input type="text" id="pp-frame" class="fld-input" placeholder="e.g. IMG_3401" autocomplete="off">
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="pp-notes">Notes</label>
+        <textarea id="pp-notes" class="fld-textarea" rows="2"
+                  placeholder="Azimuth, distance, landmarks, camera position…"></textarea>
+      </div>
+      <div class="photo-form-actions">
+        <button id="btn-photo-cancel" class="btn-ghost">Cancel</button>
+        <button id="btn-photo-save"   class="btn-primary">Save Point</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="photo-points-list" class="photo-points-list"></div>
+</div>
+
+<!-- ── Screen: Register ──────────────────────────────────────── -->
+<div id="screen-register" class="screen" hidden>
+  <header class="app-header app-header--simple">
+    <h1>Register</h1>
+  </header>
+
+  <div class="register-section">
+    <h2 class="register-heading">Quadrat Surveys</h2>
+    <div id="register-quadrats" class="register-table-wrap"></div>
+  </div>
+
+  <div class="register-section">
+    <h2 class="register-heading">Photo-Points</h2>
+    <div id="register-photos" class="register-table-wrap"></div>
+  </div>
+</div>
+
 <!-- ── Record Detail Modal ───────────────────────────────────── -->
 <div id="detail-modal" class="modal-overlay" role="dialog"
      aria-modal="true" aria-labelledby="detail-title" hidden aria-hidden="true">
@@ -265,6 +522,26 @@
 
 <!-- ── Toast ─────────────────────────────────────────────────── -->
 <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ── Bottom Navigation ─────────────────────────────────────── -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="nav-tab active" id="nav-survey" data-screen="home">
+    <span class="nav-icon">🌿</span>
+    <span class="nav-label">Survey</span>
+  </button>
+  <button class="nav-tab" id="nav-records" data-screen="records">
+    <span class="nav-icon">📋</span>
+    <span class="nav-label">Records</span>
+  </button>
+  <button class="nav-tab" id="nav-photos" data-screen="photos">
+    <span class="nav-icon">📷</span>
+    <span class="nav-label">Photos</span>
+  </button>
+  <button class="nav-tab" id="nav-register" data-screen="register">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">Register</span>
+  </button>
+</nav>
 
 <script src="db.js"></script>
 <script src="app.js"></script>

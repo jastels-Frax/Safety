@@ -1,5 +1,5 @@
 /* ============================================================
-   app.js — Hepatica americana survey app
+   app.js — Hepatica americana survey app (v2)
    ============================================================ */
 
 (function () {
@@ -7,9 +7,8 @@
 
   // ── Constants ────────────────────────────────────────────────
 
-  const PATCHES  = ['A', 'B1', 'B2', 'C'];
-  const QUADRATS = ['Q1', 'Q2'];
-  const TOTAL_STEPS = 4;
+  const QUAD_STEPS  = 4;
+  const PATCH_STEPS = 2;
 
   const SPECIES_LIST = [
     'Hepatica americana',
@@ -38,32 +37,57 @@
   // ── State ────────────────────────────────────────────────────
 
   const state = {
-    screen:   'home',
-    year:     String(new Date().getFullYear()),
-    patch:    null,
-    quadrat:  null,
-    step:     1,
-    editId:   null,
-    form: freshForm(),
+    screen:      'home',
+    year:        String(new Date().getFullYear()),
+    surveyRound: 'Spring',
+    date:        todayISO(),
+    patch:       null,
+    quadrat:     null,
+    step:        1,
+    editId:      null,
+    form:        freshForm(),
+    patchStep:   1,
+    editPatchId: null,
+    patchForm:   freshPatchForm(),
   };
 
   function freshForm() {
     return {
-      date:                 todayISO(),
       species:              [],
       hepatica_flowering:   '',
       hepatica_health:      '',
+      phenology:            [],
+      herbivory:            '',
       invasives:            [],
-      flood_observed:       false,
-      flood_notes:          '',
+      disturbance_observed: false,
+      disturbance_notes:    '',
+      erosion_observed:     false,
+      erosion_notes:        '',
       ground_cover_notes:   '',
       general_observations: '',
       photo_refs:           '',
     };
   }
 
+  function freshPatchForm() {
+    return {
+      canopy_cover:         '',
+      canopy_species:       '',
+      litter_depth:         '',
+      site_health:          '',
+      deer_browse:          '',
+      soil_moisture:        '',
+      competitive_pressure: '',
+      patch_notes:          '',
+    };
+  }
+
   function draftKey() {
-    return state.year + '_' + state.patch + '_' + state.quadrat;
+    return state.year + '_' + state.surveyRound + '_' + state.patch + '_' + state.quadrat;
+  }
+
+  function patchDraftKey() {
+    return 'PATCH_' + state.year + '_' + state.surveyRound + '_' + state.patch;
   }
 
   function todayISO() {
@@ -78,7 +102,6 @@
   // ── Init ─────────────────────────────────────────────────────
 
   async function init() {
-    // Year selector
     const yearSel = $('sel-year');
     const thisYear = new Date().getFullYear();
     for (let y = thisYear; y >= thisYear - 5; y--) {
@@ -89,37 +112,55 @@
     yearSel.value = state.year;
     yearSel.addEventListener('change', () => { state.year = yearSel.value; });
 
-    // Patch buttons
+    qsa('input[name="survey-round"]').forEach(r => {
+      r.addEventListener('change', () => { state.surveyRound = r.value; });
+    });
+
+    const homeDate = $('home-date');
+    homeDate.value = state.date;
+    homeDate.addEventListener('change', () => {
+      state.date = homeDate.value;
+      checkSeasonWarning();
+    });
+    checkSeasonWarning();
+
     qsa('.patch-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         qsa('.patch-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         state.patch = btn.dataset.patch;
-        updateStartBtn();
+        updateHomeButtons();
       });
     });
 
-    // Quadrat buttons
     qsa('.quad-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         qsa('.quad-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         state.quadrat = btn.dataset.quad;
-        updateStartBtn();
+        updateHomeButtons();
       });
     });
 
     $('btn-start').addEventListener('click', handleStart);
-    $('btn-view-records').addEventListener('click', () => showScreen('records'));
-    $('btn-back-home').addEventListener('click', () => showScreen('home'));
+    $('btn-patch-form').addEventListener('click', handlePatchStart);
     $('btn-export-csv').addEventListener('click', exportCSV);
     $('btn-prev').addEventListener('click', prevStep);
     $('btn-next').addEventListener('click', nextStep);
     $('btn-save').addEventListener('click', saveSurvey);
-    $('btn-cancel-form').addEventListener('click', cancelForm);
     $('btn-resume').addEventListener('click', resumeDraft);
     $('btn-fresh').addEventListener('click', startFresh);
     $('sort-select').addEventListener('change', () => renderRecords());
+
+    $('btn-patch-prev').addEventListener('click', prevPatchStep);
+    $('btn-patch-next').addEventListener('click', nextPatchStep);
+    $('btn-patch-save').addEventListener('click', savePatchData);
+    $('btn-patch-resume').addEventListener('click', resumePatchDraft);
+    $('btn-patch-fresh').addEventListener('click', startPatchFresh);
+
+    $('btn-add-photo-point').addEventListener('click', () => showPhotoForm());
+    $('btn-photo-cancel').addEventListener('click', hidePhotoForm);
+    $('btn-photo-save').addEventListener('click', savePhotoPoint);
 
     $('detail-close').addEventListener('click', closeDetailModal);
     $('detail-modal').addEventListener('click', e => {
@@ -129,35 +170,53 @@
       if (e.key === 'Escape' && !$('detail-modal').hidden) closeDetailModal();
     });
 
+    qsa('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => showScreen(tab.dataset.screen));
+    });
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/safety/hepatica/service-worker.js', { scope: '/safety/hepatica/' })
         .catch(e => console.warn('SW registration failed:', e));
     }
   }
 
-  function updateStartBtn() {
-    $('btn-start').disabled = !(state.patch && state.quadrat);
+  function checkSeasonWarning() {
+    const month = parseInt((state.date || '').slice(5, 7), 10);
+    $('season-warning').hidden = (month >= 5 && month <= 6);
+  }
+
+  function updateHomeButtons() {
+    $('btn-patch-form').disabled = !state.patch;
+    $('btn-start').disabled      = !(state.patch && state.quadrat);
   }
 
   // ── Screen navigation ────────────────────────────────────────
+
+  const FORM_SCREENS = new Set(['form', 'patch-form', 'draft', 'patch-draft']);
 
   function showScreen(name) {
     state.screen = name;
     qsa('.screen').forEach(s => s.hidden = true);
     $('screen-' + name).hidden = false;
+    $('bottom-nav').hidden = FORM_SCREENS.has(name);
 
-    if (name === 'records') renderRecords();
+    qsa('.nav-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.screen === name);
+    });
+
+    if (name === 'records')  renderRecords();
+    if (name === 'photos')   renderPhotosScreen();
+    if (name === 'register') renderRegisterScreen();
   }
 
-  // ── Start / resume / draft ───────────────────────────────────
+  // ── Quadrat draft / start ────────────────────────────────────
 
   async function handleStart() {
-    const key   = draftKey();
-    const draft = await HepaticaDB.getDraft(key);
-
+    const draft = await HepaticaDB.getDraft(draftKey());
     if (draft) {
       $('draft-context').textContent =
-        'Patch ' + state.patch + ' / ' + state.quadrat + ' — ' + (draft.date || '');
+        'Patch ' + state.patch + ' / ' + state.quadrat +
+        ' — ' + state.surveyRound + ' ' + state.year + ' (' + state.date + ')';
       state.form = draft;
       showScreen('draft');
     } else {
@@ -165,14 +224,10 @@
     }
   }
 
-  function resumeDraft() {
-    $('screen-draft').hidden = true;
-    openForm();
-  }
+  function resumeDraft() { openForm(); }
 
   function startFresh() {
-    $('screen-draft').hidden = true;
-    state.form = freshForm();
+    state.form   = freshForm();
     state.editId = null;
     openForm();
   }
@@ -190,7 +245,37 @@
     updateNavButtons();
   }
 
-  // ── Auto-save draft ──────────────────────────────────────────
+  // ── Patch draft / start ──────────────────────────────────────
+
+  async function handlePatchStart() {
+    const draft = await HepaticaDB.getDraft(patchDraftKey());
+    if (draft) {
+      $('patch-draft-context').textContent =
+        'Patch ' + state.patch + ' — ' + state.surveyRound + ' ' + state.year;
+      state.patchForm = draft;
+      showScreen('patch-draft');
+    } else {
+      startPatchFresh();
+    }
+  }
+
+  function resumePatchDraft() { openPatchForm(); }
+
+  function startPatchFresh() {
+    state.patchForm    = freshPatchForm();
+    state.editPatchId  = null;
+    openPatchForm();
+  }
+
+  function openPatchForm() {
+    state.patchStep = 1;
+    showScreen('patch-form');
+    updatePatchContextBar();
+    renderPatchStep(1);
+    updatePatchNavButtons();
+  }
+
+  // ── Auto-save drafts ─────────────────────────────────────────
 
   let draftTimer = null;
 
@@ -205,34 +290,48 @@
     await HepaticaDB.saveDraft(draftKey(), state.form).catch(() => {});
   }
 
-  // ── Context bar ──────────────────────────────────────────────
+  let patchDraftTimer = null;
+
+  function schedulePatchDraftSave() {
+    clearTimeout(patchDraftTimer);
+    patchDraftTimer = setTimeout(autoPatchSaveDraft, 800);
+  }
+
+  async function autoPatchSaveDraft() {
+    if (!state.patch) return;
+    collectCurrentPatchStep();
+    await HepaticaDB.saveDraft(patchDraftKey(), state.patchForm).catch(() => {});
+  }
+
+  // ── Context bars ─────────────────────────────────────────────
 
   function updateContextBar() {
     $('ctx-patch-quad').textContent = 'Patch ' + state.patch + ' · ' + state.quadrat;
-    $('ctx-year').textContent       = state.year;
-    $('ctx-step').textContent       = 'Step ' + state.step + ' of ' + TOTAL_STEPS;
+    $('ctx-year').textContent       = state.surveyRound + ' ' + state.year + ' · ' + state.date;
+    $('ctx-step').textContent       = 'Step ' + state.step + ' of ' + QUAD_STEPS;
   }
 
-  // ── Form step rendering ──────────────────────────────────────
+  function updatePatchContextBar() {
+    $('ctx-patch-only').textContent = 'Patch ' + state.patch;
+    $('ctx-patch-year').textContent = state.surveyRound + ' ' + state.year + ' · ' + state.date;
+    $('ctx-patch-step').textContent = 'Step ' + state.patchStep + ' of ' + PATCH_STEPS;
+  }
+
+  // ── Quadrat form rendering ───────────────────────────────────
 
   function renderStep(n) {
-    qsa('.step-panel').forEach(p => p.hidden = true);
-    const panel = $('step-' + n);
-    panel.hidden = false;
-
+    qsa('#screen-form .step-panel').forEach(p => p.hidden = true);
+    $('step-' + n).hidden = false;
     if (n === 1) renderStep1();
     if (n === 2) renderStep2();
     if (n === 3) renderStep3();
     if (n === 4) renderStep4();
   }
 
-  // Step 1: Date + H. americana quick status
   function renderStep1() {
-    $('f-date').value = state.form.date;
-    $('f-date').addEventListener('change', () => { state.form.date = $('f-date').value; scheduleDraftSave(); });
-
     setRadio('f-flowering', state.form.hepatica_flowering);
     setRadio('f-health',    state.form.hepatica_health);
+    setRadio('f-herbivory', state.form.herbivory);
 
     qsa('input[name="f-flowering"]').forEach(r => r.addEventListener('change', () => {
       state.form.hepatica_flowering = r.value; scheduleDraftSave();
@@ -240,19 +339,29 @@
     qsa('input[name="f-health"]').forEach(r => r.addEventListener('change', () => {
       state.form.hepatica_health = r.value; scheduleDraftSave();
     }));
+    qsa('input[name="f-herbivory"]').forEach(r => r.addEventListener('change', () => {
+      state.form.herbivory = r.value; scheduleDraftSave();
+    }));
+
+    qsa('input[name="f-phenology"]').forEach(cb => {
+      cb.checked = state.form.phenology.includes(cb.value);
+      cb.addEventListener('change', () => {
+        const set = new Set(state.form.phenology);
+        if (cb.checked) set.add(cb.value); else set.delete(cb.value);
+        state.form.phenology = [...set];
+        scheduleDraftSave();
+      });
+    });
   }
 
-  // Step 2: Species cover
   function renderStep2() {
     const tbody = $('species-tbody');
     tbody.innerHTML = '';
-
     if (state.form.species.length === 0) {
       addSpeciesRow(tbody, 'Hepatica americana', '', '');
     } else {
       state.form.species.forEach(s => addSpeciesRow(tbody, s.name, s.cover, s.stems, s.other_name));
     }
-
     $('btn-add-species').onclick = () => {
       addSpeciesRow(tbody, '', '', '');
       scheduleDraftSave();
@@ -288,26 +397,19 @@
       '</td>';
 
     tr.querySelector('.sp-name').addEventListener('change', function () {
-      const otherInput = tr.querySelector('.sp-other');
-      otherInput.hidden = this.value !== 'Other';
+      tr.querySelector('.sp-other').hidden = this.value !== 'Other';
       scheduleDraftSave();
     });
-
     tr.querySelector('.btn-del-row').addEventListener('click', () => {
-      tr.remove();
-      scheduleDraftSave();
+      tr.remove(); scheduleDraftSave();
     });
-
     qsa('input, select', tr).forEach(el => el.addEventListener('input', scheduleDraftSave));
-
     tbody.appendChild(tr);
   }
 
-  // Step 3: Invasive species
   function renderStep3() {
     const list = $('invasives-list');
     list.innerHTML = '';
-
     INVASIVES_LIST.forEach(inv => {
       const checked = state.form.invasives.includes(inv);
       const item = document.createElement('label');
@@ -321,11 +423,8 @@
       });
       list.appendChild(item);
     });
-
-    // Custom invasives (already added)
     const customs = state.form.invasives.filter(i => !INVASIVES_LIST.includes(i));
     customs.forEach(name => addCustomInvasiveChip(list, name));
-
     $('btn-add-invasive').onclick = () => {
       const val = $('inv-custom-input').value.trim();
       if (!val) return;
@@ -333,7 +432,6 @@
       $('inv-custom-input').value = '';
       scheduleDraftSave();
     };
-
     $('inv-custom-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); $('btn-add-invasive').click(); }
     });
@@ -352,35 +450,48 @@
     list.appendChild(item);
   }
 
-  // Step 4: Site observations
   function renderStep4() {
-    const floodCb    = $('f-flood');
-    const floodNotes = $('f-flood-notes');
+    const distCb    = $('f-disturbance');
+    const distNotes = $('f-disturbance-notes');
+    distCb.checked  = state.form.disturbance_observed;
+    distNotes.value = state.form.disturbance_notes || '';
+    $('disturbance-notes-wrap').hidden = !state.form.disturbance_observed;
 
-    floodCb.checked         = state.form.flood_observed;
-    floodNotes.value        = state.form.flood_notes || '';
-    floodNotes.parentElement.hidden = !state.form.flood_observed;
-
-    floodCb.addEventListener('change', () => {
-      state.form.flood_observed = floodCb.checked;
-      floodNotes.parentElement.hidden = !floodCb.checked;
+    distCb.addEventListener('change', () => {
+      state.form.disturbance_observed = distCb.checked;
+      $('disturbance-notes-wrap').hidden = !distCb.checked;
       scheduleDraftSave();
     });
-    floodNotes.addEventListener('input', () => {
-      state.form.flood_notes = floodNotes.value;
+    distNotes.addEventListener('input', () => {
+      state.form.disturbance_notes = distNotes.value;
       scheduleDraftSave();
     });
 
-    $('f-ground-cover').value        = state.form.ground_cover_notes   || '';
-    $('f-observations').value        = state.form.general_observations || '';
-    $('f-photos').value              = state.form.photo_refs           || '';
+    const erosionCb    = $('f-erosion');
+    const erosionNotes = $('f-erosion-notes');
+    erosionCb.checked  = state.form.erosion_observed;
+    erosionNotes.value = state.form.erosion_notes || '';
+    $('erosion-notes-wrap').hidden = !state.form.erosion_observed;
 
-    [$('f-ground-cover'), $('f-observations'), $('f-photos')].forEach(el => {
-      el.addEventListener('input', scheduleDraftSave);
+    erosionCb.addEventListener('change', () => {
+      state.form.erosion_observed = erosionCb.checked;
+      $('erosion-notes-wrap').hidden = !erosionCb.checked;
+      scheduleDraftSave();
     });
+    erosionNotes.addEventListener('input', () => {
+      state.form.erosion_notes = erosionNotes.value;
+      scheduleDraftSave();
+    });
+
+    $('f-ground-cover').value = state.form.ground_cover_notes   || '';
+    $('f-observations').value = state.form.general_observations || '';
+    $('f-photos').value       = state.form.photo_refs           || '';
+    [$('f-ground-cover'), $('f-observations'), $('f-photos')].forEach(el =>
+      el.addEventListener('input', scheduleDraftSave)
+    );
   }
 
-  // ── Collect current step data ────────────────────────────────
+  // ── Collect quadrat step data ────────────────────────────────
 
   function collectCurrentStep() {
     if (state.step === 1) collectStep1();
@@ -390,9 +501,10 @@
   }
 
   function collectStep1() {
-    state.form.date               = $('f-date').value;
     state.form.hepatica_flowering = getRadio('f-flowering');
     state.form.hepatica_health    = getRadio('f-health');
+    state.form.herbivory          = getRadio('f-herbivory');
+    state.form.phenology = qsa('input[name="f-phenology"]:checked').map(cb => cb.value);
   }
 
   function collectStep2() {
@@ -416,19 +528,21 @@
   }
 
   function collectStep4() {
-    state.form.flood_observed       = $('f-flood').checked;
-    state.form.flood_notes          = $('f-flood-notes').value.trim();
+    state.form.disturbance_observed = $('f-disturbance').checked;
+    state.form.disturbance_notes    = $('f-disturbance-notes').value.trim();
+    state.form.erosion_observed     = $('f-erosion').checked;
+    state.form.erosion_notes        = $('f-erosion-notes').value.trim();
     state.form.ground_cover_notes   = $('f-ground-cover').value.trim();
     state.form.general_observations = $('f-observations').value.trim();
     state.form.photo_refs           = $('f-photos').value.trim();
   }
 
-  // ── Step navigation ──────────────────────────────────────────
+  // ── Quadrat step navigation ──────────────────────────────────
 
   function nextStep() {
     collectCurrentStep();
     autoSaveDraft();
-    if (state.step < TOTAL_STEPS) {
+    if (state.step < QUAD_STEPS) {
       state.step++;
       renderStep(state.step);
       updateContextBar();
@@ -452,23 +566,146 @@
 
   function updateNavButtons() {
     $('btn-prev').textContent = state.step === 1 ? '← Cancel' : '← Back';
-    const isLast = state.step === TOTAL_STEPS;
+    const isLast = state.step === QUAD_STEPS;
     $('btn-next').hidden = isLast;
     $('btn-save').hidden = !isLast;
   }
 
-  // ── Save survey ──────────────────────────────────────────────
+  // ── Patch form rendering ─────────────────────────────────────
+
+  function renderPatchStep(n) {
+    qsa('#screen-patch-form .step-panel').forEach(p => p.hidden = true);
+    $('patch-step-' + n).hidden = false;
+    if (n === 1) renderPatchStep1();
+    if (n === 2) renderPatchStep2();
+  }
+
+  function renderPatchStep1() {
+    $('p-canopy-cover').value   = state.patchForm.canopy_cover   || '';
+    $('p-canopy-species').value = state.patchForm.canopy_species || '';
+    $('p-litter-depth').value   = state.patchForm.litter_depth   || '';
+    setRadio('p-site-health', state.patchForm.site_health);
+
+    [$('p-canopy-cover'), $('p-canopy-species'), $('p-litter-depth')].forEach(el =>
+      el.addEventListener('input', schedulePatchDraftSave)
+    );
+    qsa('input[name="p-site-health"]').forEach(r => r.addEventListener('change', () => {
+      state.patchForm.site_health = r.value; schedulePatchDraftSave();
+    }));
+  }
+
+  function renderPatchStep2() {
+    setRadio('p-deer-browse',   state.patchForm.deer_browse);
+    setRadio('p-soil-moisture', state.patchForm.soil_moisture);
+    setRadio('p-comp-pressure', state.patchForm.competitive_pressure);
+    $('p-patch-notes').value = state.patchForm.patch_notes || '';
+
+    qsa('input[name="p-deer-browse"]').forEach(r => r.addEventListener('change', () => {
+      state.patchForm.deer_browse = r.value; schedulePatchDraftSave();
+    }));
+    qsa('input[name="p-soil-moisture"]').forEach(r => r.addEventListener('change', () => {
+      state.patchForm.soil_moisture = r.value; schedulePatchDraftSave();
+    }));
+    qsa('input[name="p-comp-pressure"]').forEach(r => r.addEventListener('change', () => {
+      state.patchForm.competitive_pressure = r.value; schedulePatchDraftSave();
+    }));
+    $('p-patch-notes').addEventListener('input', schedulePatchDraftSave);
+  }
+
+  // ── Collect patch step data ──────────────────────────────────
+
+  function collectCurrentPatchStep() {
+    if (state.patchStep === 1) collectPatchStep1();
+    if (state.patchStep === 2) collectPatchStep2();
+  }
+
+  function collectPatchStep1() {
+    state.patchForm.canopy_cover   = $('p-canopy-cover').value;
+    state.patchForm.canopy_species = $('p-canopy-species').value.trim();
+    state.patchForm.litter_depth   = $('p-litter-depth').value.trim();
+    state.patchForm.site_health    = getRadio('p-site-health');
+  }
+
+  function collectPatchStep2() {
+    state.patchForm.deer_browse           = getRadio('p-deer-browse');
+    state.patchForm.soil_moisture         = getRadio('p-soil-moisture');
+    state.patchForm.competitive_pressure  = getRadio('p-comp-pressure');
+    state.patchForm.patch_notes           = $('p-patch-notes').value.trim();
+  }
+
+  // ── Patch step navigation ────────────────────────────────────
+
+  function nextPatchStep() {
+    collectCurrentPatchStep();
+    autoPatchSaveDraft();
+    if (state.patchStep < PATCH_STEPS) {
+      state.patchStep++;
+      renderPatchStep(state.patchStep);
+      updatePatchContextBar();
+      updatePatchNavButtons();
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function prevPatchStep() {
+    collectCurrentPatchStep();
+    if (state.patchStep > 1) {
+      state.patchStep--;
+      renderPatchStep(state.patchStep);
+      updatePatchContextBar();
+      updatePatchNavButtons();
+      window.scrollTo(0, 0);
+    } else {
+      autoPatchSaveDraft();
+      showScreen('home');
+    }
+  }
+
+  function updatePatchNavButtons() {
+    $('btn-patch-prev').textContent = state.patchStep === 1 ? '← Cancel' : '← Back';
+    const isLast = state.patchStep === PATCH_STEPS;
+    $('btn-patch-next').hidden = isLast;
+    $('btn-patch-save').hidden = !isLast;
+  }
+
+  // ── Save patch data ──────────────────────────────────────────
+
+  async function savePatchData() {
+    collectCurrentPatchStep();
+    const id = state.editPatchId || Date.now();
+    const record = Object.assign({
+      id,
+      year:        state.year,
+      surveyRound: state.surveyRound,
+      patch:       state.patch,
+      date:        state.date,
+      savedAt:     new Date().toISOString(),
+    }, state.patchForm);
+
+    try {
+      await HepaticaDB.savePatchRecord(record);
+      await HepaticaDB.clearDraft(patchDraftKey());
+      showToast('Patch data saved');
+      showScreen('home');
+    } catch (err) {
+      showToast('Save failed: ' + err.message, true);
+      console.error(err);
+    }
+  }
+
+  // ── Save quadrat survey ──────────────────────────────────────
 
   async function saveSurvey() {
     collectCurrentStep();
-
     const id = state.editId || Date.now();
     const record = Object.assign({
       id,
-      year:    state.year,
-      patch:   state.patch,
-      quadrat: state.quadrat,
-      savedAt: new Date().toISOString(),
+      year:        state.year,
+      surveyRound: state.surveyRound,
+      patch:       state.patch,
+      quadrat:     state.quadrat,
+      date:        state.date,
+      savedAt:     new Date().toISOString(),
     }, state.form);
 
     try {
@@ -487,7 +724,6 @@
   async function renderRecords() {
     const list = $('records-list');
     list.innerHTML = '<p class="loading-msg">Loading…</p>';
-
     let records;
     try { records = await HepaticaDB.getAllSurveys(); }
     catch (e) { list.innerHTML = '<p class="err-msg">Could not load records.</p>'; return; }
@@ -509,9 +745,9 @@
     records.forEach(rec => {
       const card = document.createElement('div');
       card.className = 'rec-card';
-
       const hep = (rec.species || []).find(s => s.name === 'Hepatica americana');
       const hepStr = hep ? hep.cover + '%' + (hep.stems ? ' · ' + hep.stems + ' stems' : '') : '—';
+      const round = rec.surveyRound ? rec.surveyRound + ' ' : '';
 
       card.innerHTML =
         '<div class="rec-header">' +
@@ -519,7 +755,7 @@
           '<span class="rec-date">' + esc(rec.date || '—') + '</span>' +
         '</div>' +
         '<div class="rec-body">' +
-          '<span class="rec-year">' + esc(rec.year) + '</span>' +
+          '<span class="rec-year">' + round + esc(rec.year) + '</span>' +
           '<span class="rec-hep"><em>H. americana</em>: ' + hepStr + '</span>' +
           (rec.hepatica_flowering ? '<span class="rec-meta">' + esc(rec.hepatica_flowering) + '</span>' : '') +
         '</div>' +
@@ -534,7 +770,6 @@
         await HepaticaDB.deleteSurvey(rec.id);
         renderRecords();
       });
-
       list.appendChild(card);
     });
   }
@@ -547,13 +782,11 @@
   }
 
   function showRecordDetail(rec) {
-    const modal = $('detail-modal');
     $('detail-title').textContent = 'Patch ' + rec.patch + ' / ' + rec.quadrat + ' — ' + (rec.date || '');
-
     const body = $('detail-body');
     const lines = [];
 
-    lines.push(row('Year',    rec.year));
+    lines.push(row('Year',    rec.surveyRound ? rec.surveyRound + ' ' + rec.year : rec.year));
     lines.push(row('Date',    rec.date));
     lines.push(row('Patch',   rec.patch));
     lines.push(row('Quadrat', rec.quadrat));
@@ -569,6 +802,10 @@
     lines.push('<h3 class="detail-section">H. americana Status</h3>');
     lines.push(row('Flowering', rec.hepatica_flowering || '—'));
     lines.push(row('Health',    rec.hepatica_health    || '—'));
+    if (rec.phenology && rec.phenology.length)
+      lines.push(row('Phenology', esc(rec.phenology.join(', '))));
+    if (rec.herbivory)
+      lines.push(row('Herbivory', esc(rec.herbivory)));
 
     if (rec.invasives && rec.invasives.length) {
       lines.push('<h3 class="detail-section">Invasive Species</h3>');
@@ -576,9 +813,12 @@
     }
 
     lines.push('<h3 class="detail-section">Site Conditions</h3>');
-    lines.push(row('Flood/water observed', rec.flood_observed ? 'Yes' : 'No'));
-    if (rec.flood_observed && rec.flood_notes)
-      lines.push(row('Flood notes', esc(rec.flood_notes)));
+    lines.push(row('Disturbance/flood', rec.disturbance_observed ? 'Yes' : 'No'));
+    if (rec.disturbance_observed && rec.disturbance_notes)
+      lines.push(row('Disturbance notes', esc(rec.disturbance_notes)));
+    lines.push(row('Erosion', rec.erosion_observed ? 'Yes' : 'No'));
+    if (rec.erosion_observed && rec.erosion_notes)
+      lines.push(row('Erosion notes', esc(rec.erosion_notes)));
     if (rec.ground_cover_notes)
       lines.push(row('Ground cover', esc(rec.ground_cover_notes)));
     if (rec.general_observations)
@@ -587,8 +827,8 @@
       lines.push(row('Photo refs', esc(rec.photo_refs)));
 
     body.innerHTML = lines.join('');
-    modal.hidden = false;
-    modal.removeAttribute('aria-hidden');
+    $('detail-modal').hidden = false;
+    $('detail-modal').removeAttribute('aria-hidden');
   }
 
   function row(label, val) {
@@ -596,48 +836,222 @@
            '<span class="detail-value">' + val + '</span></div>';
   }
 
+  // ── Photo-point management ───────────────────────────────────
+
+  let editPhotoId = null;
+
+  function showPhotoForm(rec) {
+    editPhotoId = rec ? rec.id : null;
+    $('photo-form-title').textContent = rec ? 'Edit Photo-Point' : 'Add Photo-Point';
+    $('pp-id').value        = rec ? rec.pointId   || '' : '';
+    $('pp-patch').value     = rec ? rec.patch      || '' : '';
+    $('pp-direction').value = rec ? rec.direction  || '' : '';
+    $('pp-frame').value     = rec ? rec.frame      || '' : '';
+    $('pp-notes').value     = rec ? rec.notes      || '' : '';
+    $('photo-point-form').hidden = false;
+    $('pp-id').focus();
+  }
+
+  function hidePhotoForm() {
+    $('photo-point-form').hidden = true;
+    editPhotoId = null;
+  }
+
+  async function savePhotoPoint() {
+    const pointId   = $('pp-id').value.trim();
+    const patch     = $('pp-patch').value;
+    const direction = $('pp-direction').value;
+    const frame     = $('pp-frame').value.trim();
+    const notes     = $('pp-notes').value.trim();
+
+    if (!pointId) { showToast('Point ID is required', true); return; }
+
+    const record = {
+      id:        editPhotoId || Date.now(),
+      pointId,   patch, direction, frame, notes,
+      savedAt:   new Date().toISOString(),
+    };
+
+    try {
+      await HepaticaDB.savePhotoPoint(record);
+      showToast('Photo-point saved');
+      hidePhotoForm();
+      renderPhotosScreen();
+    } catch (err) {
+      showToast('Save failed: ' + err.message, true);
+    }
+  }
+
+  async function renderPhotosScreen() {
+    const list = $('photo-points-list');
+    list.innerHTML = '<p class="loading-msg">Loading…</p>';
+    let points;
+    try { points = await HepaticaDB.getAllPhotoPoints(); }
+    catch (e) { list.innerHTML = '<p class="err-msg">Could not load photo-points.</p>'; return; }
+
+    if (!points.length) {
+      list.innerHTML = '<p class="empty-msg">No photo-points saved yet.</p>';
+      return;
+    }
+
+    points.sort((a, b) => (a.pointId || '').localeCompare(b.pointId || ''));
+    list.innerHTML = '';
+    points.forEach(pt => {
+      const card = document.createElement('div');
+      card.className = 'pp-card';
+      card.innerHTML =
+        '<div class="pp-header">' +
+          '<span class="pp-id">' + esc(pt.pointId) + '</span>' +
+          '<span class="pp-patch-badge">Patch ' + esc(pt.patch || '—') + '</span>' +
+        '</div>' +
+        '<div class="pp-meta">' +
+          (pt.direction ? '<span>' + esc(pt.direction) + '</span>' : '') +
+          (pt.frame     ? '<span>Frame: ' + esc(pt.frame) + '</span>' : '') +
+        '</div>' +
+        (pt.notes ? '<p class="pp-notes">' + esc(pt.notes) + '</p>' : '') +
+        '<div class="rec-actions">' +
+          '<button class="btn-rec-view">Edit</button>' +
+          '<button class="btn-rec-del">Delete</button>' +
+        '</div>';
+
+      card.querySelector('.btn-rec-view').addEventListener('click', () => showPhotoForm(pt));
+      card.querySelector('.btn-rec-del').addEventListener('click', async () => {
+        if (!confirm('Delete this photo-point? This cannot be undone.')) return;
+        await HepaticaDB.deletePhotoPoint(pt.id);
+        renderPhotosScreen();
+      });
+      list.appendChild(card);
+    });
+  }
+
+  // ── Register screen ──────────────────────────────────────────
+
+  async function renderRegisterScreen() {
+    const quadDiv  = $('register-quadrats');
+    const photoDiv = $('register-photos');
+    quadDiv.innerHTML  = '<p class="loading-msg">Loading…</p>';
+    photoDiv.innerHTML = '<p class="loading-msg">Loading…</p>';
+
+    const [surveys, photos] = await Promise.all([
+      HepaticaDB.getAllSurveys().catch(() => []),
+      HepaticaDB.getAllPhotoPoints().catch(() => []),
+    ]);
+
+    if (!surveys.length) {
+      quadDiv.innerHTML = '<p class="empty-msg">No surveys recorded.</p>';
+    } else {
+      surveys.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      quadDiv.innerHTML =
+        '<table class="reg-table"><thead><tr>' +
+        '<th>Date</th><th>Round</th><th>Patch</th><th>Quad</th><th><em>H.a.</em> Cover</th>' +
+        '</tr></thead><tbody>' +
+        surveys.map(s => {
+          const hep = (s.species || []).find(sp => sp.name === 'Hepatica americana');
+          return '<tr>' +
+            '<td>' + esc(s.date || '—') + '</td>' +
+            '<td>' + esc(s.surveyRound || '—') + '</td>' +
+            '<td>' + esc(s.patch || '—') + '</td>' +
+            '<td>' + esc(s.quadrat || '—') + '</td>' +
+            '<td>' + (hep ? esc(hep.cover) + '%' : '—') + '</td>' +
+            '</tr>';
+        }).join('') +
+        '</tbody></table>';
+    }
+
+    if (!photos.length) {
+      photoDiv.innerHTML = '<p class="empty-msg">No photo-points registered.</p>';
+    } else {
+      photos.sort((a, b) => (a.pointId || '').localeCompare(b.pointId || ''));
+      photoDiv.innerHTML =
+        '<table class="reg-table"><thead><tr>' +
+        '<th>Point ID</th><th>Patch</th><th>Dir.</th><th>Frame</th><th>Notes</th>' +
+        '</tr></thead><tbody>' +
+        photos.map(p =>
+          '<tr>' +
+          '<td>' + esc(p.pointId   || '—') + '</td>' +
+          '<td>' + esc(p.patch     || '—') + '</td>' +
+          '<td>' + esc(p.direction || '—') + '</td>' +
+          '<td>' + esc(p.frame     || '—') + '</td>' +
+          '<td>' + esc(p.notes     || '') + '</td>' +
+          '</tr>'
+        ).join('') +
+        '</tbody></table>';
+    }
+  }
+
   // ── CSV Export ───────────────────────────────────────────────
 
   async function exportCSV() {
-    let records;
-    try { records = await HepaticaDB.getAllSurveys(); }
-    catch (e) { showToast('Export failed', true); return; }
+    const [surveys, patchRecs, photos] = await Promise.all([
+      HepaticaDB.getAllSurveys().catch(() => []),
+      HepaticaDB.getAllPatchRecords().catch(() => []),
+      HepaticaDB.getAllPhotoPoints().catch(() => []),
+    ]);
 
-    if (!records.length) { showToast('No records to export'); return; }
+    if (!surveys.length && !patchRecs.length && !photos.length) {
+      showToast('No records to export'); return;
+    }
 
-    const headers = [
-      'id','year','patch','quadrat','date',
+    const parts = [];
+
+    parts.push('# QUADRAT RECORDS');
+    parts.push([
+      'id','year','survey_round','patch','quadrat','date',
       'hepatica_cover_pct','hepatica_stems',
       'hepatica_flowering','hepatica_health',
+      'phenology','herbivory',
       'all_species','invasives',
-      'flood_observed','flood_notes',
+      'disturbance_observed','disturbance_notes',
+      'erosion_observed','erosion_notes',
       'ground_cover_notes','general_observations',
       'photo_refs','saved_at',
-    ];
-
-    const rows = records.map(rec => {
-      const hep    = (rec.species || []).find(s => s.name === 'Hepatica americana') || {};
-      const allSp  = (rec.species || []).map(s => s.name + ':' + s.cover + '%' + (s.stems ? ':' + s.stems : '')).join('; ');
-      const invStr = (rec.invasives || []).join('; ');
-
-      return [
-        rec.id, rec.year, rec.patch, rec.quadrat, rec.date,
-        hep.cover  || '',
-        hep.stems  || '',
-        rec.hepatica_flowering || '',
-        rec.hepatica_health    || '',
-        allSp, invStr,
-        rec.flood_observed ? 'Yes' : 'No',
-        rec.flood_notes          || '',
-        rec.ground_cover_notes   || '',
-        rec.general_observations || '',
-        rec.photo_refs           || '',
-        rec.savedAt              || '',
-      ].map(csvCell);
+    ].join(','));
+    surveys.forEach(rec => {
+      const hep   = (rec.species || []).find(s => s.name === 'Hepatica americana') || {};
+      const allSp = (rec.species || []).map(s =>
+        s.name + ':' + s.cover + '%' + (s.stems ? ':' + s.stems : '')
+      ).join('; ');
+      parts.push([
+        rec.id, rec.year, rec.surveyRound || '', rec.patch, rec.quadrat, rec.date,
+        hep.cover || '', hep.stems || '',
+        rec.hepatica_flowering || '', rec.hepatica_health || '',
+        (rec.phenology || []).join('; '), rec.herbivory || '',
+        allSp, (rec.invasives || []).join('; '),
+        rec.disturbance_observed ? 'Yes' : 'No', rec.disturbance_notes || '',
+        rec.erosion_observed     ? 'Yes' : 'No', rec.erosion_notes     || '',
+        rec.ground_cover_notes || '', rec.general_observations || '',
+        rec.photo_refs || '', rec.savedAt || '',
+      ].map(csvCell).join(','));
     });
 
-    const csv  = [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
+    parts.push('');
+    parts.push('# PATCH RECORDS');
+    parts.push([
+      'id','year','survey_round','patch','date',
+      'canopy_cover_pct','canopy_species','litter_depth','site_health',
+      'deer_browse','soil_moisture','competitive_pressure',
+      'patch_notes','saved_at',
+    ].join(','));
+    patchRecs.forEach(rec => {
+      parts.push([
+        rec.id, rec.year, rec.surveyRound || '', rec.patch, rec.date,
+        rec.canopy_cover || '', rec.canopy_species || '', rec.litter_depth || '',
+        rec.site_health || '', rec.deer_browse || '', rec.soil_moisture || '',
+        rec.competitive_pressure || '', rec.patch_notes || '', rec.savedAt || '',
+      ].map(csvCell).join(','));
+    });
+
+    parts.push('');
+    parts.push('# PHOTO-POINT RECORDS');
+    parts.push(['id','point_id','patch','direction','frame','notes','saved_at'].join(','));
+    photos.forEach(pt => {
+      parts.push([
+        pt.id, pt.pointId || '', pt.patch || '', pt.direction || '',
+        pt.frame || '', pt.notes || '', pt.savedAt || '',
+      ].map(csvCell).join(','));
+    });
+
+    const blob = new Blob([parts.join('\r\n')], { type: 'text/csv' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
     a.href     = url;

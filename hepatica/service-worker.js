@@ -2,7 +2,7 @@
    Hepatica Survey — Service Worker
    ============================================================ */
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const SHELL_CACHE   = 'hepatica-shell-' + CACHE_VERSION;
 
 const SHELL_ASSETS = [
