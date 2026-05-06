@@ -37,18 +37,20 @@
   // ── State ────────────────────────────────────────────────────
 
   const state = {
-    screen:      'home',
-    year:        String(new Date().getFullYear()),
-    surveyRound: 'Spring',
-    date:        todayISO(),
-    patch:       null,
-    quadrat:     null,
-    step:        1,
-    editId:      null,
-    form:        freshForm(),
-    patchStep:   1,
-    editPatchId: null,
-    patchForm:   freshPatchForm(),
+    screen:                'home',
+    year:                  String(new Date().getFullYear()),
+    surveyRound:           'Spring',
+    date:                  todayISO(),
+    patch:                 null,
+    quadrat:               null,
+    step:                  1,
+    editId:                null,
+    originalSavedAt:       null,
+    form:                  freshForm(),
+    patchStep:             1,
+    editPatchId:           null,
+    originalPatchSavedAt:  null,
+    patchForm:             freshPatchForm(),
   };
 
   function freshForm() {
@@ -71,14 +73,15 @@
 
   function freshPatchForm() {
     return {
-      canopy_cover:         '',
-      canopy_species:       [],
-      litter_depth:         '',
-      site_health:          '',
-      deer_browse:          '',
-      soil_moisture:        '',
-      competitive_pressure: '',
-      patch_notes:          '',
+      canopy_cover:                  '',
+      canopy_species:                [],
+      litter_depth:                  '',
+      site_health:                   '',
+      deer_browse:                   '',
+      soil_moisture:                 '',
+      competitive_pressure:          '',
+      new_plants_outside_boundary:   false,
+      patch_notes:                   '',
     };
   }
 
@@ -150,7 +153,8 @@
     $('btn-save').addEventListener('click', saveSurvey);
     $('btn-resume').addEventListener('click', resumeDraft);
     $('btn-fresh').addEventListener('click', startFresh);
-    $('sort-select').addEventListener('change', () => renderRecords());
+    $('sort-select').addEventListener('change', () => renderQuadratRecords());
+    $('patch-sort-select').addEventListener('change', () => renderPatchRecordsList());
 
     $('btn-patch-prev').addEventListener('click', prevPatchStep);
     $('btn-patch-next').addEventListener('click', nextPatchStep);
@@ -209,6 +213,22 @@
     if (name === 'register') renderRegisterScreen();
   }
 
+  // ── Home screen sync ─────────────────────────────────────────
+
+  function syncHomeUI() {
+    const yearSel = $('sel-year');
+    if (yearSel) yearSel.value = state.year;
+
+    qsa('input[name="survey-round"]').forEach(r => { r.checked = r.value === state.surveyRound; });
+
+    const homeDate = $('home-date');
+    if (homeDate) { homeDate.value = state.date; checkSeasonWarning(); }
+
+    qsa('.patch-btn').forEach(b => b.classList.toggle('selected', b.dataset.patch === state.patch));
+    qsa('.quad-btn').forEach(b => b.classList.toggle('selected', b.dataset.quad === state.quadrat));
+    updateHomeButtons();
+  }
+
   // ── Quadrat draft / start ────────────────────────────────────
 
   async function handleStart() {
@@ -227,14 +247,21 @@
   function resumeDraft() { openForm(); }
 
   function startFresh() {
-    state.form   = freshForm();
-    state.editId = null;
+    state.form            = freshForm();
+    state.editId          = null;
+    state.originalSavedAt = null;
     openForm();
   }
 
   function cancelForm() {
-    autoSaveDraft();
-    showScreen('home');
+    if (state.editId) {
+      state.editId          = null;
+      state.originalSavedAt = null;
+      showScreen('records');
+    } else {
+      autoSaveDraft();
+      showScreen('home');
+    }
   }
 
   function openForm() {
@@ -243,6 +270,25 @@
     updateContextBar();
     renderStep(1);
     updateNavButtons();
+  }
+
+  // ── Edit quadrat record ──────────────────────────────────────
+
+  function editRecord(rec) {
+    state.year               = rec.year        || String(new Date().getFullYear());
+    state.surveyRound        = rec.surveyRound || 'Spring';
+    state.date               = rec.date        || todayISO();
+    state.patch              = rec.patch;
+    state.quadrat            = rec.quadrat;
+    state.editId             = rec.id;
+    state.originalSavedAt    = rec.savedAt || null;
+
+    // Strip metadata; merge with freshForm() defaults for forward-compat
+    const { id, year, surveyRound, patch, quadrat, date, savedAt, lastEditedAt, ...formData } = rec;
+    state.form = Object.assign(freshForm(), formData);
+
+    syncHomeUI();
+    openForm();
   }
 
   // ── Patch draft / start ──────────────────────────────────────
@@ -262,8 +308,9 @@
   function resumePatchDraft() { openPatchForm(); }
 
   function startPatchFresh() {
-    state.patchForm    = freshPatchForm();
-    state.editPatchId  = null;
+    state.patchForm            = freshPatchForm();
+    state.editPatchId          = null;
+    state.originalPatchSavedAt = null;
     openPatchForm();
   }
 
@@ -273,6 +320,23 @@
     updatePatchContextBar();
     renderPatchStep(1);
     updatePatchNavButtons();
+  }
+
+  // ── Edit patch record ────────────────────────────────────────
+
+  function editPatchRecord(rec) {
+    state.year                 = rec.year        || String(new Date().getFullYear());
+    state.surveyRound          = rec.surveyRound || 'Spring';
+    state.date                 = rec.date        || todayISO();
+    state.patch                = rec.patch;
+    state.editPatchId          = rec.id;
+    state.originalPatchSavedAt = rec.savedAt || null;
+
+    const { id, year, surveyRound, patch, date, savedAt, lastEditedAt, ...formData } = rec;
+    state.patchForm = Object.assign(freshPatchForm(), formData);
+
+    syncHomeUI();
+    openPatchForm();
   }
 
   // ── Auto-save drafts ─────────────────────────────────────────
@@ -569,6 +633,41 @@
     const isLast = state.step === QUAD_STEPS;
     $('btn-next').hidden = isLast;
     $('btn-save').hidden = !isLast;
+    if (isLast) $('btn-save').textContent = state.editId ? 'Save Changes' : 'Save Survey';
+  }
+
+  // ── Save quadrat survey ──────────────────────────────────────
+
+  async function saveSurvey() {
+    collectCurrentStep();
+    const isEdit = !!state.editId;
+    const id     = state.editId || Date.now();
+    const now    = new Date().toISOString();
+
+    const record = Object.assign({
+      id,
+      year:        state.year,
+      surveyRound: state.surveyRound,
+      patch:       state.patch,
+      quadrat:     state.quadrat,
+      date:        state.date,
+      savedAt:     state.originalSavedAt || now,
+    }, state.form);
+
+    if (isEdit) record.lastEditedAt = now;
+
+    state.editId          = null;
+    state.originalSavedAt = null;
+
+    try {
+      await HepaticaDB.saveSurvey(record);
+      if (!isEdit) await HepaticaDB.clearDraft(draftKey());
+      showToast(isEdit ? 'Survey updated' : 'Survey saved');
+      showScreen('records');
+    } catch (err) {
+      showToast('Save failed: ' + err.message, true);
+      console.error(err);
+    }
   }
 
   // ── Patch form rendering ─────────────────────────────────────
@@ -626,7 +725,8 @@
     setRadio('p-deer-browse',   state.patchForm.deer_browse);
     setRadio('p-soil-moisture', state.patchForm.soil_moisture);
     setRadio('p-comp-pressure', state.patchForm.competitive_pressure);
-    $('p-patch-notes').value = state.patchForm.patch_notes || '';
+    $('p-new-plants').checked = state.patchForm.new_plants_outside_boundary || false;
+    $('p-patch-notes').value  = state.patchForm.patch_notes || '';
 
     qsa('input[name="p-deer-browse"]').forEach(r => r.addEventListener('change', () => {
       state.patchForm.deer_browse = r.value; schedulePatchDraftSave();
@@ -637,6 +737,10 @@
     qsa('input[name="p-comp-pressure"]').forEach(r => r.addEventListener('change', () => {
       state.patchForm.competitive_pressure = r.value; schedulePatchDraftSave();
     }));
+    $('p-new-plants').addEventListener('change', () => {
+      state.patchForm.new_plants_outside_boundary = $('p-new-plants').checked;
+      schedulePatchDraftSave();
+    });
     $('p-patch-notes').addEventListener('input', schedulePatchDraftSave);
   }
 
@@ -656,10 +760,11 @@
   }
 
   function collectPatchStep2() {
-    state.patchForm.deer_browse           = getRadio('p-deer-browse');
-    state.patchForm.soil_moisture         = getRadio('p-soil-moisture');
-    state.patchForm.competitive_pressure  = getRadio('p-comp-pressure');
-    state.patchForm.patch_notes           = $('p-patch-notes').value.trim();
+    state.patchForm.deer_browse                  = getRadio('p-deer-browse');
+    state.patchForm.soil_moisture                = getRadio('p-soil-moisture');
+    state.patchForm.competitive_pressure         = getRadio('p-comp-pressure');
+    state.patchForm.new_plants_outside_boundary  = $('p-new-plants').checked;
+    state.patchForm.patch_notes                  = $('p-patch-notes').value.trim();
   }
 
   // ── Patch step navigation ────────────────────────────────────
@@ -685,8 +790,14 @@
       updatePatchNavButtons();
       window.scrollTo(0, 0);
     } else {
-      autoPatchSaveDraft();
-      showScreen('home');
+      if (state.editPatchId) {
+        state.editPatchId          = null;
+        state.originalPatchSavedAt = null;
+        showScreen('records');
+      } else {
+        autoPatchSaveDraft();
+        showScreen('home');
+      }
     }
   }
 
@@ -695,52 +806,35 @@
     const isLast = state.patchStep === PATCH_STEPS;
     $('btn-patch-next').hidden = isLast;
     $('btn-patch-save').hidden = !isLast;
+    if (isLast) $('btn-patch-save').textContent = state.editPatchId ? 'Save Changes' : 'Save Patch Data';
   }
 
   // ── Save patch data ──────────────────────────────────────────
 
   async function savePatchData() {
     collectCurrentPatchStep();
-    const id = state.editPatchId || Date.now();
+    const isEdit = !!state.editPatchId;
+    const id     = state.editPatchId || Date.now();
+    const now    = new Date().toISOString();
+
     const record = Object.assign({
       id,
       year:        state.year,
       surveyRound: state.surveyRound,
       patch:       state.patch,
       date:        state.date,
-      savedAt:     new Date().toISOString(),
+      savedAt:     state.originalPatchSavedAt || now,
     }, state.patchForm);
+
+    if (isEdit) record.lastEditedAt = now;
+
+    state.editPatchId          = null;
+    state.originalPatchSavedAt = null;
 
     try {
       await HepaticaDB.savePatchRecord(record);
-      await HepaticaDB.clearDraft(patchDraftKey());
-      showToast('Patch data saved');
-      showScreen('home');
-    } catch (err) {
-      showToast('Save failed: ' + err.message, true);
-      console.error(err);
-    }
-  }
-
-  // ── Save quadrat survey ──────────────────────────────────────
-
-  async function saveSurvey() {
-    collectCurrentStep();
-    const id = state.editId || Date.now();
-    const record = Object.assign({
-      id,
-      year:        state.year,
-      surveyRound: state.surveyRound,
-      patch:       state.patch,
-      quadrat:     state.quadrat,
-      date:        state.date,
-      savedAt:     new Date().toISOString(),
-    }, state.form);
-
-    try {
-      await HepaticaDB.saveSurvey(record);
-      await HepaticaDB.clearDraft(draftKey());
-      showToast('Survey saved');
+      if (!isEdit) await HepaticaDB.clearDraft(patchDraftKey());
+      showToast(isEdit ? 'Patch record updated' : 'Patch data saved');
       showScreen('records');
     } catch (err) {
       showToast('Save failed: ' + err.message, true);
@@ -750,57 +844,129 @@
 
   // ── Records screen ───────────────────────────────────────────
 
-  async function renderRecords() {
+  function renderRecords() {
+    renderQuadratRecords();
+    renderPatchRecordsList();
+  }
+
+  function sortByField(records, sort) {
+    records.sort((a, b) => {
+      if (sort === 'date-desc') return (b.date || '').localeCompare(a.date || '');
+      if (sort === 'date-asc')  return (a.date || '').localeCompare(b.date || '');
+      if (sort === 'patch')     return (a.patch || '').localeCompare(b.patch || '');
+      return 0;
+    });
+  }
+
+  async function renderQuadratRecords() {
     const list = $('records-list');
     list.innerHTML = '<p class="loading-msg">Loading…</p>';
     let records;
     try { records = await HepaticaDB.getAllSurveys(); }
     catch (e) { list.innerHTML = '<p class="err-msg">Could not load records.</p>'; return; }
 
-    const sort = $('sort-select').value;
-    records.sort((a, b) => {
-      if (sort === 'date-desc') return (b.date || '').localeCompare(a.date || '');
-      if (sort === 'date-asc')  return (a.date || '').localeCompare(b.date || '');
-      if (sort === 'patch')     return (a.patch + a.quadrat).localeCompare(b.patch + b.quadrat);
-      return 0;
-    });
+    sortByField(records, $('sort-select').value);
 
     if (!records.length) {
-      list.innerHTML = '<p class="empty-msg">No surveys saved yet.</p>';
+      list.innerHTML = '<p class="empty-msg">No quadrat surveys saved yet.</p>';
       return;
     }
-
     list.innerHTML = '';
-    records.forEach(rec => {
-      const card = document.createElement('div');
-      card.className = 'rec-card';
-      const hep = (rec.species || []).find(s => s.name === 'Hepatica americana');
-      const hepStr = hep ? hep.cover + '%' + (hep.stems ? ' · ' + hep.stems + ' stems' : '') : '—';
-      const round = rec.surveyRound ? rec.surveyRound + ' ' : '';
+    records.forEach(rec => list.appendChild(buildQuadratCard(rec)));
+  }
 
-      card.innerHTML =
-        '<div class="rec-header">' +
-          '<span class="rec-badge">Patch ' + esc(rec.patch) + ' / ' + esc(rec.quadrat) + '</span>' +
-          '<span class="rec-date">' + esc(rec.date || '—') + '</span>' +
-        '</div>' +
-        '<div class="rec-body">' +
-          '<span class="rec-year">' + round + esc(rec.year) + '</span>' +
-          '<span class="rec-hep"><em>H. americana</em>: ' + hepStr + '</span>' +
-          (rec.hepatica_flowering ? '<span class="rec-meta">' + esc(rec.hepatica_flowering) + '</span>' : '') +
-        '</div>' +
-        '<div class="rec-actions">' +
-          '<button class="btn-rec-view">View</button>' +
-          '<button class="btn-rec-del">Delete</button>' +
-        '</div>';
+  async function renderPatchRecordsList() {
+    const list = $('patch-records-list');
+    list.innerHTML = '<p class="loading-msg">Loading…</p>';
+    let records;
+    try { records = await HepaticaDB.getAllPatchRecords(); }
+    catch (e) { list.innerHTML = '<p class="err-msg">Could not load patch records.</p>'; return; }
 
-      card.querySelector('.btn-rec-view').addEventListener('click', () => showRecordDetail(rec));
-      card.querySelector('.btn-rec-del').addEventListener('click', async () => {
-        if (!confirm('Delete this survey record? This cannot be undone.')) return;
-        await HepaticaDB.deleteSurvey(rec.id);
-        renderRecords();
-      });
-      list.appendChild(card);
+    sortByField(records, $('patch-sort-select').value);
+
+    if (!records.length) {
+      list.innerHTML = '<p class="empty-msg">No patch records saved yet.</p>';
+      return;
+    }
+    list.innerHTML = '';
+    records.forEach(rec => list.appendChild(buildPatchCard(rec)));
+  }
+
+  function buildQuadratCard(rec) {
+    const card = document.createElement('div');
+    card.className = 'rec-card';
+    const hep    = (rec.species || []).find(s => s.name === 'Hepatica americana');
+    const hepStr = hep ? hep.cover + '%' + (hep.stems ? ' · ' + hep.stems + ' stems' : '') : '—';
+    const round  = rec.surveyRound ? rec.surveyRound + ' ' : '';
+    const savedDate  = rec.savedAt      ? rec.savedAt.slice(0, 10) : '';
+    const editedDate = rec.lastEditedAt ? rec.lastEditedAt.slice(0, 10) : '';
+
+    card.innerHTML =
+      '<div class="rec-header">' +
+        '<span class="rec-badge">Patch ' + esc(rec.patch) + ' / ' + esc(rec.quadrat) + '</span>' +
+        '<span class="rec-date">' + esc(rec.date || '—') + '</span>' +
+      '</div>' +
+      '<div class="rec-body">' +
+        '<span class="rec-year">' + round + esc(rec.year) + '</span>' +
+        '<span class="rec-hep"><em>H. americana</em>: ' + hepStr + '</span>' +
+        (rec.hepatica_flowering ? '<span class="rec-meta">' + esc(rec.hepatica_flowering) + '</span>' : '') +
+      '</div>' +
+      (savedDate || editedDate ?
+        '<div class="rec-timestamps">' +
+          (savedDate  ? '<span>Saved ' + esc(savedDate) + '</span>' : '') +
+          (editedDate ? '<span class="rec-edited">Edited ' + esc(editedDate) + '</span>' : '') +
+        '</div>' : '') +
+      '<div class="rec-actions">' +
+        '<button class="btn-rec-view">View</button>' +
+        '<button class="btn-rec-edit">Edit</button>' +
+        '<button class="btn-rec-del">Delete</button>' +
+      '</div>';
+
+    card.querySelector('.btn-rec-view').addEventListener('click', () => showRecordDetail(rec));
+    card.querySelector('.btn-rec-edit').addEventListener('click', () => editRecord(rec));
+    card.querySelector('.btn-rec-del').addEventListener('click', async () => {
+      if (!confirm('Delete this survey record? This cannot be undone.')) return;
+      await HepaticaDB.deleteSurvey(rec.id);
+      renderQuadratRecords();
     });
+    return card;
+  }
+
+  function buildPatchCard(rec) {
+    const card = document.createElement('div');
+    card.className = 'rec-card';
+    const round      = rec.surveyRound ? rec.surveyRound + ' ' : '';
+    const savedDate  = rec.savedAt      ? rec.savedAt.slice(0, 10) : '';
+    const editedDate = rec.lastEditedAt ? rec.lastEditedAt.slice(0, 10) : '';
+    const flagged    = rec.new_plants_outside_boundary;
+
+    card.innerHTML =
+      '<div class="rec-header">' +
+        '<span class="rec-badge">Patch ' + esc(rec.patch) + '</span>' +
+        '<span class="rec-date">' + esc(rec.date || '—') + '</span>' +
+      '</div>' +
+      '<div class="rec-body">' +
+        '<span class="rec-year">' + round + esc(rec.year) + '</span>' +
+        (rec.site_health ? '<span class="rec-meta">' + esc(rec.site_health) + '</span>' : '') +
+        (flagged ? '<span class="flag-badge">⚑ Outside boundary</span>' : '') +
+      '</div>' +
+      (savedDate || editedDate ?
+        '<div class="rec-timestamps">' +
+          (savedDate  ? '<span>Saved ' + esc(savedDate) + '</span>' : '') +
+          (editedDate ? '<span class="rec-edited">Edited ' + esc(editedDate) + '</span>' : '') +
+        '</div>' : '') +
+      '<div class="rec-actions">' +
+        '<button class="btn-rec-edit">Edit</button>' +
+        '<button class="btn-rec-del">Delete</button>' +
+      '</div>';
+
+    card.querySelector('.btn-rec-edit').addEventListener('click', () => editPatchRecord(rec));
+    card.querySelector('.btn-rec-del').addEventListener('click', async () => {
+      if (!confirm('Delete this patch record? This cannot be undone.')) return;
+      await HepaticaDB.deletePatchRecord(rec.id);
+      renderPatchRecordsList();
+    });
+    return card;
   }
 
   // ── Record detail modal ──────────────────────────────────────
@@ -1033,7 +1199,7 @@
       'disturbance_observed','disturbance_notes',
       'erosion_observed','erosion_notes',
       'ground_cover_notes','general_observations',
-      'photo_refs','saved_at',
+      'photo_refs','saved_at','last_edited_at',
     ].join(','));
     surveys.forEach(rec => {
       const hep   = (rec.species || []).find(s => s.name === 'Hepatica americana') || {};
@@ -1049,7 +1215,7 @@
         rec.disturbance_observed ? 'Yes' : 'No', rec.disturbance_notes || '',
         rec.erosion_observed     ? 'Yes' : 'No', rec.erosion_notes     || '',
         rec.ground_cover_notes || '', rec.general_observations || '',
-        rec.photo_refs || '', rec.savedAt || '',
+        rec.photo_refs || '', rec.savedAt || '', rec.lastEditedAt || '',
       ].map(csvCell).join(','));
     });
 
@@ -1059,14 +1225,17 @@
       'id','year','survey_round','patch','date',
       'canopy_cover_pct','canopy_species','litter_depth','site_health',
       'deer_browse','soil_moisture','competitive_pressure',
-      'patch_notes','saved_at',
+      'new_plants_outside_boundary','patch_notes','saved_at','last_edited_at',
     ].join(','));
     patchRecs.forEach(rec => {
       parts.push([
         rec.id, rec.year, rec.surveyRound || '', rec.patch, rec.date,
-        rec.canopy_cover || '', normalizeCanopySpecies(rec.canopy_species).join('; '), rec.litter_depth || '',
-        rec.site_health || '', rec.deer_browse || '', rec.soil_moisture || '',
-        rec.competitive_pressure || '', rec.patch_notes || '', rec.savedAt || '',
+        rec.canopy_cover || '', normalizeCanopySpecies(rec.canopy_species).join('; '),
+        rec.litter_depth || '', rec.site_health || '',
+        rec.deer_browse || '', rec.soil_moisture || '',
+        rec.competitive_pressure || '',
+        rec.new_plants_outside_boundary ? 'Yes' : 'No',
+        rec.patch_notes || '', rec.savedAt || '', rec.lastEditedAt || '',
       ].map(csvCell).join(','));
     });
 

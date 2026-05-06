@@ -194,6 +194,14 @@
         </div>
       </div>
 
+      <div class="field-group field-group--toggle">
+        <label class="toggle-label">
+          <input type="checkbox" id="p-new-plants" class="toggle-cb">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-text">New plants detected outside patch boundary</span>
+        </label>
+      </div>
+
       <div class="field-group">
         <label class="field-label" for="p-patch-notes">Patch Notes</label>
         <textarea id="p-patch-notes" class="fld-textarea" rows="4"
@@ -414,20 +422,41 @@
 <!-- ── Screen: Records ───────────────────────────────────────── -->
 <div id="screen-records" class="screen" hidden>
   <header class="app-header app-header--simple">
-    <h1>Saved Surveys</h1>
+    <h1>Records</h1>
     <button id="btn-export-csv" class="btn-export">Export CSV</button>
   </header>
 
-  <div class="records-toolbar">
-    <label class="sort-label" for="sort-select">Sort:</label>
-    <select id="sort-select" class="fld-select">
-      <option value="date-desc">Newest first</option>
-      <option value="date-asc">Oldest first</option>
-      <option value="patch">By patch</option>
-    </select>
+  <!-- Quadrat surveys -->
+  <div class="rec-section">
+    <div class="rec-section-header">
+      <h2 class="rec-section-title">Quadrat Surveys</h2>
+      <div class="rec-section-sort">
+        <label class="sort-label" for="sort-select">Sort:</label>
+        <select id="sort-select" class="fld-select">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="patch">By patch</option>
+        </select>
+      </div>
+    </div>
+    <div id="records-list" class="records-list records-list--section"></div>
   </div>
 
-  <div id="records-list" class="records-list"></div>
+  <!-- Patch records -->
+  <div class="rec-section">
+    <div class="rec-section-header">
+      <h2 class="rec-section-title">Patch Records</h2>
+      <div class="rec-section-sort">
+        <label class="sort-label" for="patch-sort-select">Sort:</label>
+        <select id="patch-sort-select" class="fld-select">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="patch">By patch</option>
+        </select>
+      </div>
+    </div>
+    <div id="patch-records-list" class="records-list records-list--section records-list--last"></div>
+  </div>
 </div>
 
 <!-- ── Screen: Photos ────────────────────────────────────────── -->

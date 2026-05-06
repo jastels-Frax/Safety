@@ -963,7 +963,6 @@ body {
 
 /* home-content and list containers get extra bottom space */
 #screen-home   .home-content  { padding-bottom: calc(64px + env(safe-area-inset-bottom) + 24px); }
-#screen-records .records-list  { padding-bottom: calc(64px + env(safe-area-inset-bottom) + 16px); }
 #screen-photos  .photo-points-list { padding-bottom: calc(64px + env(safe-area-inset-bottom) + 16px); }
 #screen-register               { padding-bottom: calc(64px + env(safe-area-inset-bottom) + 16px); }
 
@@ -1249,3 +1248,98 @@ body {
 .reg-table em { color: var(--primary); font-style: italic; }
 
 .reg-table tbody tr:hover td { background: var(--surface); }
+
+/* ── Records screen sections ──────────────────────────────── */
+
+.rec-section { border-bottom: 1px solid var(--border); }
+
+.rec-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.rec-section-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.rec-section-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rec-section-sort .sort-label { font-size: 0.78rem; }
+
+.rec-section-sort .fld-select {
+  width: auto;
+  height: 36px;
+  font-size: 0.82rem;
+  padding: 0 30px 0 10px;
+}
+
+/* override base .records-list inside sections */
+.records-list.records-list--section {
+  flex: unset;
+  overflow-y: visible;
+  padding: 8px 16px 12px;
+}
+
+/* last section absorbs bottom-nav clearance */
+.records-list.records-list--last {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom) + 16px);
+}
+
+/* ── Record edit button ────────────────────────────────────── */
+
+.btn-rec-edit {
+  flex: 1;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border: 1px solid rgba(93,191,138,0.3);
+}
+
+.btn-rec-edit:active { background: rgba(93,191,138,0.2); }
+
+/* ── Record timestamps ─────────────────────────────────────── */
+
+.rec-timestamps {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.rec-timestamps span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.rec-edited { color: var(--warning) !important; }
+
+/* ── Flag badge (new plants outside boundary) ──────────────── */
+
+.flag-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(232,165,58,0.12);
+  color: var(--warning);
+  border: 1px solid rgba(232,165,58,0.35);
+  border-radius: 4px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
