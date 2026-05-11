@@ -104,14 +104,14 @@
         '<p class="sub-project">' + esc(project) + '</p>' +
       '</div>' +
       '<div class="sub-card-actions">' +
-        '<button class="sub-btn sub-btn-view"     aria-label="View submission">View</button>' +
-        '<button class="sub-btn sub-btn-download" aria-label="Download JSON">Download</button>' +
-        '<button class="sub-btn sub-btn-delete"   aria-label="Delete submission">Delete</button>' +
+        '<button class="sub-btn sub-btn-view"   aria-label="View submission">View</button>' +
+        '<button class="sub-btn sub-btn-pdf"    aria-label="Export PDF">Export PDF</button>' +
+        '<button class="sub-btn sub-btn-delete" aria-label="Delete submission">Delete</button>' +
       '</div>';
 
-    card.querySelector('.sub-btn-view')    .addEventListener('click', ()  => openModal(rec));
-    card.querySelector('.sub-btn-download').addEventListener('click', ()  => downloadRecord(rec));
-    card.querySelector('.sub-btn-delete')  .addEventListener('click', ()  => deleteRecord(rec, card));
+    card.querySelector('.sub-btn-view')  .addEventListener('click', () => openModal(rec));
+    card.querySelector('.sub-btn-pdf')   .addEventListener('click', () => exportPDF(rec));
+    card.querySelector('.sub-btn-delete').addEventListener('click', () => deleteRecord(rec, card));
 
     return card;
   }
@@ -251,20 +251,320 @@
     return [name, phone].filter(v => v && v.trim()).join(' — ');
   }
 
-  // ── Download ─────────────────────────────────────────────────
+  // ── Export PDF ────────────────────────────────────────────────
 
-  function downloadRecord(rec) {
-    const blob = new Blob([JSON.stringify(rec, null, 2)], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    const date = (rec.data && rec.data.date) ? rec.data.date
-               : new Date(rec.id).toISOString().slice(0, 10);
-    a.href     = url;
-    a.download = 'fraxinus_' + rec.type + '_' + date + '.json';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+  function pdfFilename(type, d) {
+    const date = d.date || new Date().toISOString().slice(0, 10);
+    const proj = (d.project || '').replace(/\b\d{4}(-\d{2}(-\d{2})?)?\b/g, '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+    const init = (d.initials || '').replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 6);
+    const parts = ['Fraxinus', type, date];
+    if (proj) parts.push(proj);
+    if (init) parts.push(init);
+    return parts.join('_') + '.pdf';
+  }
+
+  function exportPDF(rec) {
+    const d = rec.data || {};
+    if (rec.type === 'toolbox') {
+      buildToolboxPDF(d).save(pdfFilename('ToolboxTalk', d));
+    } else if (rec.type === 'jsha') {
+      buildJSHAPDF(d).save(pdfFilename('HazardAssessment', d));
+    }
+  }
+
+  function buildToolboxPDF(d) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'letter' });
+    const ctx = pdfCtx(doc);
+
+    ctx.docHeader('Daily Toolbox Talk');
+
+    ctx.section('Site Information');
+    ctx.field('Date',             d.date);
+    ctx.field('Project',          d.project);
+    ctx.field('Site / Location',  d.site);
+    ctx.field('GPS Coordinates',  d.gps);
+
+    ctx.section('Crew & Operations');
+    ctx.field('Field Crew',         d.crew);
+    ctx.field('Scope of Work',      d.scope);
+    ctx.field('Weather Conditions', d.weather);
+    ctx.field('Communication Plan', d.comms);
+
+    ctx.section('Hazard Identification');
+    ctx.hazardTable(d.hazards);
+
+    ctx.section('PPE Checklist');
+    ctx.ppeGrid(d.ppe);
+
+    if (d.signoffs && d.signoffs.length) {
+      ctx.section('Sign-Off');
+      ctx.signoffTable(d.signoffs);
+    }
+
+    ctx.pageFooters();
+    return doc;
+  }
+
+  function buildJSHAPDF(d) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'letter' });
+    const ctx = pdfCtx(doc);
+    const ec  = d.emergencyContacts || {};
+
+    ctx.docHeader('Job Specific Hazard Assessment');
+
+    ctx.section('Site Information');
+    ctx.field('Date',                  d.date);
+    ctx.field('Project Name / Number', d.project);
+    ctx.field('Site / Location',       d.site);
+    ctx.field('GPS Coordinates',       d.gps);
+    ctx.field('Scope of Work',         d.scope);
+
+    ctx.section('Emergency Contacts');
+    ctx.field('Police / Fire / Ambulance', '911');
+    ctx.field('Poison Control',            '1-800-565-8161');
+    ctx.field('Field Crew Contact',        [ec.crewContactName,    ec.crewContactPhone].filter(Boolean).join(' — '));
+    ctx.field('Project Manager',           [ec.projectManagerName, ec.projectManagerPhone].filter(Boolean).join(' — '));
+    ctx.field('Health & Safety Rep',       ec.healthSafetyRep);
+    ctx.field('Nearest Hospital',          ec.nearestHospital);
+
+    ctx.section('Hazard Identification');
+    ctx.hazardTable(d.hazards);
+
+    ctx.section('PPE Checklist');
+    ctx.ppeGrid(d.ppe);
+
+    if (d.comments) {
+      ctx.section('Additional Comments');
+      ctx.field('', d.comments);
+    }
+
+    ctx.pageFooters();
+    return doc;
+  }
+
+  function pdfCtx(doc) {
+    const W  = doc.internal.pageSize.getWidth();
+    const H  = doc.internal.pageSize.getHeight();
+    const ML = 15, MR = 15, MB = 20;
+    const CW = W - ML - MR;
+
+    const ORANGE = [232, 115,  26];
+    const DARK   = [ 28,  26,  22];
+    const DGRAY  = [107, 100,  87];
+    const LGRAY  = [200, 195, 188];
+    const BGRAY  = [242, 239, 235];
+
+    let y = 20;
+    let firstSection = true;
+
+    function guard(need) {
+      if (y + need > H - MB) { doc.addPage(); y = 15; }
+    }
+
+    return {
+      docHeader(formTitle) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(20);
+        doc.setTextColor(...ORANGE);
+        doc.text('Fraxinus Environmental & Geomatics', ML, y);
+        y += 9;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(13);
+        doc.setTextColor(...DARK);
+        doc.text(formTitle, ML, y);
+        y += 5;
+
+        doc.setDrawColor(...ORANGE);
+        doc.setLineWidth(0.6);
+        doc.line(ML, y, W - MR, y);
+        y += 9;
+      },
+
+      section(title) {
+        if (firstSection) { firstSection = false; } else { y += 5; }
+        guard(14);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(...DGRAY);
+        doc.text(title.toUpperCase(), ML, y);
+        doc.setDrawColor(...LGRAY);
+        doc.setLineWidth(0.25);
+        doc.line(ML, y + 1.5, W - MR, y + 1.5);
+        y += 7;
+      },
+
+      field(label, value) {
+        const val   = (value == null || value === '') ? '—' : String(value);
+        const LW    = 58;
+        const lines = doc.splitTextToSize(val, CW - LW);
+        const rowH  = Math.max(lines.length * 4.5, 5);
+        guard(rowH + 3);
+
+        if (label) {
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8);
+          doc.setTextColor(...DGRAY);
+          doc.text(label, ML, y);
+        }
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...DARK);
+        doc.text(lines, label ? ML + LW : ML, y);
+
+        y += rowH + 1.5;
+      },
+
+      hazardTable(hazards) {
+        if (!hazards || !hazards.length) {
+          guard(6);
+          doc.setFont('helvetica', 'italic');
+          doc.setFontSize(9);
+          doc.setTextColor(...DGRAY);
+          doc.text('No hazards recorded', ML, y);
+          y += 6;
+          return;
+        }
+
+        const C1 = 14, C2 = 100, C3 = 136, W3 = 60;
+        const ROW_H = 14;
+        guard(ROW_H + 4);
+
+        doc.setFillColor(230, 230, 230);
+        doc.rect(C1, y - 5, (C3 + W3) - C1, 7, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(...DARK);
+        doc.text('Hazard',          C1 + 2, y);
+        doc.text('Risk Level',      C2 + 2, y);
+        doc.text('Control Measure', C3 + 2, y);
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.25);
+        doc.line(C1, y + 2, C3 + W3, y + 2);
+        y += ROW_H;
+
+        hazards.forEach(h => {
+          guard(ROW_H);
+
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8.5);
+          doc.setTextColor(...DARK);
+          doc.text(h.hazard || '—', C1 + 2, y);
+
+          const risk = h.risk || '';
+          const rc   = risk === 'High' ? [204,   0,   0]
+                     : risk === 'Med'  ? [232, 115,  26]
+                     : risk === 'Low'  ? [ 74, 124,  89]
+                     : DARK;
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(...rc);
+          doc.text(risk || '—', C2 + 2, y);
+
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(...DARK);
+          doc.text(h.control || '—', C3 + 2, y);
+
+          doc.setDrawColor(200, 200, 200);
+          doc.setLineWidth(0.15);
+          doc.line(C1, y + 2, C3 + W3, y + 2);
+          y += ROW_H;
+        });
+
+        y += 2;
+      },
+
+      ppeGrid(ppe) {
+        if (!ppe || !ppe.length) {
+          guard(6);
+          doc.setFont('helvetica', 'italic');
+          doc.setFontSize(9);
+          doc.setTextColor(...DGRAY);
+          doc.text('No PPE items selected', ML, y);
+          y += 6;
+          return;
+        }
+
+        const colX = [14, 80, 146];
+        let col = 0;
+
+        ppe.forEach(item => {
+          if (col === 0) guard(6);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(9);
+          doc.setTextColor(...DARK);
+          const x = colX[col];
+          doc.setDrawColor(100, 100, 100);
+          doc.setLineWidth(0.3);
+          doc.rect(x, y - 3, 4, 4);
+          doc.line(x,     y - 3, x + 4, y + 1);
+          doc.line(x + 4, y - 3, x,     y + 1);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(9);
+          doc.setTextColor(...DARK);
+          doc.text(item, x + 7, y);
+          col++;
+          if (col >= 3) { col = 0; y += 10; }
+        });
+        if (col > 0) y += 10;
+        y += 2;
+      },
+
+      signoffTable(signoffs) {
+        if (!signoffs || !signoffs.length) return;
+
+        const cols = [CW * 0.50, CW * 0.18, CW * 0.32];
+        const hdrs = ['Name', 'Initials', 'Date'];
+        guard(10);
+
+        doc.setFillColor(...BGRAY);
+        doc.rect(ML, y - 4, CW, 6, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(...DARK);
+        let x = ML;
+        hdrs.forEach((h, i) => { doc.text(h, x + 2, y); x += cols[i]; });
+        doc.setDrawColor(...LGRAY);
+        doc.setLineWidth(0.25);
+        doc.line(ML, y + 2, ML + CW, y + 2);
+        y += 6;
+
+        signoffs.forEach(s => {
+          guard(7);
+          x = ML;
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8.5);
+          doc.setTextColor(...DARK);
+          doc.text(s.name     || '—', x + 2, y); x += cols[0];
+          doc.text(s.initials || '',   x + 2, y); x += cols[1];
+          doc.text(s.date     || '',   x + 2, y);
+          y += 6;
+          doc.setDrawColor(...LGRAY);
+          doc.setLineWidth(0.15);
+          doc.line(ML, y, ML + CW, y);
+          y += 1;
+        });
+
+        y += 2;
+      },
+
+      pageFooters() {
+        const n = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= n; i++) {
+          doc.setPage(i);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(7);
+          doc.setTextColor(...DGRAY);
+          doc.text('Fraxinus Environmental & Geomatics', ML, H - 9);
+          doc.text(
+            'Page ' + i + ' of ' + n + '  •  ' + new Date().toLocaleDateString(),
+            W - MR, H - 9, { align: 'right' }
+          );
+        }
+      },
+    };
   }
 
   // ── Delete ────────────────────────────────────────────────────

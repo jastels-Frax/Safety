@@ -6,11 +6,11 @@
   <meta name="theme-color" content="#E8731A">
   <meta name="description" content="Fraxinus Environmental &amp; Geomatics field application">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Fraxinus">
+  <link rel="apple-touch-icon" href="/safety/icons/icon-192.png">
+  <link rel="manifest" href="/safety/manifest.json">
   <title>Fraxinus Environmental &amp; Geomatics</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
@@ -406,6 +406,13 @@
           </div>
 
           <div class="field-group">
+            <label class="field-label" for="tb-initials">Lead Surveyor Initials</label>
+            <input type="text" id="tb-initials" name="initials" class="form-input"
+                   placeholder="e.g. JA" maxlength="6" autocomplete="off"
+                   style="text-transform:uppercase">
+          </div>
+
+          <div class="field-group">
             <label class="field-label" for="tb-site">Site / Location</label>
             <input type="text" id="tb-site" name="site" class="form-input"
                    placeholder="e.g. Km 34 access road" autocomplete="off">
@@ -604,6 +611,13 @@
           </div>
 
           <div class="field-group">
+            <label class="field-label" for="jsha-initials">Lead Surveyor Initials</label>
+            <input type="text" id="jsha-initials" name="initials" class="form-input"
+                   placeholder="e.g. JA" maxlength="6" autocomplete="off"
+                   style="text-transform:uppercase">
+          </div>
+
+          <div class="field-group">
             <label class="field-label" for="jsha-site">Site / Location</label>
             <input type="text" id="jsha-site" name="site" class="form-input"
                    placeholder="e.g. Km 34 access road" autocomplete="off">
@@ -786,13 +800,18 @@
         <h1>Submissions</h1>
         <p class="panel-subtitle">Completed forms and submitted records</p>
       </div>
-      <div class="placeholder-card">
-        <svg class="placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M36 28v8a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4h8" stroke="#E8731A" stroke-width="2" stroke-linecap="round"/>
-          <path d="M32 4l8 8-14 14H18v-8L32 4Z" fill="#E8731A" opacity="0.12" stroke="#E8731A" stroke-width="2" stroke-linejoin="round"/>
-        </svg>
-        <p class="placeholder-title">No Submissions Yet</p>
-        <p class="placeholder-text">Submitted forms and completed records will appear here.</p>
+      <div id="sub-content"></div>
+
+      <!-- Detail modal -->
+      <div id="sub-modal-overlay" role="dialog" aria-modal="true"
+           aria-labelledby="sub-modal-title" hidden aria-hidden="true">
+        <div class="sub-modal">
+          <div class="sub-modal-header">
+            <h2 id="sub-modal-title"></h2>
+            <button id="sub-modal-close" class="sub-modal-close" aria-label="Close">✕</button>
+          </div>
+          <div id="sub-modal-body" class="sub-modal-body"></div>
+        </div>
       </div>
     </section>
 
@@ -848,6 +867,7 @@
 
   </nav>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="db.js"></script>
   <script src="toolbox.js"></script>
   <script src="jsha.js"></script>
