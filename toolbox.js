@@ -873,8 +873,10 @@
         doc.line(ML, y + 2, ML + CW, y + 2);
         y += 6;
 
+        const ROW_H = 14;
+
         rows.forEach(s => {
-          guard(6);
+          guard(ROW_H);
           x = ML;
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8.5);
@@ -883,10 +885,10 @@
           doc.text(s.company  || '—', x + 2, y); x += cols[1];
           doc.text(s.initials || '—', x + 2, y); x += cols[2];
           doc.text(s.date     || '—', x + 2, y);
-          y += 5.5;
           doc.setDrawColor(...LGRAY);
           doc.setLineWidth(0.15);
-          doc.line(ML, y - 0.5, ML + CW, y - 0.5);
+          doc.line(ML, y + ROW_H - 2, ML + CW, y + ROW_H - 2);
+          y += ROW_H;
         });
 
         y += 2;
