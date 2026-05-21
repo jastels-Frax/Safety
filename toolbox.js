@@ -559,6 +559,7 @@
   let toastTimer;
 
   function showToast(msg, type) {
+    if (!msg || !msg.trim()) return;
     const toast = $('tb-toast');
     clearTimeout(toastTimer);
     toast.textContent = msg;

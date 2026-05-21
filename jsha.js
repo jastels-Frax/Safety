@@ -350,6 +350,7 @@
   let toastTimer;
 
   function showToast(msg, type) {
+    if (!msg || !msg.trim()) return;
     const toast = $('jsha-toast');
     clearTimeout(toastTimer);
     toast.textContent = msg;
@@ -440,7 +441,6 @@
     const DARK   = [28,  26,  22];
     const DGRAY  = [107, 100, 87];
     const LGRAY  = [200, 195, 188];
-    const BGRAY  = [242, 239, 235];
 
     let y = 20;
     let firstSection = true;
