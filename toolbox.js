@@ -92,7 +92,7 @@
 
   const ppeCustomList = $('ppe-custom-list');
 
-  $('add-ppe-btn').addEventListener('click', () => {
+  function buildPPECustomRow(value) {
     const row = document.createElement('div');
     row.className = 'ppe-custom-row';
     row.innerHTML =
@@ -101,8 +101,13 @@
       '<button type="button" class="btn-remove-row" aria-label="Remove custom PPE item">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
       '</button>';
-
+    if (value) row.querySelector('.ppe-custom-input').value = value;
     row.querySelector('.btn-remove-row').addEventListener('click', () => row.remove());
+    return row;
+  }
+
+  $('add-ppe-btn').addEventListener('click', () => {
+    const row = buildPPECustomRow();
     ppeCustomList.appendChild(row);
     row.querySelector('.ppe-custom-input').focus();
   });
@@ -137,22 +142,54 @@
     row.querySelector('input').focus();
   });
 
+  // ── External / Contractor Sign-On table ──────────────────────
+
+  const extSignonTbody = $('ext-signon-tbody');
+
+  function buildExtSignonRow() {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><input type="text" class="tbl-input" placeholder="Full name…" aria-label="Name" autocomplete="name"></td>' +
+      '<td><input type="text" class="tbl-input" placeholder="Company…" aria-label="Company" autocomplete="organization"></td>' +
+      '<td><input type="text" class="tbl-input initials-input" placeholder="JD" maxlength="5" aria-label="Initials" autocomplete="off"></td>' +
+      '<td><input type="date" class="tbl-input" value="' + todayISO() + '" aria-label="Sign-on date"></td>' +
+      '<td><button type="button" class="btn-remove-row" aria-label="Remove row">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+      '</button></td>';
+
+    tr.querySelector('.btn-remove-row').addEventListener('click', () => {
+      if (extSignonTbody.rows.length > 1) tr.remove();
+    });
+
+    return tr;
+  }
+
+  extSignonTbody.appendChild(buildExtSignonRow());
+  extSignonTbody.appendChild(buildExtSignonRow());
+
+  $('add-ext-signon-btn').addEventListener('click', () => {
+    const row = buildExtSignonRow();
+    extSignonTbody.appendChild(row);
+    row.querySelector('input').focus();
+  });
+
   // ── Collect form data ────────────────────────────────────────
 
   function collectData() {
     const data = {
-      date:     $('tb-date').value,
-      project:  $('tb-project').value.trim(),
-      initials: $('tb-initials').value.trim().toUpperCase(),
-      site:     $('tb-site').value.trim(),
-      gps:      $('tb-gps').value.trim(),
-      crew:     $('tb-crew').value.trim(),
-      scope:    $('tb-scope').value.trim(),
-      weather:  $('tb-weather').value.trim(),
-      comms:    $('tb-comms').value.trim(),
-      hazards:  [],
-      ppe:      [],
-      signoffs: [],
+      date:             $('tb-date').value,
+      project:          $('tb-project').value.trim(),
+      initials:         $('tb-initials').value.trim().toUpperCase(),
+      site:             $('tb-site').value.trim(),
+      gps:              $('tb-gps').value.trim(),
+      crew:             $('tb-crew').value.trim(),
+      scope:            $('tb-scope').value.trim(),
+      weather:          $('tb-weather').value.trim(),
+      comms:            $('tb-comms').value.trim(),
+      hazards:          [],
+      ppe:              [],
+      signoffs:         [],
+      externalSignOns:  [],
     };
 
     // Hazards — skip fully empty rows
@@ -185,8 +222,116 @@
       if (name || initials) data.signoffs.push({ name, initials, date });
     });
 
+    // External sign-ons — skip fully empty rows
+    Array.from(extSignonTbody.rows).forEach(row => {
+      const inputs   = row.querySelectorAll('input');
+      const name     = inputs[0].value.trim();
+      const company  = inputs[1].value.trim();
+      const initials = inputs[2].value.trim().toUpperCase();
+      const date     = inputs[3].value;
+      if (name || company || initials) data.externalSignOns.push({ name, company, initials, date });
+    });
+
     return data;
   }
+
+  // ── Edit mode ────────────────────────────────────────────────
+
+  let currentEditId = null;
+
+  const editBanner     = $('tb-edit-banner');
+  const editBannerText = $('tb-edit-banner-text');
+  const saveLabel      = $('tb-save-label');
+
+  const STD_PPE = new Set(
+    Array.from(document.querySelectorAll('#ppe-list input[type="checkbox"]')).map(cb => cb.value)
+  );
+
+  function enterEditMode(rec) {
+    const d = rec.data || {};
+    currentEditId = rec.id;
+
+    // Populate text fields
+    $('tb-date').value     = d.date     || '';
+    $('tb-project').value  = d.project  || '';
+    $('tb-initials').value = d.initials || '';
+    $('tb-site').value     = d.site     || '';
+    $('tb-gps').value      = d.gps      || '';
+    $('tb-crew').value     = d.crew     || '';
+    $('tb-scope').value    = d.scope    || '';
+    $('tb-weather').value  = d.weather  || '';
+    $('tb-comms').value    = d.comms    || '';
+
+    // Rebuild hazard table
+    hazardTbody.innerHTML = '';
+    const hazards = (d.hazards && d.hazards.length) ? d.hazards : [{}];
+    hazards.forEach(h => {
+      const row = buildHazardRow();
+      const inputs = row.querySelectorAll('input, select');
+      inputs[0].value = h.hazard  || '';
+      inputs[1].value = h.risk    || '';
+      inputs[2].value = h.control || '';
+      applyRiskColor(inputs[1]);
+      hazardTbody.appendChild(row);
+    });
+
+    // Standard PPE checkboxes
+    document.querySelectorAll('#ppe-list input[type="checkbox"]').forEach(cb => {
+      cb.checked = Array.isArray(d.ppe) && d.ppe.includes(cb.value);
+    });
+
+    // Custom PPE
+    ppeCustomList.innerHTML = '';
+    (Array.isArray(d.ppe) ? d.ppe : [])
+      .filter(item => !STD_PPE.has(item))
+      .forEach(item => {
+        const row = buildPPECustomRow(item);
+        ppeCustomList.appendChild(row);
+      });
+
+    // Sign-off rows
+    signoffTbody.innerHTML = '';
+    const signoffs = (d.signoffs && d.signoffs.length) ? d.signoffs : [{}, {}];
+    signoffs.forEach(s => {
+      const row = buildSignoffRow();
+      const inputs = row.querySelectorAll('input');
+      inputs[0].value = s.name     || '';
+      inputs[1].value = s.initials || '';
+      inputs[2].value = s.date     || '';
+      signoffTbody.appendChild(row);
+    });
+
+    // External sign-on rows
+    extSignonTbody.innerHTML = '';
+    const extRows = (d.externalSignOns && d.externalSignOns.length) ? d.externalSignOns : [{}, {}];
+    extRows.forEach(e => {
+      const row = buildExtSignonRow();
+      const inputs = row.querySelectorAll('input');
+      inputs[0].value = e.name     || '';
+      inputs[1].value = e.company  || '';
+      inputs[2].value = e.initials || '';
+      inputs[3].value = e.date     || '';
+      extSignonTbody.appendChild(row);
+    });
+
+    // Banner and button
+    editBannerText.textContent =
+      'Editing saved submission from ' + (d.date || '—') + ' — ' + (d.project || '—') +
+      '. Save Submission will overwrite the original.';
+    editBanner.hidden    = false;
+    saveLabel.textContent = 'Save Changes';
+
+    document.getElementById('main-content').scrollTop = 0;
+  }
+
+  function exitEditMode() {
+    currentEditId         = null;
+    editBanner.hidden     = true;
+    saveLabel.textContent = 'Save Submission';
+  }
+
+  // Expose so submissions.js can call it
+  window.ToolboxForm = { loadForEdit: enterEditMode };
 
   // ── Toast notification ───────────────────────────────────────
 
@@ -206,11 +351,19 @@
     const btn = $('tb-save-btn');
     btn.disabled = true;
     try {
-      await FraxinusDB.saveSubmission('toolbox', collectData());
-      showToast('Saved successfully');
+      const data = collectData();
+      if (currentEditId !== null) {
+        await FraxinusDB.updateSubmission(currentEditId, data);
+        showToast('Submission updated successfully');
+        exitEditMode();
+        document.querySelector('[data-tab="submissions"]').click();
+      } else {
+        await FraxinusDB.saveSubmission('toolbox', data);
+        showToast('Saved successfully');
+      }
     } catch (err) {
       showToast('Save failed — ' + err.message, 'error');
-      console.error('saveSubmission:', err);
+      console.error('save:', err);
     } finally {
       btn.disabled = false;
     }
@@ -261,6 +414,11 @@
 
     ctx.section('Sign-Off');
     ctx.signoffTable(d.signoffs);
+
+    if (d.externalSignOns && d.externalSignOns.length) {
+      ctx.section('External / Contractor Sign-On');
+      ctx.extSignonTable(d.externalSignOns);
+    }
 
     ctx.pageFooters();
     return doc;
@@ -464,6 +622,44 @@
           doc.setTextColor(...DARK);
           doc.text(s.name     || '—', x + 2, y); x += cols[0];
           doc.text(s.initials || '—', x + 2, y); x += cols[1];
+          doc.text(s.date     || '—', x + 2, y);
+          y += 5.5;
+          doc.setDrawColor(...LGRAY);
+          doc.setLineWidth(0.15);
+          doc.line(ML, y - 0.5, ML + CW, y - 0.5);
+        });
+
+        y += 2;
+      },
+
+      extSignonTable(rows) {
+        if (!rows || !rows.length) return;
+
+        const cols = [CW * 0.36, CW * 0.30, CW * 0.14, CW * 0.20];
+        const hdrs = ['Name', 'Company', 'Initials', 'Date'];
+        guard(10);
+
+        doc.setFillColor(210, 210, 210);
+        doc.rect(ML, y - 4, CW, 6, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(...DARK);
+        let x = ML;
+        hdrs.forEach((h, i) => { doc.text(h, x + 2, y); x += cols[i]; });
+        doc.setDrawColor(...LGRAY);
+        doc.setLineWidth(0.25);
+        doc.line(ML, y + 2, ML + CW, y + 2);
+        y += 6;
+
+        rows.forEach(s => {
+          guard(6);
+          x = ML;
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8.5);
+          doc.setTextColor(...DARK);
+          doc.text(s.name     || '—', x + 2, y); x += cols[0];
+          doc.text(s.company  || '—', x + 2, y); x += cols[1];
+          doc.text(s.initials || '—', x + 2, y); x += cols[2];
           doc.text(s.date     || '—', x + 2, y);
           y += 5.5;
           doc.setDrawColor(...LGRAY);
