@@ -95,10 +95,6 @@
 
     const card = document.createElement('article');
     card.className = 'sub-card';
-    const editBtnHTML = rec.type === 'toolbox'
-      ? '<button class="sub-btn sub-btn-edit" aria-label="Edit submission">Edit</button>'
-      : '';
-
     card.innerHTML =
       '<div class="sub-card-info">' +
         '<div class="sub-card-top">' +
@@ -108,18 +104,11 @@
         '<p class="sub-project">' + esc(project) + '</p>' +
       '</div>' +
       '<div class="sub-card-actions">' +
-        editBtnHTML +
         '<button class="sub-btn sub-btn-view"   aria-label="View submission">View</button>' +
         '<button class="sub-btn sub-btn-pdf"    aria-label="Export PDF">Export PDF</button>' +
         '<button class="sub-btn sub-btn-delete" aria-label="Delete submission">Delete</button>' +
       '</div>';
 
-    if (rec.type === 'toolbox') {
-      card.querySelector('.sub-btn-edit').addEventListener('click', () => {
-        document.querySelector('[data-tab="toolbox"]').click();
-        if (window.ToolboxForm) window.ToolboxForm.loadForEdit(rec);
-      });
-    }
     card.querySelector('.sub-btn-view')  .addEventListener('click', () => openModal(rec));
     card.querySelector('.sub-btn-pdf')   .addEventListener('click', () => exportPDF(rec));
     card.querySelector('.sub-btn-delete').addEventListener('click', () => deleteRecord(rec, card));
@@ -233,23 +222,6 @@
       out.push('</div>');
     }
 
-    // External sign-ons (Toolbox only)
-    if (rec.type === 'toolbox' && d.externalSignOns && d.externalSignOns.length) {
-      out.push(mSection('External / Contractor Sign-On'));
-      out.push('<div class="modal-signoff-table">');
-      d.externalSignOns.forEach(s => {
-        out.push(
-          '<div class="modal-signoff-row">' +
-            '<span class="modal-sig-name">'     + esc(s.name     || '—') + '</span>' +
-            '<span class="modal-sig-initials">' + esc(s.company  || '')  + '</span>' +
-            '<span class="modal-sig-initials">' + esc(s.initials || '')  + '</span>' +
-            '<span class="modal-sig-date">'     + esc(s.date     || '')  + '</span>' +
-          '</div>'
-        );
-      });
-      out.push('</div>');
-    }
-
     // Comments (JSHA only)
     if (rec.type === 'jsha' && d.comments) {
       out.push(mSection('Additional Comments'));
@@ -328,11 +300,6 @@
     if (d.signoffs && d.signoffs.length) {
       ctx.section('Sign-Off');
       ctx.signoffTable(d.signoffs);
-    }
-
-    if (d.externalSignOns && d.externalSignOns.length) {
-      ctx.section('External / Contractor Sign-On');
-      ctx.extSignonTable(d.externalSignOns);
     }
 
     ctx.pageFooters();
@@ -578,44 +545,6 @@
           doc.setLineWidth(0.15);
           doc.line(ML, y, ML + CW, y);
           y += 1;
-        });
-
-        y += 2;
-      },
-
-      extSignonTable(rows) {
-        if (!rows || !rows.length) return;
-
-        const cols = [CW * 0.36, CW * 0.30, CW * 0.14, CW * 0.20];
-        const hdrs = ['Name', 'Company', 'Initials', 'Date'];
-        guard(10);
-
-        doc.setFillColor(210, 210, 210);
-        doc.rect(ML, y - 4, CW, 6, 'F');
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(8);
-        doc.setTextColor(...DARK);
-        let x = ML;
-        hdrs.forEach((h, i) => { doc.text(h, x + 2, y); x += cols[i]; });
-        doc.setDrawColor(...LGRAY);
-        doc.setLineWidth(0.25);
-        doc.line(ML, y + 2, ML + CW, y + 2);
-        y += 6;
-
-        rows.forEach(s => {
-          guard(6);
-          x = ML;
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(8.5);
-          doc.setTextColor(...DARK);
-          doc.text(s.name     || '—', x + 2, y); x += cols[0];
-          doc.text(s.company  || '—', x + 2, y); x += cols[1];
-          doc.text(s.initials || '—', x + 2, y); x += cols[2];
-          doc.text(s.date     || '—', x + 2, y);
-          y += 5.5;
-          doc.setDrawColor(...LGRAY);
-          doc.setLineWidth(0.15);
-          doc.line(ML, y - 0.5, ML + CW, y - 0.5);
         });
 
         y += 2;

@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Fraxinus">
-  <link rel="apple-touch-icon" href="/Safety/icons/icon-192.png">
-  <link rel="manifest" href="/Safety/manifest.json">
+  <link rel="apple-touch-icon" href="/safety/icons/icon-192.png">
+  <link rel="manifest" href="/safety/manifest.json">
   <title>Fraxinus Environmental &amp; Geomatics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -390,12 +390,6 @@
 
       <form id="toolbox-form" novalidate>
 
-        <!-- ── Draft banner ── -->
-        <div id="tb-draft-banner" class="draft-banner" hidden>
-          <span id="tb-draft-banner-text" class="draft-banner-text"></span>
-          <button type="button" id="tb-clear-draft-btn" class="draft-clear-btn">Clear Draft</button>
-        </div>
-
         <!-- ── Site Information ── -->
         <div class="form-card">
           <h2 class="form-section-title">Site Information</h2>
@@ -556,50 +550,6 @@
           </button>
         </div>
 
-        <!-- ── External / Contractor Sign-On ── -->
-        <div class="form-card ext-signon-card">
-          <h2 class="form-section-title">External / Contractor Sign-On</h2>
-          <p class="ext-signon-subtitle">For personnel from other companies signing on to this safety sheet</p>
-          <div class="table-wrap">
-            <table class="form-table" id="ext-signon-table">
-              <colgroup>
-                <col style="min-width:110px">
-                <col style="min-width:100px">
-                <col style="width:72px">
-                <col style="width:110px">
-                <col style="width:44px">
-              </colgroup>
-              <thead>
-                <tr class="ext-signon-head">
-                  <th>Name</th>
-                  <th>Company</th>
-                  <th>Initials</th>
-                  <th>Date</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="ext-signon-tbody"></tbody>
-            </table>
-          </div>
-          <button type="button" id="add-ext-signon-btn" class="btn-add-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                 stroke-linecap="round" aria-hidden="true">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Add Row
-          </button>
-        </div>
-
-        <!-- ── Edit banner ── -->
-        <div id="tb-edit-banner" class="edit-banner" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="edit-banner-icon">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span id="tb-edit-banner-text"></span>
-        </div>
-
         <!-- ── Actions ── -->
         <div class="form-actions">
           <button type="button" id="tb-save-btn" class="btn-primary">
@@ -609,7 +559,7 @@
               <polyline points="17 21 17 13 7 13 7 21"/>
               <polyline points="7 3 7 8 15 8"/>
             </svg>
-            <span id="tb-save-label">Save Submission</span>
+            Save Submission
           </button>
           <button type="button" id="tb-pdf-btn" class="btn-secondary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -644,12 +594,6 @@
       </div>
 
       <form id="jsha-form" novalidate>
-
-        <!-- ── Draft banner ── -->
-        <div id="jsha-draft-banner" class="draft-banner" hidden>
-          <span id="jsha-draft-banner-text" class="draft-banner-text"></span>
-          <button type="button" id="jsha-clear-draft-btn" class="draft-clear-btn">Clear Draft</button>
-        </div>
 
         <!-- ── Site Information ── -->
         <div class="form-card">
@@ -958,7 +902,7 @@
     // Register service worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/Safety/service-worker.js', { scope: '/Safety/' })
+        navigator.serviceWorker.register('/safety/service-worker.js', { scope: '/safety/' })
           .catch(err => console.warn('Service worker registration failed:', err));
       });
     }
