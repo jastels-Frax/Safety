@@ -95,7 +95,7 @@
 
     const card = document.createElement('article');
     card.className = 'sub-card';
-    const editBtnHTML = rec.type === 'toolbox'
+    const editBtnHTML = (rec.type === 'toolbox' || rec.type === 'jsha')
       ? '<button class="sub-btn sub-btn-edit" aria-label="Edit submission">Edit</button>'
       : '';
 
@@ -118,6 +118,12 @@
       card.querySelector('.sub-btn-edit').addEventListener('click', () => {
         document.querySelector('[data-tab="toolbox"]').click();
         if (window.ToolboxForm) window.ToolboxForm.loadForEdit(rec);
+      });
+    }
+    if (rec.type === 'jsha') {
+      card.querySelector('.sub-btn-edit').addEventListener('click', () => {
+        document.querySelector('[data-tab="hazard"]').click();
+        if (window.JSHAForm) window.JSHAForm.loadForEdit(rec);
       });
     }
     card.querySelector('.sub-btn-view')  .addEventListener('click', () => openModal(rec));
@@ -217,11 +223,12 @@
       );
     }
 
-    // Sign-offs (Toolbox only)
-    if (rec.type === 'toolbox' && d.signoffs && d.signoffs.length) {
+    // Sign-offs
+    const signoffsData = rec.type === 'jsha' ? d.jshaSignOffs : d.signoffs;
+    if (signoffsData && signoffsData.length) {
       out.push(mSection('Sign-Off'));
       out.push('<div class="modal-signoff-table">');
-      d.signoffs.forEach(s => {
+      signoffsData.forEach(s => {
         out.push(
           '<div class="modal-signoff-row">' +
             '<span class="modal-sig-name">'     + esc(s.name     || '—') + '</span>' +
@@ -233,8 +240,8 @@
       out.push('</div>');
     }
 
-    // External sign-ons (Toolbox only)
-    if (rec.type === 'toolbox' && d.externalSignOns && d.externalSignOns.length) {
+    // External sign-ons
+    if (d.externalSignOns && d.externalSignOns.length) {
       out.push(mSection('External / Contractor Sign-On'));
       out.push('<div class="modal-signoff-table">');
       d.externalSignOns.forEach(s => {
@@ -371,6 +378,16 @@
     if (d.comments) {
       ctx.section('Additional Comments');
       ctx.field('', d.comments);
+    }
+
+    if (d.jshaSignOffs && d.jshaSignOffs.length) {
+      ctx.section('Sign-Off');
+      ctx.signoffTable(d.jshaSignOffs);
+    }
+
+    if (d.externalSignOns && d.externalSignOns.length) {
+      ctx.section('External / Contractor Sign-On');
+      ctx.extSignonTable(d.externalSignOns);
     }
 
     ctx.pageFooters();

@@ -806,6 +806,81 @@
                     placeholder="Additional notes, special conditions, or site-specific concerns…"></textarea>
         </div>
 
+        <!-- ── Sign-Off ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Sign-Off</h2>
+          <div class="table-wrap">
+            <table class="form-table" id="jsha-signoff-table">
+              <colgroup>
+                <col style="min-width:140px">
+                <col style="width:80px">
+                <col style="width:130px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Initials</th>
+                  <th>Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="jsha-signoff-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="jsha-add-signoff-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Sign-Off Row
+          </button>
+        </div>
+
+        <!-- ── External / Contractor Sign-On ── -->
+        <div class="form-card ext-signon-card">
+          <h2 class="form-section-title">External / Contractor Sign-On</h2>
+          <p class="ext-signon-subtitle">For personnel from other companies signing on to this safety sheet</p>
+          <div class="table-wrap">
+            <table class="form-table" id="jsha-ext-signon-table">
+              <colgroup>
+                <col style="min-width:110px">
+                <col style="min-width:100px">
+                <col style="width:72px">
+                <col style="width:110px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr class="ext-signon-head">
+                  <th>Name</th>
+                  <th>Company</th>
+                  <th>Initials</th>
+                  <th>Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="jsha-ext-signon-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="jsha-add-ext-signon-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Row
+          </button>
+        </div>
+
+        <!-- ── Edit banner ── -->
+        <div id="jsha-edit-banner" class="edit-banner" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="edit-banner-icon">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="jsha-edit-banner-text"></span>
+        </div>
+
         <!-- ── Actions ── -->
         <div class="form-actions">
           <button type="button" id="jsha-save-btn" class="btn-primary">
@@ -815,7 +890,7 @@
               <polyline points="17 21 17 13 7 13 7 21"/>
               <polyline points="7 3 7 8 15 8"/>
             </svg>
-            Save Submission
+            <span id="jsha-save-label">Save Submission</span>
           </button>
           <button type="button" id="jsha-pdf-btn" class="btn-secondary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
