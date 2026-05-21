@@ -186,11 +186,16 @@
         const inp = row.querySelectorAll('input');
         return { name: inp[0].value, initials: inp[1].value, date: inp[2].value };
       }),
+      extSignOns: Array.from(extSignonTbody.rows).map(row => {
+        const inp = row.querySelectorAll('input');
+        return { name: inp[0].value, company: inp[1].value, initials: inp[2].value, date: inp[3].value };
+      }),
     };
     try { localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); } catch (e) { /* storage quota */ }
   }
 
   function scheduleDraftSave() {
+    if (currentEditId !== null) return;
     clearTimeout(draftTimer);
     draftTimer = setTimeout(writeDraft, 500);
   }
@@ -253,6 +258,23 @@
         signoffTbody.appendChild(buildSignoffRow());
       }
     }
+
+    if (Array.isArray(draft.extSignOns)) {
+      while (extSignonTbody.rows.length) extSignonTbody.deleteRow(0);
+      draft.extSignOns.forEach(e => {
+        const row = buildExtSignonRow();
+        const inp = row.querySelectorAll('input');
+        inp[0].value = e.name     || '';
+        inp[1].value = e.company  || '';
+        inp[2].value = e.initials || '';
+        inp[3].value = e.date     || '';
+        extSignonTbody.appendChild(row);
+      });
+      if (!extSignonTbody.rows.length) {
+        extSignonTbody.appendChild(buildExtSignonRow());
+        extSignonTbody.appendChild(buildExtSignonRow());
+      }
+    }
   }
 
   function clearDraft() {
@@ -290,13 +312,21 @@
     signoffTbody.appendChild(buildSignoffRow('', '', ''));
     signoffTbody.appendChild(buildSignoffRow('', '', ''));
 
+    // Ext sign-on — 2 blank rows
+    while (extSignonTbody.rows.length) extSignonTbody.deleteRow(0);
+    extSignonTbody.appendChild(buildExtSignonRow());
+    extSignonTbody.appendChild(buildExtSignonRow());
+
+    // Edit mode state
+    currentEditId = null;
+
     // Draft + banners
     localStorage.removeItem(DRAFT_KEY);
     hideDraftBanner();
     const editBanner = $('tb-edit-banner');
     if (editBanner) editBanner.hidden = true;
 
-    // Save button label (defensive — for when edit mode is present)
+    // Save button label
     const saveLabel = $('tb-save-label');
     if (saveLabel) saveLabel.textContent = 'Save Submission';
 
@@ -340,7 +370,7 @@
       '</button></td>';
 
     tr.querySelector('.btn-remove-row').addEventListener('click', () => {
-      if (extSignonTbody.rows.length > 1) tr.remove();
+      if (extSignonTbody.rows.length > 1) { tr.remove(); scheduleDraftSave(); }
     });
 
     return tr;
@@ -353,6 +383,7 @@
     const row = buildExtSignonRow();
     extSignonTbody.appendChild(row);
     row.querySelector('input').focus();
+    scheduleDraftSave();
   });
 
   // ── Collect form data ────────────────────────────────────────
