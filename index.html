@@ -29,6 +29,9 @@
         <span class="company-name">Fraxinus</span>
         <span class="company-subtitle">Environmental &amp; Geomatics</span>
       </div>
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+        <span class="theme-icon">🌙</span>
+      </button>
     </div>
   </header>
 
@@ -1020,6 +1023,25 @@
   </script>
 
   <script src="documents.js"></script>
+
+  <script>
+  (function() {
+    const toggle = document.getElementById('theme-toggle');
+    const icon = toggle.querySelector('.theme-icon');
+
+    const saved = localStorage.getItem('fraxinus-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    icon.textContent = saved === 'dark' ? '☀️' : '🌙';
+
+    toggle.addEventListener('click', function() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('fraxinus-theme', next);
+      icon.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+  })();
+  </script>
 
 </body>
 </html>
