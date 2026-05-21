@@ -533,12 +533,15 @@
         y += ROW_H;
 
         hazards.forEach(h => {
+          if (!h.hazard && !h.control) return;
           guard(ROW_H);
+          const textY = y + 9;
+          const lineY = y + ROW_H;
 
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8.5);
           doc.setTextColor(...DARK);
-          doc.text(h.hazard || '—', C1 + 2, y);
+          doc.text(h.hazard || '', C1 + 2, textY);
 
           const risk = h.risk || '';
           const rc   = risk === 'High' ? [204,   0,   0]
@@ -547,15 +550,15 @@
                      : DARK;
           doc.setFont('helvetica', 'bold');
           doc.setTextColor(...rc);
-          doc.text(risk || '—', C2 + 2, y);
+          doc.text(risk, C2 + 2, textY);
 
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(...DARK);
-          doc.text(h.control || '—', C3 + 2, y);
+          doc.text(h.control || '', C3 + 2, textY);
 
           doc.setDrawColor(200, 200, 200);
           doc.setLineWidth(0.15);
-          doc.line(C1, y + 2, C3 + W3, y + 2);
+          doc.line(C1, lineY, C3 + W3, lineY);
           y += ROW_H;
         });
 

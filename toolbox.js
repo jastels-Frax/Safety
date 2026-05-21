@@ -748,12 +748,15 @@
         y += ROW_H;
 
         hazards.forEach(h => {
+          if (!h.hazard && !h.control) return;
           guard(ROW_H);
+          const textY = y + 9;
+          const lineY = y + ROW_H;
 
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8.5);
           doc.setTextColor(...DARK);
-          doc.text(h.hazard || '—', C1 + 2, y);
+          doc.text(h.hazard || '', C1 + 2, textY);
 
           const risk = h.risk || '';
           const rc   = risk === 'High' ? [204,   0,   0]
@@ -762,15 +765,15 @@
                      : DARK;
           doc.setFont('helvetica', 'bold');
           doc.setTextColor(...rc);
-          doc.text(risk || '—', C2 + 2, y);
+          doc.text(risk, C2 + 2, textY);
 
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(...DARK);
-          doc.text(h.control || '—', C3 + 2, y);
+          doc.text(h.control || '', C3 + 2, textY);
 
-          doc.setDrawColor(200, 200, 200);
-          doc.setLineWidth(0.15);
-          doc.line(C1, y + 2, C3 + W3, y + 2);
+          doc.setDrawColor(220, 220, 220);
+          doc.setLineWidth(0.3);
+          doc.line(C1, lineY, C3 + W3, lineY);
           y += ROW_H;
         });
 
@@ -837,19 +840,23 @@
         doc.line(ML, y + 2, ML + CW, y + 2);
         y += 6;
 
+        const ROW_H = 14;
         signoffs.forEach(s => {
-          guard(6);
+          if (!s.name && !s.initials) return;
+          guard(ROW_H);
+          const textY = y + 9;
+          const lineY = y + ROW_H;
           x = ML;
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8.5);
           doc.setTextColor(...DARK);
-          doc.text(s.name     || '—', x + 2, y); x += cols[0];
-          doc.text(s.initials || '—', x + 2, y); x += cols[1];
-          doc.text(s.date     || '—', x + 2, y);
-          y += 5.5;
+          doc.text(s.name     || '', x + 2, textY); x += cols[0];
+          doc.text(s.initials || '', x + 2, textY); x += cols[1];
+          doc.text(s.date     || '', x + 2, textY);
           doc.setDrawColor(...LGRAY);
           doc.setLineWidth(0.15);
-          doc.line(ML, y - 0.5, ML + CW, y - 0.5);
+          doc.line(ML, lineY, ML + CW, lineY);
+          y += ROW_H;
         });
 
         y += 2;
@@ -877,18 +884,21 @@
         const ROW_H = 14;
 
         rows.forEach(s => {
+          if (!s.name && !s.company) return;
           guard(ROW_H);
+          const textY = y + 9;
+          const lineY = y + ROW_H;
           x = ML;
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(8.5);
           doc.setTextColor(...DARK);
-          doc.text(s.name     || '—', x + 2, y); x += cols[0];
-          doc.text(s.company  || '—', x + 2, y); x += cols[1];
-          doc.text(s.initials || '—', x + 2, y); x += cols[2];
-          doc.text(s.date     || '—', x + 2, y);
+          doc.text(s.name     || '', x + 2, textY); x += cols[0];
+          doc.text(s.company  || '', x + 2, textY); x += cols[1];
+          doc.text(s.initials || '', x + 2, textY); x += cols[2];
+          doc.text(s.date     || '', x + 2, textY);
           doc.setDrawColor(...LGRAY);
           doc.setLineWidth(0.15);
-          doc.line(ML, y + ROW_H - 2, ML + CW, y + ROW_H - 2);
+          doc.line(ML, lineY, ML + CW, lineY);
           y += ROW_H;
         });
 
