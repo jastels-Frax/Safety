@@ -4,20 +4,21 @@
    everything else (future API calls, dynamic content).
    ============================================================ */
 
-const CACHE_VERSION = 'v15';
+const CACHE_VERSION = 'v16';
 const SHELL_CACHE   = 'fraxinus-shell-' + CACHE_VERSION;
 
 const SHELL_ASSETS = [
-  '/safety/',
-  '/safety/index.html',
-  '/safety/style.css',
-  '/safety/db.js',
-  '/safety/toolbox.js',
-  '/safety/jsha.js',
-  '/safety/submissions.js',
-  '/safety/documents.js',
-  '/safety/manifest.json',
-  'https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap',
+  '/Safety/',
+  '/Safety/index.html',
+  '/Safety/style.css',
+  '/Safety/db.js',
+  '/Safety/toolbox.js',
+  '/Safety/jsha.js',
+  '/Safety/submissions.js',
+  '/Safety/documents.js',
+  '/Safety/manifest.json',
+  '/Safety/icons/icon-192.png',
+  '/Safety/icons/icon-512.png',
 ];
 
 // ── Install: pre-cache the app shell ────────────────────────
@@ -54,8 +55,8 @@ self.addEventListener('fetch', function(event) {
 
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match('/safety/index.html').then(function(response) {
-        return response || fetch('/safety/index.html');
+      caches.match('/Safety/index.html').then(function(response) {
+        return response || fetch('/Safety/index.html');
       })
     );
     return;

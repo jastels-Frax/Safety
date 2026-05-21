@@ -2,8 +2,8 @@
   "name": "Fraxinus Environmental & Geomatics",
   "short_name": "Fraxinus",
   "description": "Field application for Fraxinus Environmental & Geomatics — documents, toolbox talks, hazard assessments, and submissions.",
-  "start_url": "/safety/",
-  "scope": "/safety/",
+  "start_url": "/Safety/",
+  "scope": "/Safety/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#E8731A",
@@ -11,25 +11,25 @@
   "categories": ["productivity", "utilities"],
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "/Safety/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-192-maskable.png",
+      "src": "/Safety/icons/icon-192-maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "/Safety/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-512-maskable.png",
+      "src": "/Safety/icons/icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -39,12 +39,12 @@
   "shortcuts": [
     {
       "name": "Documents",
-      "url": "/safety/?tab=documents",
+      "url": "/Safety/?tab=documents",
       "description": "Open field documents"
     },
     {
       "name": "Hazard Assessment",
-      "url": "/safety/?tab=hazard",
+      "url": "/Safety/?tab=hazard",
       "description": "Start a hazard assessment"
     }
   ]

@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Fraxinus">
-  <link rel="apple-touch-icon" href="/safety/icons/icon-192.png">
-  <link rel="manifest" href="/safety/manifest.json">
+  <link rel="apple-touch-icon" href="/Safety/icons/icon-192.png">
+  <link rel="manifest" href="/Safety/manifest.json">
   <title>Fraxinus Environmental &amp; Geomatics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -902,7 +902,7 @@
     // Register service worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/safety/service-worker.js', { scope: '/safety/' })
+        navigator.serviceWorker.register('/Safety/service-worker.js', { scope: '/Safety/' })
           .catch(err => console.warn('Service worker registration failed:', err));
       });
     }
