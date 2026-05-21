@@ -1022,11 +1022,63 @@
     // Pre-warm IndexedDB
     FraxinusDB.initDB().catch(console.error);
 
-    // Register service worker
+    // ── Check whether any form has unsaved data ───────────────
+    function hasUnsavedFormData() {
+      const toolboxDraft = localStorage.getItem('fraxinus_draft_toolbox');
+      if (toolboxDraft) {
+        try {
+          const d = JSON.parse(toolboxDraft);
+          if (d.project || d.scope || d.crew) return true;
+        } catch (e) {}
+      }
+
+      const jshaDraft = localStorage.getItem('fraxinus_draft_jsha');
+      if (jshaDraft) {
+        try {
+          const d = JSON.parse(jshaDraft);
+          if (d.project || d.scope) return true;
+        } catch (e) {}
+      }
+
+      if (document.getElementById('tb-project')   && document.getElementById('tb-project').value)   return true;
+      if (document.getElementById('jsha-project') && document.getElementById('jsha-project').value) return true;
+
+      return false;
+    }
+
+    // ── Service worker registration with silent auto-update ───
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/Safety/service-worker.js', { scope: '/Safety/' })
+          .then(registration => {
+
+            // Check for updates every 60 minutes
+            setInterval(() => { registration.update(); }, 60 * 60 * 1000);
+
+            // When a new service worker finishes installing, activate it
+            // only if no form work is in progress
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  if (!hasUnsavedFormData()) {
+                    navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+                  }
+                }
+              });
+            });
+
+          })
           .catch(err => console.warn('Service worker registration failed:', err));
+
+        // Reload once when the new service worker takes over
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        });
       });
     }
   </script>

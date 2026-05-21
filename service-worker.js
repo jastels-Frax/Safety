@@ -1,10 +1,11 @@
 /* ============================================================
    Fraxinus PWA — Service Worker
-   Strategy: cache-first for shell assets, network-first for
-   everything else (future API calls, dynamic content).
+   Strategy: network-first for navigation, cache-first for
+   static assets. Updates silently in the background and
+   only reloads when no form data is in progress.
    ============================================================ */
 
-const CACHE_VERSION = 'v27';
+const CACHE_VERSION = 'v28';
 const SHELL_CACHE   = 'fraxinus-shell-' + CACHE_VERSION;
 
 const SHELL_ASSETS = [
@@ -31,17 +32,16 @@ self.addEventListener('install', event => {
   );
 });
 
-// ── Activate: remove stale caches ───────────────────────────
+// ── Activate: remove stale caches, claim clients ─────────────
 
 self.addEventListener('activate', event => {
-  const keep = [SHELL_CACHE];
   event.waitUntil(
     caches.keys()
-      .then(keys =>
+      .then(cacheNames =>
         Promise.all(
-          keys
-            .filter(key => !keep.includes(key))
-            .map(key => caches.delete(key))
+          cacheNames
+            .filter(name => name !== SHELL_CACHE)
+            .map(name => caches.delete(name))
         )
       )
       .then(() => self.clients.claim())
@@ -50,21 +50,39 @@ self.addEventListener('activate', event => {
 
 // ── Fetch ────────────────────────────────────────────────────
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
+  // Navigation: network-first so fresh HTML is always fetched
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match('/Safety/index.html').then(function(response) {
-        return response || fetch('/Safety/index.html');
-      })
+      fetch(event.request)
+        .then(response => {
+          const clone = response.clone();
+          caches.open(SHELL_CACHE).then(cache => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match('/Safety/index.html'))
     );
     return;
   }
 
+  // Static assets: cache-first, update cache on network hit
   event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request).then(response => {
+        const clone = response.clone();
+        caches.open(SHELL_CACHE).then(cache => cache.put(event.request, clone));
+        return response;
+      });
     })
   );
+});
+
+// ── Message handler ──────────────────────────────────────────
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
