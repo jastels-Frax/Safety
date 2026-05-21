@@ -217,6 +217,19 @@
     hideDraftBanner();
   }
 
+  function clearAllJSHAFormBanners() {
+    localStorage.removeItem(DRAFT_KEY);
+    hideDraftBanner();
+    const editBanner = $('jsha-edit-banner');
+    if (editBanner) editBanner.hidden = true;
+    const saveLabel = $('jsha-save-label');
+    if (saveLabel) saveLabel.textContent = 'Save Submission';
+  }
+
+  function isDraftMeaningful(draft) {
+    return !!(draft.project || draft.site || draft.scope || draft.crewName);
+  }
+
   function resetJSHAForm() {
     // Fields
     $('jsha-date').value     = todayISO();
@@ -250,15 +263,8 @@
     // Comments
     $('jsha-comments').value = '';
 
-    // Draft + banners
-    localStorage.removeItem(DRAFT_KEY);
-    hideDraftBanner();
-    const editBanner = $('jsha-edit-banner');
-    if (editBanner) editBanner.hidden = true;
-
-    // Save button label (defensive)
-    const saveLabel = $('jsha-save-label');
-    if (saveLabel) saveLabel.textContent = 'Save Submission';
+    // Clear banners, edit state, draft
+    clearAllJSHAFormBanners();
 
     // Allow draft to be re-restored on next tab visit
     draftRestored = false;
@@ -275,9 +281,13 @@
       const raw = localStorage.getItem(DRAFT_KEY);
       if (!raw) return;
       const draft = JSON.parse(raw);
+      if (!isDraftMeaningful(draft)) {
+        localStorage.removeItem(DRAFT_KEY);
+        return;
+      }
       restoreDraft(draft);
       showDraftBanner('Draft restored — tap Clear Draft to discard');
-    } catch (e) { /* corrupt draft */ }
+    } catch (e) { localStorage.removeItem(DRAFT_KEY); }
   }
 
   $('jsha-clear-draft-btn').addEventListener('click', () => {
