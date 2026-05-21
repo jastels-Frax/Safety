@@ -13,6 +13,12 @@
 
   $('jsha-date').value = todayISO();
 
+  // ── Draft persistence ────────────────────────────────────────
+
+  const DRAFT_KEY = 'fraxinus_draft_jsha';
+  let draftRestored = false;
+  let draftTimer = null;
+
   // ── GPS capture ─────────────────────────────────────────────
 
   $('jsha-gps-btn').addEventListener('click', function () {
@@ -32,6 +38,7 @@
         field.value = pos.coords.latitude.toFixed(6) + ', ' + pos.coords.longitude.toFixed(6);
         this.disabled = false;
         label.textContent = 'Recapture';
+        scheduleDraftSave();
       },
       err => {
         field.value = 'Location unavailable';
@@ -74,7 +81,7 @@
     });
 
     tr.querySelector('.btn-remove-row').addEventListener('click', () => {
-      if (hazardTbody.rows.length > 1) tr.remove();
+      if (hazardTbody.rows.length > 1) { tr.remove(); scheduleDraftSave(); }
     });
 
     return tr;
@@ -86,25 +93,165 @@
     const row = buildHazardRow();
     hazardTbody.appendChild(row);
     row.querySelector('input').focus();
+    scheduleDraftSave();
   });
 
   // ── PPE custom items ─────────────────────────────────────────
 
   const ppeCustomList = $('jsha-ppe-custom-list');
 
-  $('jsha-add-ppe-btn').addEventListener('click', () => {
+  function buildPPECustomRow(label, checked) {
     const row = document.createElement('div');
     row.className = 'ppe-custom-row';
     row.innerHTML =
-      '<input type="checkbox" class="ppe-custom-cb" checked aria-label="Include custom PPE item">' +
+      '<input type="checkbox" class="ppe-custom-cb" aria-label="Include custom PPE item">' +
       '<input type="text" class="tbl-input ppe-custom-input" placeholder="Custom PPE item…" aria-label="Custom PPE item name">' +
       '<button type="button" class="btn-remove-row" aria-label="Remove custom PPE item">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
       '</button>';
+    row.querySelector('.ppe-custom-cb').checked = (checked !== false);
+    if (label) row.querySelector('.ppe-custom-input').value = label;
+    row.querySelector('.btn-remove-row').addEventListener('click', () => { row.remove(); scheduleDraftSave(); });
+    return row;
+  }
 
-    row.querySelector('.btn-remove-row').addEventListener('click', () => row.remove());
+  $('jsha-add-ppe-btn').addEventListener('click', () => {
+    const row = buildPPECustomRow();
     ppeCustomList.appendChild(row);
     row.querySelector('.ppe-custom-input').focus();
+    scheduleDraftSave();
+  });
+
+  // ── Draft helpers ────────────────────────────────────────────
+
+  function writeDraft() {
+    const draft = {
+      date:     $('jsha-date').value,
+      project:  $('jsha-project').value,
+      initials: $('jsha-initials').value,
+      site:     $('jsha-site').value,
+      gps:      $('jsha-gps').value,
+      scope:    $('jsha-scope').value,
+      crewName:  $('jsha-crew-name').value,
+      crewPhone: $('jsha-crew-phone').value,
+      pmName:    $('jsha-pm-name').value,
+      pmPhone:   $('jsha-pm-phone').value,
+      hsRep:     $('jsha-hs-rep').value,
+      hospital:  $('jsha-hospital').value,
+      comments:  $('jsha-comments').value,
+      hazards: Array.from(hazardTbody.rows).map(row => {
+        const inp = row.querySelectorAll('input, select');
+        return { hazard: inp[0].value, risk: inp[1].value, control: inp[2].value };
+      }),
+      stdPPE: Array.from(document.querySelectorAll('#jsha-ppe-list input[type="checkbox"]')).map(cb => ({
+        value: cb.value, checked: cb.checked,
+      })),
+      customPPE: Array.from(ppeCustomList.querySelectorAll('.ppe-custom-row')).map(row => ({
+        checked: row.querySelector('.ppe-custom-cb').checked,
+        label:   row.querySelector('.ppe-custom-input').value,
+      })),
+    };
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); } catch (e) { /* storage quota */ }
+  }
+
+  function scheduleDraftSave() {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(writeDraft, 500);
+  }
+
+  function showDraftBanner(text) {
+    $('jsha-draft-banner-text').textContent = text;
+    $('jsha-draft-banner').hidden = false;
+  }
+
+  function hideDraftBanner() {
+    $('jsha-draft-banner').hidden = true;
+  }
+
+  function restoreDraft(draft) {
+    if (draft.date     !== undefined) $('jsha-date').value     = draft.date;
+    if (draft.project  !== undefined) $('jsha-project').value  = draft.project;
+    if (draft.initials !== undefined) $('jsha-initials').value = draft.initials;
+    if (draft.site     !== undefined) $('jsha-site').value     = draft.site;
+    if (draft.gps      !== undefined) $('jsha-gps').value      = draft.gps;
+    if (draft.scope    !== undefined) $('jsha-scope').value    = draft.scope;
+    if (draft.crewName  !== undefined) $('jsha-crew-name').value  = draft.crewName;
+    if (draft.crewPhone !== undefined) $('jsha-crew-phone').value = draft.crewPhone;
+    if (draft.pmName    !== undefined) $('jsha-pm-name').value    = draft.pmName;
+    if (draft.pmPhone   !== undefined) $('jsha-pm-phone').value   = draft.pmPhone;
+    if (draft.hsRep     !== undefined) $('jsha-hs-rep').value     = draft.hsRep;
+    if (draft.hospital  !== undefined) $('jsha-hospital').value   = draft.hospital;
+    if (draft.comments  !== undefined) $('jsha-comments').value   = draft.comments;
+
+    if (Array.isArray(draft.hazards) && draft.hazards.length) {
+      while (hazardTbody.rows.length) hazardTbody.deleteRow(0);
+      draft.hazards.forEach(h => {
+        const row = buildHazardRow();
+        const inp = row.querySelectorAll('input, select');
+        inp[0].value = h.hazard  || '';
+        inp[1].value = h.risk    || '';
+        inp[2].value = h.control || '';
+        applyRiskColor(inp[1]);
+        hazardTbody.appendChild(row);
+      });
+      if (!hazardTbody.rows.length) hazardTbody.appendChild(buildHazardRow());
+    }
+
+    if (Array.isArray(draft.stdPPE)) {
+      draft.stdPPE.forEach(item => {
+        const cb = document.querySelector('#jsha-ppe-list input[value="' + item.value.replace(/"/g, '\\"') + '"]');
+        if (cb) cb.checked = item.checked;
+      });
+    }
+
+    if (Array.isArray(draft.customPPE)) {
+      while (ppeCustomList.firstChild) ppeCustomList.removeChild(ppeCustomList.firstChild);
+      draft.customPPE.forEach(item => {
+        ppeCustomList.appendChild(buildPPECustomRow(item.label, item.checked));
+      });
+    }
+  }
+
+  function clearDraft() {
+    localStorage.removeItem(DRAFT_KEY);
+    hideDraftBanner();
+  }
+
+  function resetForm() {
+    $('jsha-date').value     = todayISO();
+    $('jsha-project').value  = '';
+    $('jsha-initials').value = '';
+    $('jsha-site').value     = '';
+    $('jsha-gps').value      = '';
+    $('jsha-scope').value    = '';
+    $('jsha-crew-name').value  = '';
+    $('jsha-crew-phone').value = '';
+    $('jsha-pm-name').value    = '';
+    $('jsha-pm-phone').value   = '';
+    $('jsha-hs-rep').value     = '';
+    $('jsha-hospital').value   = '';
+    $('jsha-comments').value   = '';
+    while (hazardTbody.rows.length) hazardTbody.deleteRow(0);
+    hazardTbody.appendChild(buildHazardRow());
+    while (ppeCustomList.firstChild) ppeCustomList.removeChild(ppeCustomList.firstChild);
+    document.querySelectorAll('#jsha-ppe-list input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+  }
+
+  function maybeRestoreDraft() {
+    if (draftRestored) return;
+    draftRestored = true;
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      restoreDraft(draft);
+      showDraftBanner('Draft restored — tap Clear Draft to discard');
+    } catch (e) { /* corrupt draft */ }
+  }
+
+  $('jsha-clear-draft-btn').addEventListener('click', () => {
+    clearDraft();
+    resetForm();
   });
 
   // ── Collect form data ────────────────────────────────────────
@@ -177,6 +324,7 @@
     btn.disabled = true;
     try {
       await FraxinusDB.saveSubmission('jsha', collectData());
+      clearDraft();
       showToast('Saved successfully');
     } catch (err) {
       showToast('Save failed — ' + err.message, 'error');
@@ -440,5 +588,15 @@
     a.remove();
     URL.revokeObjectURL(url);
   });
+
+  // ── Form-level auto-save delegation ─────────────────────────
+
+  const jshaForm = $('jsha-form');
+  jshaForm.addEventListener('input',  scheduleDraftSave);
+  jshaForm.addEventListener('change', scheduleDraftSave);
+
+  // ── Restore draft on first tab activation ────────────────────
+
+  document.getElementById('nav-hazard').addEventListener('click', maybeRestoreDraft);
 
 })();

@@ -13,6 +13,12 @@
 
   $('tb-date').value = todayISO();
 
+  // ── Draft persistence ────────────────────────────────────────
+
+  const DRAFT_KEY = 'fraxinus_draft_toolbox';
+  let draftRestored = false;
+  let draftTimer = null;
+
   // ── GPS capture ─────────────────────────────────────────────
 
   $('tb-gps-btn').addEventListener('click', function () {
@@ -32,6 +38,7 @@
         field.value = pos.coords.latitude.toFixed(6) + ', ' + pos.coords.longitude.toFixed(6);
         this.disabled = false;
         label.textContent = 'Recapture';
+        scheduleDraftSave();
       },
       err => {
         field.value = 'Location unavailable';
@@ -74,7 +81,7 @@
     });
 
     tr.querySelector('.btn-remove-row').addEventListener('click', () => {
-      if (hazardTbody.rows.length > 1) tr.remove();
+      if (hazardTbody.rows.length > 1) { tr.remove(); scheduleDraftSave(); }
     });
 
     return tr;
@@ -86,32 +93,40 @@
     const row = buildHazardRow();
     hazardTbody.appendChild(row);
     row.querySelector('input').focus();
+    scheduleDraftSave();
   });
 
   // ── PPE custom items ─────────────────────────────────────────
 
   const ppeCustomList = $('ppe-custom-list');
 
-  $('add-ppe-btn').addEventListener('click', () => {
+  function buildPPECustomRow(label, checked) {
     const row = document.createElement('div');
     row.className = 'ppe-custom-row';
     row.innerHTML =
-      '<input type="checkbox" class="ppe-custom-cb" checked aria-label="Include custom PPE item">' +
+      '<input type="checkbox" class="ppe-custom-cb" aria-label="Include custom PPE item">' +
       '<input type="text" class="tbl-input ppe-custom-input" placeholder="Custom PPE item…" aria-label="Custom PPE item name">' +
       '<button type="button" class="btn-remove-row" aria-label="Remove custom PPE item">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
       '</button>';
+    row.querySelector('.ppe-custom-cb').checked = (checked !== false);
+    if (label) row.querySelector('.ppe-custom-input').value = label;
+    row.querySelector('.btn-remove-row').addEventListener('click', () => { row.remove(); scheduleDraftSave(); });
+    return row;
+  }
 
-    row.querySelector('.btn-remove-row').addEventListener('click', () => row.remove());
+  $('add-ppe-btn').addEventListener('click', () => {
+    const row = buildPPECustomRow();
     ppeCustomList.appendChild(row);
     row.querySelector('.ppe-custom-input').focus();
+    scheduleDraftSave();
   });
 
   // ── Sign-off table ───────────────────────────────────────────
 
   const signoffTbody = $('signoff-tbody');
 
-  function buildSignoffRow() {
+  function buildSignoffRow(name, initials, date) {
     const tr = document.createElement('tr');
     tr.innerHTML =
       '<td><input type="text" class="tbl-input" placeholder="Full name…" aria-label="Name" autocomplete="name"></td>' +
@@ -121,8 +136,13 @@
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
       '</button></td>';
 
+    const inputs = tr.querySelectorAll('input');
+    if (name     !== undefined) inputs[0].value = name;
+    if (initials !== undefined) inputs[1].value = initials;
+    if (date     !== undefined) inputs[2].value = date;
+
     tr.querySelector('.btn-remove-row').addEventListener('click', () => {
-      if (signoffTbody.rows.length > 1) tr.remove();
+      if (signoffTbody.rows.length > 1) { tr.remove(); scheduleDraftSave(); }
     });
 
     return tr;
@@ -135,6 +155,145 @@
     const row = buildSignoffRow();
     signoffTbody.appendChild(row);
     row.querySelector('input').focus();
+    scheduleDraftSave();
+  });
+
+  // ── Draft helpers ────────────────────────────────────────────
+
+  function writeDraft() {
+    const draft = {
+      date:    $('tb-date').value,
+      project: $('tb-project').value,
+      initials: $('tb-initials').value,
+      site:    $('tb-site').value,
+      gps:     $('tb-gps').value,
+      crew:    $('tb-crew').value,
+      scope:   $('tb-scope').value,
+      weather: $('tb-weather').value,
+      comms:   $('tb-comms').value,
+      hazards: Array.from(hazardTbody.rows).map(row => {
+        const inp = row.querySelectorAll('input, select');
+        return { hazard: inp[0].value, risk: inp[1].value, control: inp[2].value };
+      }),
+      stdPPE: Array.from(document.querySelectorAll('#ppe-list input[type="checkbox"]')).map(cb => ({
+        value: cb.value, checked: cb.checked,
+      })),
+      customPPE: Array.from(ppeCustomList.querySelectorAll('.ppe-custom-row')).map(row => ({
+        checked: row.querySelector('.ppe-custom-cb').checked,
+        label:   row.querySelector('.ppe-custom-input').value,
+      })),
+      signoffs: Array.from(signoffTbody.rows).map(row => {
+        const inp = row.querySelectorAll('input');
+        return { name: inp[0].value, initials: inp[1].value, date: inp[2].value };
+      }),
+    };
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(draft)); } catch (e) { /* storage quota */ }
+  }
+
+  function scheduleDraftSave() {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(writeDraft, 500);
+  }
+
+  function showDraftBanner(text) {
+    $('tb-draft-banner-text').textContent = text;
+    $('tb-draft-banner').hidden = false;
+  }
+
+  function hideDraftBanner() {
+    $('tb-draft-banner').hidden = true;
+  }
+
+  function restoreDraft(draft) {
+    if (draft.date     !== undefined) $('tb-date').value     = draft.date;
+    if (draft.project  !== undefined) $('tb-project').value  = draft.project;
+    if (draft.initials !== undefined) $('tb-initials').value = draft.initials;
+    if (draft.site     !== undefined) $('tb-site').value     = draft.site;
+    if (draft.gps      !== undefined) $('tb-gps').value      = draft.gps;
+    if (draft.crew     !== undefined) $('tb-crew').value     = draft.crew;
+    if (draft.scope    !== undefined) $('tb-scope').value    = draft.scope;
+    if (draft.weather  !== undefined) $('tb-weather').value  = draft.weather;
+    if (draft.comms    !== undefined) $('tb-comms').value    = draft.comms;
+
+    if (Array.isArray(draft.hazards) && draft.hazards.length) {
+      while (hazardTbody.rows.length) hazardTbody.deleteRow(0);
+      draft.hazards.forEach(h => {
+        const row = buildHazardRow();
+        const inp = row.querySelectorAll('input, select');
+        inp[0].value = h.hazard  || '';
+        inp[1].value = h.risk    || '';
+        inp[2].value = h.control || '';
+        applyRiskColor(inp[1]);
+        hazardTbody.appendChild(row);
+      });
+      if (!hazardTbody.rows.length) hazardTbody.appendChild(buildHazardRow());
+    }
+
+    if (Array.isArray(draft.stdPPE)) {
+      draft.stdPPE.forEach(item => {
+        const cb = document.querySelector('#ppe-list input[value="' + item.value.replace(/"/g, '\\"') + '"]');
+        if (cb) cb.checked = item.checked;
+      });
+    }
+
+    if (Array.isArray(draft.customPPE)) {
+      while (ppeCustomList.firstChild) ppeCustomList.removeChild(ppeCustomList.firstChild);
+      draft.customPPE.forEach(item => {
+        ppeCustomList.appendChild(buildPPECustomRow(item.label, item.checked));
+      });
+    }
+
+    if (Array.isArray(draft.signoffs) && draft.signoffs.length) {
+      while (signoffTbody.rows.length) signoffTbody.deleteRow(0);
+      draft.signoffs.forEach(s => {
+        signoffTbody.appendChild(buildSignoffRow(s.name, s.initials, s.date));
+      });
+      if (!signoffTbody.rows.length) {
+        signoffTbody.appendChild(buildSignoffRow());
+        signoffTbody.appendChild(buildSignoffRow());
+      }
+    }
+  }
+
+  function clearDraft() {
+    localStorage.removeItem(DRAFT_KEY);
+    hideDraftBanner();
+  }
+
+  function resetForm() {
+    $('tb-date').value     = todayISO();
+    $('tb-project').value  = '';
+    $('tb-initials').value = '';
+    $('tb-site').value     = '';
+    $('tb-gps').value      = '';
+    $('tb-crew').value     = '';
+    $('tb-scope').value    = '';
+    $('tb-weather').value  = '';
+    $('tb-comms').value    = '';
+    while (hazardTbody.rows.length) hazardTbody.deleteRow(0);
+    hazardTbody.appendChild(buildHazardRow());
+    while (ppeCustomList.firstChild) ppeCustomList.removeChild(ppeCustomList.firstChild);
+    document.querySelectorAll('#ppe-list input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+    while (signoffTbody.rows.length) signoffTbody.deleteRow(0);
+    signoffTbody.appendChild(buildSignoffRow());
+    signoffTbody.appendChild(buildSignoffRow());
+  }
+
+  function maybeRestoreDraft() {
+    if (draftRestored) return;
+    draftRestored = true;
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      restoreDraft(draft);
+      showDraftBanner('Draft restored — tap Clear Draft to discard');
+    } catch (e) { /* corrupt draft */ }
+  }
+
+  $('tb-clear-draft-btn').addEventListener('click', () => {
+    clearDraft();
+    resetForm();
   });
 
   // ── Collect form data ────────────────────────────────────────
@@ -207,6 +366,7 @@
     btn.disabled = true;
     try {
       await FraxinusDB.saveSubmission('toolbox', collectData());
+      clearDraft();
       showToast('Saved successfully');
     } catch (err) {
       showToast('Save failed — ' + err.message, 'error');
@@ -507,5 +667,15 @@
     a.remove();
     URL.revokeObjectURL(url);
   });
+
+  // ── Form-level auto-save delegation ─────────────────────────
+
+  const tbForm = $('toolbox-form');
+  tbForm.addEventListener('input',  scheduleDraftSave);
+  tbForm.addEventListener('change', scheduleDraftSave);
+
+  // ── Restore draft on first tab activation ────────────────────
+
+  document.getElementById('nav-toolbox').addEventListener('click', maybeRestoreDraft);
 
 })();
