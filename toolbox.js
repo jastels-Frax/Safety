@@ -260,7 +260,8 @@
     hideDraftBanner();
   }
 
-  function resetForm() {
+  function resetToolboxForm() {
+    // Fields
     $('tb-date').value     = todayISO();
     $('tb-project').value  = '';
     $('tb-initials').value = '';
@@ -270,13 +271,41 @@
     $('tb-scope').value    = '';
     $('tb-weather').value  = '';
     $('tb-comms').value    = '';
+    $('tb-gps-label').textContent = 'Capture';
+
+    // Hazard table — 1 blank row, Risk defaulting to Low
     while (hazardTbody.rows.length) hazardTbody.deleteRow(0);
-    hazardTbody.appendChild(buildHazardRow());
+    const blankHazard = buildHazardRow();
+    const riskSel = blankHazard.querySelector('.risk-select');
+    riskSel.value = 'Low';
+    applyRiskColor(riskSel);
+    hazardTbody.appendChild(blankHazard);
+
+    // PPE
     while (ppeCustomList.firstChild) ppeCustomList.removeChild(ppeCustomList.firstChild);
     document.querySelectorAll('#ppe-list input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+
+    // Sign-off — 2 blank rows with empty dates
     while (signoffTbody.rows.length) signoffTbody.deleteRow(0);
-    signoffTbody.appendChild(buildSignoffRow());
-    signoffTbody.appendChild(buildSignoffRow());
+    signoffTbody.appendChild(buildSignoffRow('', '', ''));
+    signoffTbody.appendChild(buildSignoffRow('', '', ''));
+
+    // Draft + banners
+    localStorage.removeItem(DRAFT_KEY);
+    hideDraftBanner();
+    const editBanner = $('tb-edit-banner');
+    if (editBanner) editBanner.hidden = true;
+
+    // Save button label (defensive — for when edit mode is present)
+    const saveLabel = $('tb-save-label');
+    if (saveLabel) saveLabel.textContent = 'Save Submission';
+
+    // Allow draft to be re-restored on next tab visit
+    draftRestored = false;
+
+    // Scroll to top of form
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) mainContent.scrollTop = 0;
   }
 
   function maybeRestoreDraft() {
@@ -292,8 +321,7 @@
   }
 
   $('tb-clear-draft-btn').addEventListener('click', () => {
-    clearDraft();
-    resetForm();
+    resetToolboxForm();
   });
 
   // ── Collect form data ────────────────────────────────────────
@@ -366,7 +394,7 @@
     btn.disabled = true;
     try {
       await FraxinusDB.saveSubmission('toolbox', collectData());
-      clearDraft();
+      resetToolboxForm();
       showToast('Saved successfully');
     } catch (err) {
       showToast('Save failed — ' + err.message, 'error');

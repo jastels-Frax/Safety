@@ -217,24 +217,55 @@
     hideDraftBanner();
   }
 
-  function resetForm() {
+  function resetJSHAForm() {
+    // Fields
     $('jsha-date').value     = todayISO();
     $('jsha-project').value  = '';
     $('jsha-initials').value = '';
     $('jsha-site').value     = '';
     $('jsha-gps').value      = '';
     $('jsha-scope').value    = '';
+    $('jsha-gps-label').textContent = 'Capture';
+
+    // Emergency contacts (editable fields only — 911 and Poison Control rows unchanged)
     $('jsha-crew-name').value  = '';
     $('jsha-crew-phone').value = '';
     $('jsha-pm-name').value    = '';
     $('jsha-pm-phone').value   = '';
     $('jsha-hs-rep').value     = '';
     $('jsha-hospital').value   = '';
-    $('jsha-comments').value   = '';
+
+    // Hazard table — 1 blank row, Risk defaulting to Low
     while (hazardTbody.rows.length) hazardTbody.deleteRow(0);
-    hazardTbody.appendChild(buildHazardRow());
+    const blankHazard = buildHazardRow();
+    const riskSel = blankHazard.querySelector('.risk-select');
+    riskSel.value = 'Low';
+    applyRiskColor(riskSel);
+    hazardTbody.appendChild(blankHazard);
+
+    // PPE
     while (ppeCustomList.firstChild) ppeCustomList.removeChild(ppeCustomList.firstChild);
     document.querySelectorAll('#jsha-ppe-list input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+
+    // Comments
+    $('jsha-comments').value = '';
+
+    // Draft + banners
+    localStorage.removeItem(DRAFT_KEY);
+    hideDraftBanner();
+    const editBanner = $('jsha-edit-banner');
+    if (editBanner) editBanner.hidden = true;
+
+    // Save button label (defensive)
+    const saveLabel = $('jsha-save-label');
+    if (saveLabel) saveLabel.textContent = 'Save Submission';
+
+    // Allow draft to be re-restored on next tab visit
+    draftRestored = false;
+
+    // Scroll to top of form
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) mainContent.scrollTop = 0;
   }
 
   function maybeRestoreDraft() {
@@ -250,8 +281,7 @@
   }
 
   $('jsha-clear-draft-btn').addEventListener('click', () => {
-    clearDraft();
-    resetForm();
+    resetJSHAForm();
   });
 
   // ── Collect form data ────────────────────────────────────────
@@ -324,7 +354,7 @@
     btn.disabled = true;
     try {
       await FraxinusDB.saveSubmission('jsha', collectData());
-      clearDraft();
+      resetJSHAForm();
       showToast('Saved successfully');
     } catch (err) {
       showToast('Save failed — ' + err.message, 'error');
