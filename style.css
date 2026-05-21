@@ -170,7 +170,7 @@ body {
   height: 44px;
   width: 44px;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 0;
   flex-shrink: 0;
 }
 

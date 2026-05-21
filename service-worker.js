@@ -5,7 +5,7 @@
    only reloads when no form data is in progress.
    ============================================================ */
 
-const CACHE_VERSION = 'v28';
+const CACHE_VERSION = 'v29';
 const SHELL_CACHE   = 'fraxinus-shell-' + CACHE_VERSION;
 
 const SHELL_ASSETS = [
