@@ -83,5 +83,26 @@ window.FraxinusDB = (function () {
     });
   }
 
-  return { initDB, saveSubmission, getSubmissions, getAllSubmissions, deleteSubmission };
+  async function updateSubmission(id, data) {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx    = db.transaction(STORE, 'readwrite');
+      const store = tx.objectStore(STORE);
+      const getReq = store.get(id);
+      getReq.onsuccess = e => {
+        const existing = e.target.result;
+        if (!existing) { db.close(); reject(new Error('Record ' + id + ' not found')); return; }
+        const updated = Object.assign({}, existing, {
+          data:    data,
+          project: data.project || existing.project,
+        });
+        const putReq = store.put(updated);
+        putReq.onsuccess = () => { db.close(); resolve(updated); };
+        putReq.onerror   = ev => { db.close(); reject(ev.target.error); };
+      };
+      getReq.onerror = ev => { db.close(); reject(ev.target.error); };
+    });
+  }
+
+  return { initDB, saveSubmission, getSubmissions, getAllSubmissions, deleteSubmission, updateSubmission };
 })();
