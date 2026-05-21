@@ -2,9 +2,9 @@ const sharp = require('sharp');
 const path  = require('path');
 const fs    = require('fs');
 
-// Safety app: Fraxinus green on dark background
-const LOGO  = { r: 93,  g: 191, b: 138 };  // #5DBF8A
-const BG    = { r: 18,  g: 18,  b: 18  };  // #121212
+// Safety app: safety orange on black
+const LOGO  = { r: 232, g: 115, b: 26  };  // #E8731A
+const BG    = { r: 17,  g: 17,  b: 17  };  // #111111
 
 const src = path.join(__dirname, 'icons', 'White&Transparent Squircle.png');
 if (!fs.existsSync(src)) { console.error('Source not found:', src); process.exit(1); }
