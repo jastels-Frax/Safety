@@ -1056,6 +1056,27 @@ body {
   background: var(--bg-tertiary);
 }
 
+.ppe-list--cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 8px;
+}
+
+@media (max-width: 480px) {
+  .ppe-list--cols { grid-template-columns: 1fr; }
+}
+
+.ppe-other-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+
 .ppe-item input[type="checkbox"] {
   width: 20px;
   height: 20px;

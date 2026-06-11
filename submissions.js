@@ -321,6 +321,11 @@
         out.push('</div>');
       }
 
+      if (d.additionalNotes) {
+        out.push(mSection('Additional Notes'));
+        out.push('<p class="modal-comments">' + esc(d.additionalNotes) + '</p>');
+      }
+
       if (d.signOffs && d.signOffs.length) {
         out.push(mSection('Sign-Off'));
         out.push('<div class="modal-signoff-table">');
@@ -526,6 +531,11 @@
     if (d.correctiveActions && d.correctiveActions.length) {
       ctx.section('Corrective / Preventive Actions');
       ctx.correctiveTable(d.correctiveActions);
+    }
+
+    if (d.additionalNotes) {
+      ctx.section('Additional Notes');
+      ctx.field('', d.additionalNotes);
     }
 
     if (d.signOffs && d.signOffs.length) {

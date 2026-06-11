@@ -1041,7 +1041,7 @@
           <p class="panel-subtitle" style="margin:-8px 0 16px">Select all that apply</p>
 
           <h3 class="form-subsection-title">Environmental</h3>
-          <div class="ppe-list" id="nm-factors-env">
+          <div class="ppe-list ppe-list--cols" id="nm-factors-env">
             <label class="ppe-item"><input type="checkbox" name="factor-env" value="Slippery surface"> Slippery surface</label>
             <label class="ppe-item"><input type="checkbox" name="factor-env" value="Poor visibility"> Poor visibility</label>
             <label class="ppe-item"><input type="checkbox" name="factor-env" value="Extreme weather"> Extreme weather</label>
@@ -1049,32 +1049,40 @@
             <label class="ppe-item"><input type="checkbox" name="factor-env" value="Unstable terrain"> Unstable terrain</label>
             <label class="ppe-item"><input type="checkbox" name="factor-env" value="Standing or moving water"> Standing / moving water</label>
             <label class="ppe-item"><input type="checkbox" name="factor-env" value="Darkness or inadequate lighting"> Darkness / inadequate lighting</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-env" id="nm-factor-env-other-cb" value="Other"> Other
+              <input type="text" id="nm-factor-env-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
           </div>
 
           <h3 class="form-subsection-title">Human Factors</h3>
-          <div class="ppe-list" id="nm-factors-human">
+          <div class="ppe-list ppe-list--cols" id="nm-factors-human">
             <label class="ppe-item"><input type="checkbox" name="factor-human" value="Distraction"> Distraction</label>
             <label class="ppe-item"><input type="checkbox" name="factor-human" value="Fatigue"> Fatigue</label>
             <label class="ppe-item"><input type="checkbox" name="factor-human" value="Inadequate training"> Inadequate training</label>
             <label class="ppe-item"><input type="checkbox" name="factor-human" value="Procedure not followed"> Procedure not followed</label>
             <label class="ppe-item"><input type="checkbox" name="factor-human" value="Communication gap"> Communication gap</label>
             <label class="ppe-item"><input type="checkbox" name="factor-human" value="Overconfidence or complacency"> Overconfidence / complacency</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-human" id="nm-factor-human-other-cb" value="Other"> Other
+              <input type="text" id="nm-factor-human-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
           </div>
 
           <h3 class="form-subsection-title">Equipment</h3>
-          <div class="ppe-list" id="nm-factors-equip">
+          <div class="ppe-list ppe-list--cols" id="nm-factors-equip">
             <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Defective or damaged equipment"> Defective / damaged equipment</label>
             <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Improper use of equipment"> Improper use of equipment</label>
             <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Missing or inadequate equipment"> Missing / inadequate equipment</label>
             <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Inadequate PPE"> Inadequate PPE</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-equip" id="nm-factor-equip-other-cb" value="Other"> Other
+              <input type="text" id="nm-factor-equip-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
           </div>
 
           <h3 class="form-subsection-title">Organizational</h3>
-          <div class="ppe-list" id="nm-factors-org">
+          <div class="ppe-list ppe-list--cols" id="nm-factors-org">
             <label class="ppe-item"><input type="checkbox" name="factor-org" value="Inadequate procedures"> Inadequate procedures</label>
             <label class="ppe-item"><input type="checkbox" name="factor-org" value="Time pressure"> Time pressure</label>
             <label class="ppe-item"><input type="checkbox" name="factor-org" value="Inadequate supervision"> Inadequate supervision</label>
             <label class="ppe-item"><input type="checkbox" name="factor-org" value="Unfamiliar with site or task"> Unfamiliar with site / task</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-org" id="nm-factor-org-other-cb" value="Other"> Other
+              <input type="text" id="nm-factor-org-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
           </div>
         </div>
 
@@ -1114,6 +1122,13 @@
             </svg>
             Add Action
           </button>
+        </div>
+
+        <!-- ── Additional Notes ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Additional Notes <span class="field-optional">(optional)</span></h2>
+          <textarea id="nm-additional-notes" name="additionalNotes" class="form-textarea" rows="3"
+                    placeholder="Any other relevant information not captured above…"></textarea>
         </div>
 
         <!-- ── Sign-Off ── -->

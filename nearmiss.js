@@ -125,6 +125,20 @@
     scheduleDraftSave();
   });
 
+  // ── "Other" factor checkbox toggles ─────────────────────────
+
+  ['env', 'human', 'equip', 'org'].forEach(g => {
+    const cb  = $('nm-factor-' + g + '-other-cb');
+    const txt = $('nm-factor-' + g + '-other-txt');
+    if (cb && txt) {
+      cb.addEventListener('change', () => {
+        txt.hidden = !cb.checked;
+        if (!cb.checked) txt.value = '';
+        scheduleDraftSave();
+      });
+    }
+  });
+
   // ── Draft helpers ────────────────────────────────────────────
 
   function writeDraft() {
@@ -142,11 +156,12 @@
       severity:        $('nm-severity').value,
       potentialHarm:   $('nm-potential-harm').value,
       immediateActions: $('nm-actions').value,
+      additionalNotes: $('nm-additional-notes').value,
       factors: {
-        env:   checkedValues('#nm-factors-env   input[type="checkbox"]'),
-        human: checkedValues('#nm-factors-human input[type="checkbox"]'),
-        equip: checkedValues('#nm-factors-equip input[type="checkbox"]'),
-        org:   checkedValues('#nm-factors-org   input[type="checkbox"]'),
+        env:   factorValues('#nm-factors-env   input[type="checkbox"]', 'nm-factor-env-other-txt'),
+        human: factorValues('#nm-factors-human input[type="checkbox"]', 'nm-factor-human-other-txt'),
+        equip: factorValues('#nm-factors-equip input[type="checkbox"]', 'nm-factor-equip-other-txt'),
+        org:   factorValues('#nm-factors-org   input[type="checkbox"]', 'nm-factor-org-other-txt'),
       },
       correctiveActions: Array.from(correctiveTbody.rows).map(row => {
         const inp = row.querySelectorAll('input');
@@ -164,6 +179,15 @@
     return Array.from(document.querySelectorAll(selector))
       .filter(cb => cb.checked)
       .map(cb => cb.value);
+  }
+
+  function factorValues(groupSelector, otherTxtId) {
+    const vals = checkedValues(groupSelector);
+    const otherTxt = $(otherTxtId);
+    if (vals.includes('Other') && otherTxt && otherTxt.value.trim()) {
+      return vals.map(v => v === 'Other' ? 'Other: ' + otherTxt.value.trim() : v);
+    }
+    return vals;
   }
 
   function scheduleDraftSave() {
@@ -194,13 +218,18 @@
     if (draft.conditions      !== undefined) $('nm-conditions').value     = draft.conditions;
     if (draft.severity        !== undefined) $('nm-severity').value       = draft.severity;
     if (draft.potentialHarm   !== undefined) $('nm-potential-harm').value = draft.potentialHarm;
-    if (draft.immediateActions !== undefined) $('nm-actions').value       = draft.immediateActions;
+    if (draft.immediateActions !== undefined) $('nm-actions').value          = draft.immediateActions;
+    if (draft.additionalNotes  !== undefined) $('nm-additional-notes').value = draft.additionalNotes;
 
     if (draft.factors) {
       restoreCheckboxGroup('#nm-factors-env   input[type="checkbox"]', draft.factors.env);
       restoreCheckboxGroup('#nm-factors-human input[type="checkbox"]', draft.factors.human);
       restoreCheckboxGroup('#nm-factors-equip input[type="checkbox"]', draft.factors.equip);
       restoreCheckboxGroup('#nm-factors-org   input[type="checkbox"]', draft.factors.org);
+      restoreOtherInput('nm-factor-env-other-cb',   'nm-factor-env-other-txt',   draft.factors.env);
+      restoreOtherInput('nm-factor-human-other-cb', 'nm-factor-human-other-txt', draft.factors.human);
+      restoreOtherInput('nm-factor-equip-other-cb', 'nm-factor-equip-other-txt', draft.factors.equip);
+      restoreOtherInput('nm-factor-org-other-cb',   'nm-factor-org-other-txt',   draft.factors.org);
     }
 
     if (Array.isArray(draft.correctiveActions) && draft.correctiveActions.length) {
@@ -229,8 +258,25 @@
   function restoreCheckboxGroup(selector, values) {
     if (!Array.isArray(values)) return;
     document.querySelectorAll(selector).forEach(cb => {
-      cb.checked = values.includes(cb.value);
+      if (cb.value === 'Other') {
+        cb.checked = values.some(v => v === 'Other' || v.startsWith('Other: '));
+      } else {
+        cb.checked = values.includes(cb.value);
+      }
     });
+  }
+
+  function restoreOtherInput(cbId, txtId, values) {
+    const cb = $(cbId), txt = $(txtId);
+    if (!cb || !txt || !Array.isArray(values)) return;
+    const otherVal = values.find(v => v.startsWith('Other: '));
+    if (otherVal) {
+      cb.checked = true; txt.value = otherVal.slice(7); txt.hidden = false;
+    } else if (values.includes('Other')) {
+      cb.checked = true; txt.hidden = false;
+    } else {
+      txt.hidden = true; txt.value = '';
+    }
   }
 
   function clearAllBanners() {
@@ -260,8 +306,15 @@
     $('nm-potential-harm').value = '';
     $('nm-actions').value        = '';
 
-    document.querySelectorAll('#nm-factors-env input, #nm-factors-human input, #nm-factors-equip input, #nm-factors-org input')
+    document.querySelectorAll('#nm-factors-env input[type="checkbox"], #nm-factors-human input[type="checkbox"], #nm-factors-equip input[type="checkbox"], #nm-factors-org input[type="checkbox"]')
       .forEach(cb => { cb.checked = false; });
+
+    ['env', 'human', 'equip', 'org'].forEach(g => {
+      const txt = $('nm-factor-' + g + '-other-txt');
+      if (txt) { txt.value = ''; txt.hidden = true; }
+    });
+
+    $('nm-additional-notes').value = '';
 
     while (correctiveTbody.rows.length) correctiveTbody.deleteRow(0);
     correctiveTbody.appendChild(buildCorrectiveRow());
@@ -311,11 +364,12 @@
       severity:         $('nm-severity').value,
       potentialHarm:    $('nm-potential-harm').value.trim(),
       immediateActions: $('nm-actions').value.trim(),
+      additionalNotes:  $('nm-additional-notes').value.trim(),
       factors: {
-        env:   checkedValues('#nm-factors-env   input[type="checkbox"]'),
-        human: checkedValues('#nm-factors-human input[type="checkbox"]'),
-        equip: checkedValues('#nm-factors-equip input[type="checkbox"]'),
-        org:   checkedValues('#nm-factors-org   input[type="checkbox"]'),
+        env:   factorValues('#nm-factors-env   input[type="checkbox"]', 'nm-factor-env-other-txt'),
+        human: factorValues('#nm-factors-human input[type="checkbox"]', 'nm-factor-human-other-txt'),
+        equip: factorValues('#nm-factors-equip input[type="checkbox"]', 'nm-factor-equip-other-txt'),
+        org:   factorValues('#nm-factors-org   input[type="checkbox"]', 'nm-factor-org-other-txt'),
       },
       correctiveActions: [],
       signOffs:          [],
@@ -358,13 +412,18 @@
     $('nm-conditions').value      = d.conditions       || '';
     $('nm-severity').value        = d.severity         || '';
     $('nm-potential-harm').value  = d.potentialHarm    || '';
-    $('nm-actions').value         = d.immediateActions || '';
+    $('nm-actions').value          = d.immediateActions  || '';
+    $('nm-additional-notes').value = d.additionalNotes   || '';
 
     const factors = d.factors || {};
     restoreCheckboxGroup('#nm-factors-env   input[type="checkbox"]', factors.env   || []);
     restoreCheckboxGroup('#nm-factors-human input[type="checkbox"]', factors.human || []);
     restoreCheckboxGroup('#nm-factors-equip input[type="checkbox"]', factors.equip || []);
     restoreCheckboxGroup('#nm-factors-org   input[type="checkbox"]', factors.org   || []);
+    restoreOtherInput('nm-factor-env-other-cb',   'nm-factor-env-other-txt',   factors.env   || []);
+    restoreOtherInput('nm-factor-human-other-cb', 'nm-factor-human-other-txt', factors.human || []);
+    restoreOtherInput('nm-factor-equip-other-cb', 'nm-factor-equip-other-txt', factors.equip || []);
+    restoreOtherInput('nm-factor-org-other-cb',   'nm-factor-org-other-txt',   factors.org   || []);
 
     correctiveTbody.innerHTML = '';
     const corrective = (d.correctiveActions && d.correctiveActions.length) ? d.correctiveActions : [{}, {}];
@@ -490,6 +549,11 @@
     if (d.correctiveActions && d.correctiveActions.length) {
       ctx.section('Corrective / Preventive Actions');
       ctx.correctiveTable(d.correctiveActions);
+    }
+
+    if (d.additionalNotes) {
+      ctx.section('Additional Notes');
+      ctx.field('', d.additionalNotes);
     }
 
     if (d.signOffs && d.signOffs.length) {
