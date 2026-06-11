@@ -405,25 +405,15 @@
           <span class="form-hub-desc">Job-specific hazard identification</span>
         </button>
 
-        <button type="button" class="form-hub-card form-hub-card--nearmiss" data-form="nearmiss">
-          <svg class="form-hub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          <span class="form-hub-title">Near-Miss Report</span>
-          <span class="form-hub-desc">Document a near-miss incident</span>
-        </button>
-
-        <button type="button" class="form-hub-card form-hub-card--incident" data-form="incident">
+        <button type="button" class="form-hub-card form-hub-card--safety-report" data-form="safety-report">
           <svg class="form-hub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
             <line x1="9" y1="13" x2="15" y2="13"/><line x1="12" y1="10" x2="12" y2="16"/>
           </svg>
-          <span class="form-hub-title">Incident Report</span>
-          <span class="form-hub-desc">Injury, illness, or property damage</span>
+          <span class="form-hub-title">Incident / Near-Miss Report</span>
+          <span class="form-hub-desc">Incident reporting and near-miss documentation</span>
         </button>
 
       </div>
@@ -991,9 +981,9 @@
     </section>
 
     <!-- ════════════════════════════════════════════════════════
-         Near-Miss Report
+         Incident / Near-Miss Report (Combined Safety Report)
          ════════════════════════════════════════════════════════ -->
-    <section id="tab-nearmiss" class="tab-panel" role="tabpanel" aria-labelledby="nav-forms">
+    <section id="tab-safety-report" class="tab-panel" role="tabpanel" aria-labelledby="nav-forms">
       <button type="button" class="btn-back-forms">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
              stroke-linecap="round" aria-hidden="true">
@@ -1002,383 +992,95 @@
         All Forms
       </button>
       <div class="panel-header">
-        <h1>Near-Miss Report</h1>
-        <p class="panel-subtitle">Incident near-miss documentation and corrective actions</p>
+        <h1>Incident / Near-Miss Report</h1>
+        <p class="panel-subtitle">Incident and near-miss documentation, corrective actions, and sign-off</p>
       </div>
 
-      <form id="nm-form" novalidate>
+      <!-- ── Report type selector ── -->
+      <div class="sr-type-toggle" role="group" aria-label="Report type">
+        <label class="sr-type-option">
+          <input type="radio" name="reportType" id="sr-type-nearmiss" value="nearmiss" checked>
+          <span class="sr-type-label">Near-Miss</span>
+        </label>
+        <label class="sr-type-option">
+          <input type="radio" name="reportType" id="sr-type-incident" value="incident">
+          <span class="sr-type-label">Incident</span>
+        </label>
+      </div>
 
-        <div id="nm-draft-banner" class="draft-banner" hidden>
-          <span id="nm-draft-banner-text" class="draft-banner-text"></span>
-          <button type="button" id="nm-clear-draft-btn" class="draft-clear-btn">Clear Draft</button>
+      <form id="sr-form" data-report-type="nearmiss" novalidate>
+
+        <div id="sr-draft-banner" class="draft-banner" hidden>
+          <span id="sr-draft-banner-text" class="draft-banner-text"></span>
+          <button type="button" id="sr-clear-draft-btn" class="draft-clear-btn">Clear Draft</button>
         </div>
 
         <!-- ── Incident Details ── -->
         <div class="form-card">
           <h2 class="form-section-title">Incident Details</h2>
           <div class="form-row">
-            <label class="field-label" for="nm-datetime">Date &amp; Time of Near-Miss</label>
-            <input type="datetime-local" id="nm-datetime" name="datetime" class="form-input">
+            <label class="field-label" for="sr-datetime">Date &amp; Time</label>
+            <input type="datetime-local" id="sr-datetime" name="datetime" class="form-input">
           </div>
           <div class="form-row">
-            <label class="field-label" for="nm-project">Project Name / Number</label>
-            <input type="text" id="nm-project" name="project" class="form-input"
+            <label class="field-label" for="sr-project">Project Name / Number</label>
+            <input type="text" id="sr-project" name="project" class="form-input"
                    placeholder="e.g. Hope Brook Rare Plant Survey 2025-042" autocomplete="off">
           </div>
           <div class="form-row">
-            <label class="field-label" for="nm-site">Site / Location Description</label>
-            <input type="text" id="nm-site" name="site" class="form-input"
+            <label class="field-label" for="sr-site">Site / Location Description</label>
+            <input type="text" id="sr-site" name="site" class="form-input"
                    placeholder="e.g. North transect, 200m from vehicle staging area" autocomplete="off">
           </div>
           <div class="form-row">
-            <label class="field-label" for="nm-gps">GPS Coordinates</label>
+            <label class="field-label" for="sr-gps">GPS Coordinates</label>
             <div class="gps-row">
-              <input type="text" id="nm-gps" name="gps" class="form-input" readonly
+              <input type="text" id="sr-gps" name="gps" class="form-input" readonly
                      placeholder="Tap Capture to record location">
-              <button type="button" id="nm-gps-btn" class="btn-gps">
+              <button type="button" id="sr-gps-btn" class="btn-gps">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="3"/>
                   <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
                   <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="none"/>
                 </svg>
-                <span id="nm-gps-label">Capture</span>
+                <span id="sr-gps-label">Capture</span>
               </button>
             </div>
           </div>
+          <div class="sr-incident-only">
+            <div class="form-row">
+              <label class="field-label" for="sr-incident-type">Incident Type</label>
+              <select id="sr-incident-type" name="incidentType" class="form-select">
+                <option value="">— Select type —</option>
+                <option>Injury</option>
+                <option>Illness</option>
+                <option>Property Damage</option>
+                <option>Vehicle / Equipment Damage</option>
+                <option>Environmental Release</option>
+                <option>Near-Miss</option>
+                <option>Security / Threat</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
           <div class="form-row">
-            <label class="field-label" for="nm-reporter">Reported By</label>
-            <input type="text" id="nm-reporter" name="reporter" class="form-input"
+            <label class="field-label" for="sr-reporter">Reported By</label>
+            <input type="text" id="sr-reporter" name="reporter" class="form-input"
                    placeholder="Full name" autocomplete="name">
           </div>
           <div class="form-row">
-            <label class="field-label" for="nm-supervisor">Supervisor / Lead</label>
-            <input type="text" id="nm-supervisor" name="supervisor" class="form-input"
+            <label class="field-label" for="sr-supervisor">Supervisor / Lead</label>
+            <input type="text" id="sr-supervisor" name="supervisor" class="form-input"
                    placeholder="Field lead or project manager name" autocomplete="off">
           </div>
         </div>
 
-        <!-- ── Incident Description ── -->
-        <div class="form-card">
-          <h2 class="form-section-title">Incident Description</h2>
-          <div class="form-row">
-            <label class="field-label" for="nm-type">Near-Miss Type</label>
-            <select id="nm-type" name="type" class="form-select">
-              <option value="">— Select type —</option>
-              <option value="Wildlife Encounter">Wildlife Encounter</option>
-              <option value="Slip / Trip / Fall">Slip / Trip / Fall</option>
-              <option value="Struck By Object">Struck By Object</option>
-              <option value="Moving Vehicle">Moving Vehicle</option>
-              <option value="Environmental Hazard">Environmental Hazard</option>
-              <option value="Chemical / Biological Exposure">Chemical / Biological Exposure</option>
-              <option value="Equipment Failure">Equipment Failure</option>
-              <option value="Weather Event">Weather Event</option>
-              <option value="Ergonomic / Overexertion">Ergonomic / Overexertion</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="nm-activity">Activity at Time of Near-Miss</label>
-            <input type="text" id="nm-activity" name="activity" class="form-input"
-                   placeholder="e.g. Vegetation survey, stream crossing, equipment setup" autocomplete="off">
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="nm-description">What Happened</label>
-            <textarea id="nm-description" name="description" class="form-textarea" rows="5"
-                      placeholder="Describe the near-miss event in detail — what occurred, the sequence of events, and how harm was avoided…"></textarea>
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="nm-conditions">Conditions at Time of Incident</label>
-            <textarea id="nm-conditions" name="conditions" class="form-textarea" rows="3"
-                      placeholder="Weather, lighting, terrain, visibility, and other relevant site conditions…"></textarea>
-          </div>
-        </div>
-
-        <!-- ── Potential Consequences ── -->
-        <div class="form-card">
-          <h2 class="form-section-title">Potential Consequences</h2>
-          <div class="form-row">
-            <label class="field-label" for="nm-severity">Potential Severity</label>
-            <select id="nm-severity" name="severity" class="form-select">
-              <option value="">— Select severity —</option>
-              <option value="Minor">Minor — No injury or first aid only</option>
-              <option value="Moderate">Moderate — Medical treatment required</option>
-              <option value="Serious">Serious — Significant injury / lost time</option>
-              <option value="Critical">Critical — Life-threatening or fatality</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="nm-potential-harm">What Harm Could Have Occurred</label>
-            <textarea id="nm-potential-harm" name="potentialHarm" class="form-textarea" rows="3"
-                      placeholder="Describe the injury, illness, or environmental damage that could have resulted…"></textarea>
-          </div>
-        </div>
-
-        <!-- ── Contributing Factors ── -->
-        <div class="form-card">
-          <h2 class="form-section-title">Contributing Factors</h2>
-          <p class="panel-subtitle" style="margin:-8px 0 16px">Select all that apply</p>
-
-          <h3 class="form-subsection-title">Environmental</h3>
-          <div class="ppe-list ppe-list--cols" id="nm-factors-env">
-            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Slippery surface"> Slippery surface</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Poor visibility"> Poor visibility</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Extreme weather"> Extreme weather</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Wildlife presence"> Wildlife presence</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Unstable terrain"> Unstable terrain</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Standing or moving water"> Standing / moving water</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Darkness or inadequate lighting"> Darkness / inadequate lighting</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-env" id="nm-factor-env-other-cb" value="Other"> Other
-              <input type="text" id="nm-factor-env-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
-          </div>
-
-          <h3 class="form-subsection-title">Human Factors</h3>
-          <div class="ppe-list ppe-list--cols" id="nm-factors-human">
-            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Distraction"> Distraction</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Fatigue"> Fatigue</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Inadequate training"> Inadequate training</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Procedure not followed"> Procedure not followed</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Communication gap"> Communication gap</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Overconfidence or complacency"> Overconfidence / complacency</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-human" id="nm-factor-human-other-cb" value="Other"> Other
-              <input type="text" id="nm-factor-human-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
-          </div>
-
-          <h3 class="form-subsection-title">Equipment</h3>
-          <div class="ppe-list ppe-list--cols" id="nm-factors-equip">
-            <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Defective or damaged equipment"> Defective / damaged equipment</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Improper use of equipment"> Improper use of equipment</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Missing or inadequate equipment"> Missing / inadequate equipment</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Inadequate PPE"> Inadequate PPE</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-equip" id="nm-factor-equip-other-cb" value="Other"> Other
-              <input type="text" id="nm-factor-equip-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
-          </div>
-
-          <h3 class="form-subsection-title">Organizational</h3>
-          <div class="ppe-list ppe-list--cols" id="nm-factors-org">
-            <label class="ppe-item"><input type="checkbox" name="factor-org" value="Inadequate procedures"> Inadequate procedures</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-org" value="Time pressure"> Time pressure</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-org" value="Inadequate supervision"> Inadequate supervision</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-org" value="Unfamiliar with site or task"> Unfamiliar with site / task</label>
-            <label class="ppe-item"><input type="checkbox" name="factor-org" id="nm-factor-org-other-cb" value="Other"> Other
-              <input type="text" id="nm-factor-org-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
-          </div>
-        </div>
-
-        <!-- ── Immediate Actions ── -->
-        <div class="form-card">
-          <h2 class="form-section-title">Immediate Actions Taken</h2>
-          <textarea id="nm-actions" name="immediateActions" class="form-textarea" rows="4"
-                    placeholder="Describe what was done immediately following the near-miss (e.g. area secured, personnel accounted for, work stopped, first aid administered)…"></textarea>
-        </div>
-
-        <!-- ── Corrective / Preventive Actions ── -->
-        <div class="form-card">
-          <h2 class="form-section-title">Corrective / Preventive Actions</h2>
-          <div class="table-wrap">
-            <table class="form-table" id="nm-corrective-table">
-              <colgroup>
-                <col style="min-width:160px">
-                <col style="min-width:120px">
-                <col style="width:120px">
-                <col style="width:44px">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>Action Required</th>
-                  <th>Responsible Person</th>
-                  <th>Target Date</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="nm-corrective-tbody"></tbody>
-            </table>
-          </div>
-          <button type="button" id="nm-add-corrective-btn" class="btn-add-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                 stroke-linecap="round" aria-hidden="true">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Add Action
-          </button>
-        </div>
-
-        <!-- ── Additional Notes ── -->
-        <div class="form-card">
-          <h2 class="form-section-title">Additional Notes <span class="field-optional">(optional)</span></h2>
-          <textarea id="nm-additional-notes" name="additionalNotes" class="form-textarea" rows="3"
-                    placeholder="Any other relevant information not captured above…"></textarea>
-        </div>
-
-        <!-- ── Sign-Off ── -->
-        <div class="form-card">
-          <h2 class="form-section-title">Sign-Off</h2>
-          <div class="table-wrap">
-            <table class="form-table" id="nm-signoff-table">
-              <colgroup>
-                <col style="min-width:140px">
-                <col style="width:80px">
-                <col style="width:130px">
-                <col style="width:44px">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Initials</th>
-                  <th>Date</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="nm-signoff-tbody"></tbody>
-            </table>
-          </div>
-          <button type="button" id="nm-add-signoff-btn" class="btn-add-row">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                 stroke-linecap="round" aria-hidden="true">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Add Sign-Off Row
-          </button>
-        </div>
-
-        <!-- ── Edit banner ── -->
-        <div id="nm-edit-banner" class="edit-banner" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="edit-banner-icon">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span id="nm-edit-banner-text"></span>
-        </div>
-
-        <!-- ── Actions ── -->
-        <div class="form-actions">
-          <button type="button" id="nm-save-btn" class="btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-              <polyline points="17 21 17 13 7 13 7 21"/>
-              <polyline points="7 3 7 8 15 8"/>
-            </svg>
-            <span id="nm-save-label">Save Submission</span>
-          </button>
-          <button type="button" id="nm-pdf-btn" class="btn-secondary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 6 2 18 2 18 9"/>
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-              <rect x="6" y="14" width="12" height="8"/>
-            </svg>
-            Export PDF
-          </button>
-          <button type="button" id="nm-export-btn" class="btn-secondary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            Export JSON
-          </button>
-        </div>
-
-      </form>
-
-      <div class="toast" id="nm-toast" role="status" aria-live="polite" aria-atomic="true"></div>
-
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════
-         Incident Report
-         ════════════════════════════════════════════════════════ -->
-    <section id="tab-incident" class="tab-panel" role="tabpanel" aria-labelledby="nav-forms">
-      <button type="button" class="btn-back-forms">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-             stroke-linecap="round" aria-hidden="true">
-          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
-        </svg>
-        All Forms
-      </button>
-      <div class="panel-header">
-        <h1>Incident Report</h1>
-        <p class="panel-subtitle">Injury, illness, property damage, and environmental release documentation</p>
-      </div>
-
-      <div id="inc-draft-banner" class="draft-banner" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="draft-banner-icon">
-          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-        </svg>
-        <span id="inc-draft-banner-text"></span>
-        <button type="button" id="inc-clear-draft-btn" class="draft-banner-clear">Clear Draft</button>
-      </div>
-
-      <form id="inc-form" novalidate>
-
-        <!-- ── Incident Details ── -->
-        <div class="form-card">
-          <h2 class="form-section-title">Incident Details</h2>
-          <div class="form-row">
-            <label class="field-label" for="inc-datetime">Date &amp; Time of Incident</label>
-            <input type="datetime-local" id="inc-datetime" name="datetime" class="form-input">
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="inc-project">Project Name / Number</label>
-            <input type="text" id="inc-project" name="project" class="form-input"
-                   placeholder="e.g. Fraxinus 2024-078 — Thompson River" autocomplete="off">
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="inc-site">Site / Location</label>
-            <input type="text" id="inc-site" name="site" class="form-input"
-                   placeholder="e.g. Access road km 12.4, north bank" autocomplete="off">
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="inc-gps">GPS Coordinates</label>
-            <div class="gps-row">
-              <input type="text" id="inc-gps" name="gps" class="form-input gps-input"
-                     readonly placeholder="Tap to capture…">
-              <button type="button" id="inc-gps-btn" class="btn-gps">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-                </svg>
-                <span id="inc-gps-label">Capture</span>
-              </button>
-            </div>
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="inc-type">Incident Type</label>
-            <select id="inc-type" name="type" class="form-select">
-              <option value="">— Select type —</option>
-              <option>Injury</option>
-              <option>Illness</option>
-              <option>Property Damage</option>
-              <option>Vehicle / Equipment Damage</option>
-              <option>Environmental Release</option>
-              <option>Near-Miss</option>
-              <option>Security / Threat</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="inc-reporter">Reported By</label>
-            <input type="text" id="inc-reporter" name="reporter" class="form-input"
-                   placeholder="Full name of person completing this report" autocomplete="name">
-          </div>
-          <div class="form-row">
-            <label class="field-label" for="inc-supervisor">Supervisor / Lead</label>
-            <input type="text" id="inc-supervisor" name="supervisor" class="form-input"
-                   placeholder="Field supervisor or project lead" autocomplete="off">
-          </div>
-        </div>
-
-        <!-- ── Person(s) Involved ── -->
-        <div class="form-card">
+        <!-- ── Person(s) Involved (incident-only) ── -->
+        <div class="form-card sr-incident-only">
           <h2 class="form-section-title">Person(s) Involved</h2>
           <div class="table-wrap">
-            <table class="form-table" id="inc-persons-table">
+            <table class="form-table" id="sr-persons-table">
               <colgroup>
                 <col style="min-width:120px">
                 <col style="min-width:110px">
@@ -1395,10 +1097,10 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody id="inc-persons-tbody"></tbody>
+              <tbody id="sr-persons-tbody"></tbody>
             </table>
           </div>
-          <button type="button" id="inc-add-person-btn" class="btn-add-row">
+          <button type="button" id="sr-add-person-btn" class="btn-add-row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                  stroke-linecap="round" aria-hidden="true">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -1410,40 +1112,78 @@
         <!-- ── Incident Description ── -->
         <div class="form-card">
           <h2 class="form-section-title">Incident Description</h2>
-          <div class="form-row">
-            <label class="field-label" for="inc-activity">Activity at Time of Incident</label>
-            <input type="text" id="inc-activity" name="activity" class="form-input"
-                   placeholder="What task was being performed?" autocomplete="off">
+          <div class="sr-nearmiss-only">
+            <div class="form-row">
+              <label class="field-label" for="sr-nearmiss-type">Near-Miss Type</label>
+              <select id="sr-nearmiss-type" name="nearMissType" class="form-select">
+                <option value="">— Select type —</option>
+                <option value="Wildlife Encounter">Wildlife Encounter</option>
+                <option value="Slip / Trip / Fall">Slip / Trip / Fall</option>
+                <option value="Struck By Object">Struck By Object</option>
+                <option value="Moving Vehicle">Moving Vehicle</option>
+                <option value="Environmental Hazard">Environmental Hazard</option>
+                <option value="Chemical / Biological Exposure">Chemical / Biological Exposure</option>
+                <option value="Equipment Failure">Equipment Failure</option>
+                <option value="Weather Event">Weather Event</option>
+                <option value="Ergonomic / Overexertion">Ergonomic / Overexertion</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
           </div>
           <div class="form-row">
-            <label class="field-label" for="inc-description">What Happened</label>
-            <textarea id="inc-description" name="description" class="form-textarea" rows="4"
-                      placeholder="Describe the sequence of events leading to and including the incident…"></textarea>
+            <label class="field-label" for="sr-activity">Activity at Time of Incident</label>
+            <input type="text" id="sr-activity" name="activity" class="form-input"
+                   placeholder="e.g. Vegetation survey, stream crossing, equipment setup" autocomplete="off">
           </div>
           <div class="form-row">
-            <label class="field-label" for="inc-conditions">Environmental / Working Conditions</label>
-            <textarea id="inc-conditions" name="conditions" class="form-textarea" rows="3"
-                      placeholder="Weather, terrain, lighting, noise, equipment state…"></textarea>
+            <label class="field-label" for="sr-description">What Happened</label>
+            <textarea id="sr-description" name="description" class="form-textarea" rows="5"
+                      placeholder="Describe the event in detail — what occurred, the sequence of events…"></textarea>
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="sr-conditions">Conditions at Time of Incident</label>
+            <textarea id="sr-conditions" name="conditions" class="form-textarea" rows="3"
+                      placeholder="Weather, lighting, terrain, visibility, and other relevant site conditions…"></textarea>
           </div>
         </div>
 
-        <!-- ── Injury / Illness Details ── -->
-        <div class="form-card">
+        <!-- ── Potential Consequences (nearmiss-only) ── -->
+        <div class="form-card sr-nearmiss-only">
+          <h2 class="form-section-title">Potential Consequences</h2>
+          <div class="form-row">
+            <label class="field-label" for="sr-severity">Potential Severity</label>
+            <select id="sr-severity" name="severity" class="form-select">
+              <option value="">— Select severity —</option>
+              <option value="Minor">Minor — No injury or first aid only</option>
+              <option value="Moderate">Moderate — Medical treatment required</option>
+              <option value="Serious">Serious — Significant injury / lost time</option>
+              <option value="Critical">Critical — Life-threatening or fatality</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="sr-potential-harm">What Harm Could Have Occurred</label>
+            <textarea id="sr-potential-harm" name="potentialHarm" class="form-textarea" rows="3"
+                      placeholder="Describe the injury, illness, or environmental damage that could have resulted…"></textarea>
+          </div>
+        </div>
+
+        <!-- ── Injury / Illness Details (incident-only) ── -->
+        <div class="form-card sr-incident-only">
           <h2 class="form-section-title">Injury / Illness Details</h2>
           <p class="panel-subtitle" style="margin:-8px 0 16px">Leave blank if no injury or illness occurred</p>
           <div class="form-row">
-            <label class="field-label" for="inc-injury-nature">Nature of Injury / Illness</label>
-            <textarea id="inc-injury-nature" name="injuryNature" class="form-textarea" rows="2"
+            <label class="field-label" for="sr-injury-nature">Nature of Injury / Illness</label>
+            <textarea id="sr-injury-nature" name="injuryNature" class="form-textarea" rows="2"
                       placeholder="e.g. Laceration to left forearm, heat exhaustion, sprain…"></textarea>
           </div>
           <div class="form-row">
-            <label class="field-label" for="inc-body-part">Body Part(s) Affected</label>
-            <input type="text" id="inc-body-part" name="bodyPart" class="form-input"
+            <label class="field-label" for="sr-body-part">Body Part(s) Affected</label>
+            <input type="text" id="sr-body-part" name="bodyPart" class="form-input"
                    placeholder="e.g. Left forearm, lower back, right knee" autocomplete="off">
           </div>
           <div class="form-row">
-            <label class="field-label" for="inc-medical-treatment">Medical Treatment Required</label>
-            <select id="inc-medical-treatment" name="medicalTreatment" class="form-select">
+            <label class="field-label" for="sr-medical-treatment">Medical Treatment Required</label>
+            <select id="sr-medical-treatment" name="medicalTreatment" class="form-select">
               <option value="">— Select —</option>
               <option>None required</option>
               <option>First Aid</option>
@@ -1453,8 +1193,8 @@
             </select>
           </div>
           <div class="form-row">
-            <label class="field-label" for="inc-wcb">WorkSafe BC Reportable</label>
-            <select id="inc-wcb" name="wcbReportable" class="form-select">
+            <label class="field-label" for="sr-wcb">WorkSafe BC Reportable</label>
+            <select id="sr-wcb" name="wcbReportable" class="form-select">
               <option value="">— Select —</option>
               <option>Not applicable</option>
               <option>Yes — reportable</option>
@@ -1463,18 +1203,18 @@
           </div>
         </div>
 
-        <!-- ── Property / Equipment Damage ── -->
-        <div class="form-card">
+        <!-- ── Property / Equipment Damage (incident-only) ── -->
+        <div class="form-card sr-incident-only">
           <h2 class="form-section-title">Property / Equipment Damage</h2>
           <p class="panel-subtitle" style="margin:-8px 0 16px">Leave blank if no property or equipment damage occurred</p>
           <div class="form-row">
-            <label class="field-label" for="inc-damage-desc">Description of Damage</label>
-            <textarea id="inc-damage-desc" name="damageDesc" class="form-textarea" rows="3"
+            <label class="field-label" for="sr-damage-desc">Description of Damage</label>
+            <textarea id="sr-damage-desc" name="damageDesc" class="form-textarea" rows="3"
                       placeholder="What was damaged and how?"></textarea>
           </div>
           <div class="form-row">
-            <label class="field-label" for="inc-damage-cost">Estimated Cost</label>
-            <input type="text" id="inc-damage-cost" name="damageCost" class="form-input"
+            <label class="field-label" for="sr-damage-cost">Estimated Cost</label>
+            <input type="text" id="sr-damage-cost" name="damageCost" class="form-input"
                    placeholder="e.g. $500 — $2,000" autocomplete="off">
           </div>
         </div>
@@ -1485,56 +1225,56 @@
           <p class="panel-subtitle" style="margin:-8px 0 16px">Select all that apply</p>
 
           <h3 class="form-subsection-title">Environmental</h3>
-          <div class="ppe-list ppe-list--cols" id="inc-factors-env">
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Slippery surface"> Slippery surface</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Poor visibility"> Poor visibility</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Extreme weather"> Extreme weather</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Wildlife presence"> Wildlife presence</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Unstable terrain"> Unstable terrain</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Standing or moving water"> Standing / moving water</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Darkness or inadequate lighting"> Darkness / inadequate lighting</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" id="inc-factor-env-other-cb" value="Other"> Other
-              <input type="text" id="inc-factor-env-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
+          <div class="ppe-list ppe-list--cols" id="sr-factors-env">
+            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Slippery surface"> Slippery surface</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Poor visibility"> Poor visibility</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Extreme weather"> Extreme weather</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Wildlife presence"> Wildlife presence</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Unstable terrain"> Unstable terrain</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Standing or moving water"> Standing / moving water</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-env" value="Darkness or inadequate lighting"> Darkness / inadequate lighting</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-env" id="sr-factor-env-other-cb" value="Other"> Other
+              <input type="text" id="sr-factor-env-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
           </div>
 
           <h3 class="form-subsection-title">Human Factors</h3>
-          <div class="ppe-list ppe-list--cols" id="inc-factors-human">
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Distraction"> Distraction</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Fatigue"> Fatigue</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Inadequate training"> Inadequate training</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Procedure not followed"> Procedure not followed</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Communication gap"> Communication gap</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Overconfidence or complacency"> Overconfidence / complacency</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" id="inc-factor-human-other-cb" value="Other"> Other
-              <input type="text" id="inc-factor-human-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
+          <div class="ppe-list ppe-list--cols" id="sr-factors-human">
+            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Distraction"> Distraction</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Fatigue"> Fatigue</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Inadequate training"> Inadequate training</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Procedure not followed"> Procedure not followed</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Communication gap"> Communication gap</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-human" value="Overconfidence or complacency"> Overconfidence / complacency</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-human" id="sr-factor-human-other-cb" value="Other"> Other
+              <input type="text" id="sr-factor-human-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
           </div>
 
           <h3 class="form-subsection-title">Equipment</h3>
-          <div class="ppe-list ppe-list--cols" id="inc-factors-equip">
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" value="Defective or damaged equipment"> Defective / damaged equipment</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" value="Improper use of equipment"> Improper use of equipment</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" value="Missing or inadequate equipment"> Missing / inadequate equipment</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" value="Inadequate PPE"> Inadequate PPE</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" id="inc-factor-equip-other-cb" value="Other"> Other
-              <input type="text" id="inc-factor-equip-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
+          <div class="ppe-list ppe-list--cols" id="sr-factors-equip">
+            <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Defective or damaged equipment"> Defective / damaged equipment</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Improper use of equipment"> Improper use of equipment</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Missing or inadequate equipment"> Missing / inadequate equipment</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-equip" value="Inadequate PPE"> Inadequate PPE</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-equip" id="sr-factor-equip-other-cb" value="Other"> Other
+              <input type="text" id="sr-factor-equip-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
           </div>
 
           <h3 class="form-subsection-title">Organizational</h3>
-          <div class="ppe-list ppe-list--cols" id="inc-factors-org">
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" value="Inadequate procedures"> Inadequate procedures</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" value="Time pressure"> Time pressure</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" value="Inadequate supervision"> Inadequate supervision</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" value="Unfamiliar with site or task"> Unfamiliar with site / task</label>
-            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" id="inc-factor-org-other-cb" value="Other"> Other
-              <input type="text" id="inc-factor-org-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
+          <div class="ppe-list ppe-list--cols" id="sr-factors-org">
+            <label class="ppe-item"><input type="checkbox" name="factor-org" value="Inadequate procedures"> Inadequate procedures</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-org" value="Time pressure"> Time pressure</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-org" value="Inadequate supervision"> Inadequate supervision</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-org" value="Unfamiliar with site or task"> Unfamiliar with site / task</label>
+            <label class="ppe-item"><input type="checkbox" name="factor-org" id="sr-factor-org-other-cb" value="Other"> Other
+              <input type="text" id="sr-factor-org-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
           </div>
         </div>
 
-        <!-- ── Witnesses ── -->
-        <div class="form-card">
+        <!-- ── Witnesses (incident-only) ── -->
+        <div class="form-card sr-incident-only">
           <h2 class="form-section-title">Witnesses</h2>
           <div class="table-wrap">
-            <table class="form-table" id="inc-witnesses-table">
+            <table class="form-table" id="sr-witnesses-table">
               <colgroup>
                 <col style="min-width:150px">
                 <col style="min-width:130px">
@@ -1543,10 +1283,10 @@
               <thead>
                 <tr><th>Name</th><th>Contact</th><th></th></tr>
               </thead>
-              <tbody id="inc-witnesses-tbody"></tbody>
+              <tbody id="sr-witnesses-tbody"></tbody>
             </table>
           </div>
-          <button type="button" id="inc-add-witness-btn" class="btn-add-row">
+          <button type="button" id="sr-add-witness-btn" class="btn-add-row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                  stroke-linecap="round" aria-hidden="true">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -1558,15 +1298,15 @@
         <!-- ── Immediate Actions ── -->
         <div class="form-card">
           <h2 class="form-section-title">Immediate Actions Taken</h2>
-          <textarea id="inc-actions" name="immediateActions" class="form-textarea" rows="4"
-                    placeholder="Describe what was done immediately following the incident (e.g. first aid administered, area secured, emergency services called, work stopped)…"></textarea>
+          <textarea id="sr-actions" name="immediateActions" class="form-textarea" rows="4"
+                    placeholder="Describe what was done immediately following the incident (e.g. area secured, personnel accounted for, work stopped, first aid administered)…"></textarea>
         </div>
 
         <!-- ── Corrective / Preventive Actions ── -->
         <div class="form-card">
           <h2 class="form-section-title">Corrective / Preventive Actions</h2>
           <div class="table-wrap">
-            <table class="form-table" id="inc-corrective-table">
+            <table class="form-table" id="sr-corrective-table">
               <colgroup>
                 <col style="min-width:160px">
                 <col style="min-width:120px">
@@ -1581,10 +1321,10 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody id="inc-corrective-tbody"></tbody>
+              <tbody id="sr-corrective-tbody"></tbody>
             </table>
           </div>
-          <button type="button" id="inc-add-corrective-btn" class="btn-add-row">
+          <button type="button" id="sr-add-corrective-btn" class="btn-add-row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                  stroke-linecap="round" aria-hidden="true">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -1596,7 +1336,7 @@
         <!-- ── Additional Notes ── -->
         <div class="form-card">
           <h2 class="form-section-title">Additional Notes <span class="field-optional">(optional)</span></h2>
-          <textarea id="inc-additional-notes" name="additionalNotes" class="form-textarea" rows="3"
+          <textarea id="sr-additional-notes" name="additionalNotes" class="form-textarea" rows="3"
                     placeholder="Any other relevant information not captured above…"></textarea>
         </div>
 
@@ -1604,7 +1344,7 @@
         <div class="form-card">
           <h2 class="form-section-title">Sign-Off</h2>
           <div class="table-wrap">
-            <table class="form-table" id="inc-signoff-table">
+            <table class="form-table" id="sr-signoff-table">
               <colgroup>
                 <col style="min-width:140px">
                 <col style="width:80px">
@@ -1613,13 +1353,16 @@
               </colgroup>
               <thead>
                 <tr>
-                  <th>Name</th><th>Initials</th><th>Date</th><th></th>
+                  <th>Name</th>
+                  <th>Initials</th>
+                  <th>Date</th>
+                  <th></th>
                 </tr>
               </thead>
-              <tbody id="inc-signoff-tbody"></tbody>
+              <tbody id="sr-signoff-tbody"></tbody>
             </table>
           </div>
-          <button type="button" id="inc-add-signoff-btn" class="btn-add-row">
+          <button type="button" id="sr-add-signoff-btn" class="btn-add-row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                  stroke-linecap="round" aria-hidden="true">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -1629,27 +1372,27 @@
         </div>
 
         <!-- ── Edit banner ── -->
-        <div id="inc-edit-banner" class="edit-banner" hidden>
+        <div id="sr-edit-banner" class="edit-banner" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="edit-banner-icon">
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
             <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
-          <span id="inc-edit-banner-text"></span>
+          <span id="sr-edit-banner-text"></span>
         </div>
 
         <!-- ── Actions ── -->
         <div class="form-actions">
-          <button type="button" id="inc-save-btn" class="btn-primary">
+          <button type="button" id="sr-save-btn" class="btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
               <polyline points="17 21 17 13 7 13 7 21"/>
               <polyline points="7 3 7 8 15 8"/>
             </svg>
-            <span id="inc-save-label">Save Submission</span>
+            <span id="sr-save-label">Save Submission</span>
           </button>
-          <button type="button" id="inc-pdf-btn" class="btn-secondary">
+          <button type="button" id="sr-pdf-btn" class="btn-secondary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="6 9 6 2 18 2 18 9"/>
@@ -1658,7 +1401,7 @@
             </svg>
             Export PDF
           </button>
-          <button type="button" id="inc-export-btn" class="btn-secondary">
+          <button type="button" id="sr-export-btn" class="btn-secondary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -1671,7 +1414,7 @@
 
       </form>
 
-      <div class="toast" id="inc-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div class="toast" id="sr-toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
     </section>
 
@@ -1741,7 +1484,6 @@
   <script src="toolbox.js"></script>
   <script src="jsha.js"></script>
   <script src="nearmiss.js"></script>
-  <script src="incident.js"></script>
   <script src="submissions.js"></script>
   <script>
     // ── Tab switching (Documents · Forms · Submissions) ───────────
@@ -1815,16 +1557,12 @@
         } catch (e) {}
       }
 
-      const nearmissDraft = localStorage.getItem('fraxinus_draft_nearmiss');
-      if (nearmissDraft) { try { const d = JSON.parse(nearmissDraft); if (d.project || d.description) return true; } catch (e) {} }
-
-      const incidentDraft = localStorage.getItem('fraxinus_draft_incident');
-      if (incidentDraft) { try { const d = JSON.parse(incidentDraft); if (d.project || d.description) return true; } catch (e) {} }
+      const safetyDraft = localStorage.getItem('fraxinus_draft_safety_report');
+      if (safetyDraft) { try { const d = JSON.parse(safetyDraft); if (d.project || d.description) return true; } catch (e) {} }
 
       if (document.getElementById('tb-project')   && document.getElementById('tb-project').value)   return true;
       if (document.getElementById('jsha-project') && document.getElementById('jsha-project').value) return true;
-      if (document.getElementById('nm-project')   && document.getElementById('nm-project').value)   return true;
-      if (document.getElementById('inc-project')  && document.getElementById('inc-project').value)  return true;
+      if (document.getElementById('sr-project')   && document.getElementById('sr-project').value)   return true;
 
       return false;
     }

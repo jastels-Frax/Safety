@@ -102,7 +102,7 @@
 
     const card = document.createElement('article');
     card.className = 'sub-card';
-    const editBtnHTML = (rec.type === 'toolbox' || rec.type === 'jsha' || rec.type === 'nearmiss')
+    const editBtnHTML = (rec.type === 'toolbox' || rec.type === 'jsha' || rec.type === 'nearmiss' || rec.type === 'incident')
       ? '<button class="sub-btn sub-btn-edit" aria-label="Edit submission">Edit</button>'
       : '';
 
@@ -133,16 +133,10 @@
         if (window.JSHAForm) window.JSHAForm.loadForEdit(rec);
       });
     }
-    if (rec.type === 'nearmiss') {
+    if (rec.type === 'nearmiss' || rec.type === 'incident') {
       card.querySelector('.sub-btn-edit').addEventListener('click', () => {
-        window.openFormPanel('nearmiss');
-        if (window.NearMissForm) window.NearMissForm.loadForEdit(rec);
-      });
-    }
-    if (rec.type === 'incident') {
-      card.querySelector('.sub-btn-edit').addEventListener('click', () => {
-        window.openFormPanel('incident');
-        if (window.IncidentForm) window.IncidentForm.loadForEdit(rec);
+        window.openFormPanel('safety-report');
+        if (window.SafetyReportForm) window.SafetyReportForm.loadForEdit(rec);
       });
     }
     card.querySelector('.sub-btn-view')  .addEventListener('click', () => openModal(rec));
