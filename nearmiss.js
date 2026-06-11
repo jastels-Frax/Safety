@@ -773,6 +773,8 @@
 
   // ── Restore draft on first tab activation ────────────────────
 
-  document.getElementById('nav-nearmiss').addEventListener('click', maybeRestoreDraft);
+  document.addEventListener('fraxinus-form-activate', e => {
+    if (e.detail && e.detail.form === 'nearmiss') maybeRestoreDraft();
+  });
 
 })();

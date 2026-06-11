@@ -945,8 +945,10 @@
   tbForm.addEventListener('input',  scheduleDraftSave);
   tbForm.addEventListener('change', scheduleDraftSave);
 
-  // ── Restore draft on first tab activation ────────────────────
+  // ── Restore draft on form activation ────────────────────────
 
-  document.getElementById('nav-toolbox').addEventListener('click', maybeRestoreDraft);
+  document.addEventListener('fraxinus-form-activate', e => {
+    if (e.detail && e.detail.form === 'toolbox') maybeRestoreDraft();
+  });
 
 })();

@@ -37,7 +37,7 @@
 
   <main class="app-main" id="main-content">
 
-    <section id="tab-documents" class="tab-panel active" role="tabpanel" aria-labelledby="nav-documents">
+    <section id="tab-documents" class="tab-panel" role="tabpanel" aria-labelledby="nav-documents">
       <div class="panel-header">
         <h1>Documents</h1>
         <p class="panel-subtitle">Policies, procedures, and field references</p>
@@ -374,7 +374,72 @@
 
     </section>
 
-    <section id="tab-toolbox" class="tab-panel" role="tabpanel" aria-labelledby="nav-toolbox">
+    <!-- ════════════════════════════════════════════════════════
+         Forms Hub
+         ════════════════════════════════════════════════════════ -->
+    <section id="tab-forms" class="tab-panel active" role="tabpanel" aria-labelledby="nav-forms">
+      <div class="panel-header">
+        <h1>Forms</h1>
+        <p class="panel-subtitle">Select a form to complete</p>
+      </div>
+      <div class="forms-grid">
+
+        <button type="button" class="form-hub-card form-hub-card--toolbox" data-form="toolbox">
+          <svg class="form-hub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+            <path d="M13 3H11a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/>
+            <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+          </svg>
+          <span class="form-hub-title">Toolbox Talk</span>
+          <span class="form-hub-desc">Pre-work safety briefing</span>
+        </button>
+
+        <button type="button" class="form-hub-card form-hub-card--hazard" data-form="hazard">
+          <svg class="form-hub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span class="form-hub-title">Hazard Assessment</span>
+          <span class="form-hub-desc">Job-specific hazard identification</span>
+        </button>
+
+        <button type="button" class="form-hub-card form-hub-card--nearmiss" data-form="nearmiss">
+          <svg class="form-hub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span class="form-hub-title">Near-Miss Report</span>
+          <span class="form-hub-desc">Document a near-miss incident</span>
+        </button>
+
+        <button type="button" class="form-hub-card form-hub-card--incident" data-form="incident">
+          <svg class="form-hub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="9" y1="13" x2="15" y2="13"/><line x1="12" y1="10" x2="12" y2="16"/>
+          </svg>
+          <span class="form-hub-title">Incident Report</span>
+          <span class="form-hub-desc">Injury, illness, or property damage</span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         Toolbox Talk
+         ════════════════════════════════════════════════════════ -->
+    <section id="tab-toolbox" class="tab-panel" role="tabpanel" aria-labelledby="nav-forms">
+      <button type="button" class="btn-back-forms">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        All Forms
+      </button>
       <div class="panel-header">
         <h1>Toolbox Talk</h1>
         <p class="panel-subtitle">Daily safety briefing</p>
@@ -629,7 +694,14 @@
 
     </section>
 
-    <section id="tab-hazard" class="tab-panel" role="tabpanel" aria-labelledby="nav-hazard">
+    <section id="tab-hazard" class="tab-panel" role="tabpanel" aria-labelledby="nav-forms">
+      <button type="button" class="btn-back-forms">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        All Forms
+      </button>
       <div class="panel-header">
         <h1>Job Specific Hazard Assessment</h1>
         <p class="panel-subtitle">Field risk identification and controls</p>
@@ -921,7 +993,14 @@
     <!-- ════════════════════════════════════════════════════════
          Near-Miss Report
          ════════════════════════════════════════════════════════ -->
-    <section id="tab-nearmiss" class="tab-panel" role="tabpanel" aria-labelledby="nav-nearmiss">
+    <section id="tab-nearmiss" class="tab-panel" role="tabpanel" aria-labelledby="nav-forms">
+      <button type="button" class="btn-back-forms">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        All Forms
+      </button>
       <div class="panel-header">
         <h1>Near-Miss Report</h1>
         <p class="panel-subtitle">Incident near-miss documentation and corrective actions</p>
@@ -1209,6 +1288,393 @@
 
     </section>
 
+    <!-- ════════════════════════════════════════════════════════
+         Incident Report
+         ════════════════════════════════════════════════════════ -->
+    <section id="tab-incident" class="tab-panel" role="tabpanel" aria-labelledby="nav-forms">
+      <button type="button" class="btn-back-forms">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" aria-hidden="true">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        All Forms
+      </button>
+      <div class="panel-header">
+        <h1>Incident Report</h1>
+        <p class="panel-subtitle">Injury, illness, property damage, and environmental release documentation</p>
+      </div>
+
+      <div id="inc-draft-banner" class="draft-banner" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="draft-banner-icon">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        <span id="inc-draft-banner-text"></span>
+        <button type="button" id="inc-clear-draft-btn" class="draft-banner-clear">Clear Draft</button>
+      </div>
+
+      <form id="inc-form" novalidate>
+
+        <!-- ── Incident Details ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Incident Details</h2>
+          <div class="form-row">
+            <label class="field-label" for="inc-datetime">Date &amp; Time of Incident</label>
+            <input type="datetime-local" id="inc-datetime" name="datetime" class="form-input">
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-project">Project Name / Number</label>
+            <input type="text" id="inc-project" name="project" class="form-input"
+                   placeholder="e.g. Fraxinus 2024-078 — Thompson River" autocomplete="off">
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-site">Site / Location</label>
+            <input type="text" id="inc-site" name="site" class="form-input"
+                   placeholder="e.g. Access road km 12.4, north bank" autocomplete="off">
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-gps">GPS Coordinates</label>
+            <div class="gps-row">
+              <input type="text" id="inc-gps" name="gps" class="form-input gps-input"
+                     readonly placeholder="Tap to capture…">
+              <button type="button" id="inc-gps-btn" class="btn-gps">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+                </svg>
+                <span id="inc-gps-label">Capture</span>
+              </button>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-type">Incident Type</label>
+            <select id="inc-type" name="type" class="form-select">
+              <option value="">— Select type —</option>
+              <option>Injury</option>
+              <option>Illness</option>
+              <option>Property Damage</option>
+              <option>Vehicle / Equipment Damage</option>
+              <option>Environmental Release</option>
+              <option>Near-Miss</option>
+              <option>Security / Threat</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-reporter">Reported By</label>
+            <input type="text" id="inc-reporter" name="reporter" class="form-input"
+                   placeholder="Full name of person completing this report" autocomplete="name">
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-supervisor">Supervisor / Lead</label>
+            <input type="text" id="inc-supervisor" name="supervisor" class="form-input"
+                   placeholder="Field supervisor or project lead" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- ── Person(s) Involved ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Person(s) Involved</h2>
+          <div class="table-wrap">
+            <table class="form-table" id="inc-persons-table">
+              <colgroup>
+                <col style="min-width:120px">
+                <col style="min-width:110px">
+                <col style="min-width:100px">
+                <col style="min-width:100px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Job Title / Role</th>
+                  <th>Company</th>
+                  <th>Contact</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="inc-persons-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="inc-add-person-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Person
+          </button>
+        </div>
+
+        <!-- ── Incident Description ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Incident Description</h2>
+          <div class="form-row">
+            <label class="field-label" for="inc-activity">Activity at Time of Incident</label>
+            <input type="text" id="inc-activity" name="activity" class="form-input"
+                   placeholder="What task was being performed?" autocomplete="off">
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-description">What Happened</label>
+            <textarea id="inc-description" name="description" class="form-textarea" rows="4"
+                      placeholder="Describe the sequence of events leading to and including the incident…"></textarea>
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-conditions">Environmental / Working Conditions</label>
+            <textarea id="inc-conditions" name="conditions" class="form-textarea" rows="3"
+                      placeholder="Weather, terrain, lighting, noise, equipment state…"></textarea>
+          </div>
+        </div>
+
+        <!-- ── Injury / Illness Details ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Injury / Illness Details</h2>
+          <p class="panel-subtitle" style="margin:-8px 0 16px">Leave blank if no injury or illness occurred</p>
+          <div class="form-row">
+            <label class="field-label" for="inc-injury-nature">Nature of Injury / Illness</label>
+            <textarea id="inc-injury-nature" name="injuryNature" class="form-textarea" rows="2"
+                      placeholder="e.g. Laceration to left forearm, heat exhaustion, sprain…"></textarea>
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-body-part">Body Part(s) Affected</label>
+            <input type="text" id="inc-body-part" name="bodyPart" class="form-input"
+                   placeholder="e.g. Left forearm, lower back, right knee" autocomplete="off">
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-medical-treatment">Medical Treatment Required</label>
+            <select id="inc-medical-treatment" name="medicalTreatment" class="form-select">
+              <option value="">— Select —</option>
+              <option>None required</option>
+              <option>First Aid</option>
+              <option>Medical Treatment</option>
+              <option>Hospitalization</option>
+              <option>Fatality</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-wcb">WorkSafe BC Reportable</label>
+            <select id="inc-wcb" name="wcbReportable" class="form-select">
+              <option value="">— Select —</option>
+              <option>Not applicable</option>
+              <option>Yes — reportable</option>
+              <option>No</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ── Property / Equipment Damage ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Property / Equipment Damage</h2>
+          <p class="panel-subtitle" style="margin:-8px 0 16px">Leave blank if no property or equipment damage occurred</p>
+          <div class="form-row">
+            <label class="field-label" for="inc-damage-desc">Description of Damage</label>
+            <textarea id="inc-damage-desc" name="damageDesc" class="form-textarea" rows="3"
+                      placeholder="What was damaged and how?"></textarea>
+          </div>
+          <div class="form-row">
+            <label class="field-label" for="inc-damage-cost">Estimated Cost</label>
+            <input type="text" id="inc-damage-cost" name="damageCost" class="form-input"
+                   placeholder="e.g. $500 — $2,000" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- ── Contributing Factors ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Contributing Factors</h2>
+          <p class="panel-subtitle" style="margin:-8px 0 16px">Select all that apply</p>
+
+          <h3 class="form-subsection-title">Environmental</h3>
+          <div class="ppe-list ppe-list--cols" id="inc-factors-env">
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Slippery surface"> Slippery surface</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Poor visibility"> Poor visibility</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Extreme weather"> Extreme weather</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Wildlife presence"> Wildlife presence</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Unstable terrain"> Unstable terrain</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Standing or moving water"> Standing / moving water</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" value="Darkness or inadequate lighting"> Darkness / inadequate lighting</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-env" id="inc-factor-env-other-cb" value="Other"> Other
+              <input type="text" id="inc-factor-env-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
+          </div>
+
+          <h3 class="form-subsection-title">Human Factors</h3>
+          <div class="ppe-list ppe-list--cols" id="inc-factors-human">
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Distraction"> Distraction</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Fatigue"> Fatigue</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Inadequate training"> Inadequate training</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Procedure not followed"> Procedure not followed</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Communication gap"> Communication gap</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" value="Overconfidence or complacency"> Overconfidence / complacency</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-human" id="inc-factor-human-other-cb" value="Other"> Other
+              <input type="text" id="inc-factor-human-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
+          </div>
+
+          <h3 class="form-subsection-title">Equipment</h3>
+          <div class="ppe-list ppe-list--cols" id="inc-factors-equip">
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" value="Defective or damaged equipment"> Defective / damaged equipment</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" value="Improper use of equipment"> Improper use of equipment</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" value="Missing or inadequate equipment"> Missing / inadequate equipment</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" value="Inadequate PPE"> Inadequate PPE</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-equip" id="inc-factor-equip-other-cb" value="Other"> Other
+              <input type="text" id="inc-factor-equip-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
+          </div>
+
+          <h3 class="form-subsection-title">Organizational</h3>
+          <div class="ppe-list ppe-list--cols" id="inc-factors-org">
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" value="Inadequate procedures"> Inadequate procedures</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" value="Time pressure"> Time pressure</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" value="Inadequate supervision"> Inadequate supervision</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" value="Unfamiliar with site or task"> Unfamiliar with site / task</label>
+            <label class="ppe-item"><input type="checkbox" name="inc-factor-org" id="inc-factor-org-other-cb" value="Other"> Other
+              <input type="text" id="inc-factor-org-other-txt" class="ppe-other-input" placeholder="specify…" hidden></label>
+          </div>
+        </div>
+
+        <!-- ── Witnesses ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Witnesses</h2>
+          <div class="table-wrap">
+            <table class="form-table" id="inc-witnesses-table">
+              <colgroup>
+                <col style="min-width:150px">
+                <col style="min-width:130px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr><th>Name</th><th>Contact</th><th></th></tr>
+              </thead>
+              <tbody id="inc-witnesses-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="inc-add-witness-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Witness
+          </button>
+        </div>
+
+        <!-- ── Immediate Actions ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Immediate Actions Taken</h2>
+          <textarea id="inc-actions" name="immediateActions" class="form-textarea" rows="4"
+                    placeholder="Describe what was done immediately following the incident (e.g. first aid administered, area secured, emergency services called, work stopped)…"></textarea>
+        </div>
+
+        <!-- ── Corrective / Preventive Actions ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Corrective / Preventive Actions</h2>
+          <div class="table-wrap">
+            <table class="form-table" id="inc-corrective-table">
+              <colgroup>
+                <col style="min-width:160px">
+                <col style="min-width:120px">
+                <col style="width:120px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Action Required</th>
+                  <th>Responsible Person</th>
+                  <th>Target Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="inc-corrective-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="inc-add-corrective-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Action
+          </button>
+        </div>
+
+        <!-- ── Additional Notes ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Additional Notes <span class="field-optional">(optional)</span></h2>
+          <textarea id="inc-additional-notes" name="additionalNotes" class="form-textarea" rows="3"
+                    placeholder="Any other relevant information not captured above…"></textarea>
+        </div>
+
+        <!-- ── Sign-Off ── -->
+        <div class="form-card">
+          <h2 class="form-section-title">Sign-Off</h2>
+          <div class="table-wrap">
+            <table class="form-table" id="inc-signoff-table">
+              <colgroup>
+                <col style="min-width:140px">
+                <col style="width:80px">
+                <col style="width:130px">
+                <col style="width:44px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Name</th><th>Initials</th><th>Date</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="inc-signoff-tbody"></tbody>
+            </table>
+          </div>
+          <button type="button" id="inc-add-signoff-btn" class="btn-add-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add Sign-Off Row
+          </button>
+        </div>
+
+        <!-- ── Edit banner ── -->
+        <div id="inc-edit-banner" class="edit-banner" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="edit-banner-icon">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="inc-edit-banner-text"></span>
+        </div>
+
+        <!-- ── Actions ── -->
+        <div class="form-actions">
+          <button type="button" id="inc-save-btn" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            <span id="inc-save-label">Save Submission</span>
+          </button>
+          <button type="button" id="inc-pdf-btn" class="btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 6 2 18 2 18 9"/>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+              <rect x="6" y="14" width="12" height="8"/>
+            </svg>
+            Export PDF
+          </button>
+          <button type="button" id="inc-export-btn" class="btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Export JSON
+          </button>
+        </div>
+
+      </form>
+
+      <div class="toast" id="inc-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    </section>
+
     <section id="tab-submissions" class="tab-panel" role="tabpanel" aria-labelledby="nav-submissions">
       <div class="panel-header">
         <h1>Submissions</h1>
@@ -1233,7 +1699,7 @@
 
   <nav class="bottom-nav" role="tablist" aria-label="Main navigation">
 
-    <button class="nav-item active" id="nav-documents" role="tab" aria-selected="true"
+    <button class="nav-item" id="nav-documents" role="tab" aria-selected="false"
             aria-controls="tab-documents" data-tab="documents">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1245,37 +1711,16 @@
       <span class="nav-label">Documents</span>
     </button>
 
-    <button class="nav-item" id="nav-toolbox" role="tab" aria-selected="false"
-            aria-controls="tab-toolbox" data-tab="toolbox">
+    <button class="nav-item active" id="nav-forms" role="tab" aria-selected="true"
+            aria-controls="tab-forms" data-tab="forms">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="2" y="10" width="20" height="12" rx="2"/>
-        <path d="M16 10V8a4 4 0 0 0-8 0v2"/>
-        <line x1="12" y1="14" x2="12" y2="18"/>
-        <line x1="10" y1="16" x2="14" y2="16"/>
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
       </svg>
-      <span class="nav-label">Toolbox Talk</span>
-    </button>
-
-    <button class="nav-item" id="nav-hazard" role="tab" aria-selected="false"
-            aria-controls="tab-hazard" data-tab="hazard">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-        <line x1="12" y1="9" x2="12" y2="13"/>
-        <line x1="12" y1="17" x2="12.01" y2="17"/>
-      </svg>
-      <span class="nav-label">Hazard</span>
-    </button>
-
-    <button class="nav-item" id="nav-nearmiss" role="tab" aria-selected="false"
-            aria-controls="tab-nearmiss" data-tab="nearmiss">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 9v4"/><path d="M12 17h.01"/>
-        <path d="M3.44 19h17.12a1.6 1.6 0 0 0 1.39-2.4L13.39 3.6a1.6 1.6 0 0 0-2.78 0L2.05 16.6A1.6 1.6 0 0 0 3.44 19z"/>
-      </svg>
-      <span class="nav-label">Near-Miss</span>
+      <span class="nav-label">Forms</span>
     </button>
 
     <button class="nav-item" id="nav-submissions" role="tab" aria-selected="false"
@@ -1296,30 +1741,58 @@
   <script src="toolbox.js"></script>
   <script src="jsha.js"></script>
   <script src="nearmiss.js"></script>
+  <script src="incident.js"></script>
   <script src="submissions.js"></script>
   <script>
-    // Tab switching
+    // ── Tab switching (Documents · Forms · Submissions) ───────────
     const navItems = document.querySelectorAll('.nav-item[role="tab"]');
     const tabPanels = document.querySelectorAll('.tab-panel');
 
     navItems.forEach(button => {
       button.addEventListener('click', () => {
         const target = button.dataset.tab;
-
-        navItems.forEach(btn => {
-          btn.classList.remove('active');
-          btn.setAttribute('aria-selected', 'false');
-        });
+        navItems.forEach(btn => { btn.classList.remove('active'); btn.setAttribute('aria-selected', 'false'); });
         tabPanels.forEach(panel => panel.classList.remove('active'));
-
         button.classList.add('active');
         button.setAttribute('aria-selected', 'true');
         document.getElementById('tab-' + target).classList.add('active');
-
-        // Scroll content to top on tab switch
         document.getElementById('main-content').scrollTop = 0;
       });
     });
+
+    // ── Form hub card → individual form ──────────────────────────
+    document.querySelectorAll('.form-hub-card').forEach(card => {
+      card.addEventListener('click', () => {
+        tabPanels.forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + card.dataset.form).classList.add('active');
+        navItems.forEach(btn => { btn.classList.remove('active'); btn.setAttribute('aria-selected', 'false'); });
+        const navForms = document.getElementById('nav-forms');
+        navForms.classList.add('active');
+        navForms.setAttribute('aria-selected', 'true');
+        document.getElementById('main-content').scrollTop = 0;
+        document.dispatchEvent(new CustomEvent('fraxinus-form-activate', { detail: { form: card.dataset.form } }));
+      });
+    });
+
+    // ── Back to Forms hub ─────────────────────────────────────────
+    document.querySelectorAll('.btn-back-forms').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabPanels.forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-forms').classList.add('active');
+        document.getElementById('main-content').scrollTop = 0;
+      });
+    });
+
+    // ── openFormPanel — used by submissions edit handlers ─────────
+    window.openFormPanel = function (formId) {
+      tabPanels.forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + formId).classList.add('active');
+      navItems.forEach(btn => { btn.classList.remove('active'); btn.setAttribute('aria-selected', 'false'); });
+      const navForms = document.getElementById('nav-forms');
+      navForms.classList.add('active');
+      navForms.setAttribute('aria-selected', 'true');
+      document.getElementById('main-content').scrollTop = 0;
+    };
 
     // Pre-warm IndexedDB
     FraxinusDB.initDB().catch(console.error);
@@ -1342,8 +1815,16 @@
         } catch (e) {}
       }
 
+      const nearmissDraft = localStorage.getItem('fraxinus_draft_nearmiss');
+      if (nearmissDraft) { try { const d = JSON.parse(nearmissDraft); if (d.project || d.description) return true; } catch (e) {} }
+
+      const incidentDraft = localStorage.getItem('fraxinus_draft_incident');
+      if (incidentDraft) { try { const d = JSON.parse(incidentDraft); if (d.project || d.description) return true; } catch (e) {} }
+
       if (document.getElementById('tb-project')   && document.getElementById('tb-project').value)   return true;
       if (document.getElementById('jsha-project') && document.getElementById('jsha-project').value) return true;
+      if (document.getElementById('nm-project')   && document.getElementById('nm-project').value)   return true;
+      if (document.getElementById('inc-project')  && document.getElementById('inc-project').value)  return true;
 
       return false;
     }

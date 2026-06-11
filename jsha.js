@@ -953,8 +953,10 @@
   jshaForm.addEventListener('input',  scheduleDraftSave);
   jshaForm.addEventListener('change', scheduleDraftSave);
 
-  // ── Restore draft on first tab activation ────────────────────
+  // ── Restore draft on form activation ────────────────────────
 
-  document.getElementById('nav-hazard').addEventListener('click', maybeRestoreDraft);
+  document.addEventListener('fraxinus-form-activate', e => {
+    if (e.detail && e.detail.form === 'hazard') maybeRestoreDraft();
+  });
 
 })();

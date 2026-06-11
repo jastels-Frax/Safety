@@ -15,6 +15,7 @@
     toolbox:  { label: 'Toolbox Talk',      badge: 'badge-toolbox'  },
     jsha:     { label: 'Hazard Assessment', badge: 'badge-jsha'     },
     nearmiss: { label: 'Near-Miss Report',  badge: 'badge-nearmiss' },
+    incident: { label: 'Incident Report',   badge: 'badge-incident' },
   };
 
   // ── Utilities ────────────────────────────────────────────────
@@ -53,6 +54,7 @@
     const toolbox  = all.filter(r => r.type === 'toolbox').sort(byTimestampDesc);
     const jsha     = all.filter(r => r.type === 'jsha').sort(byTimestampDesc);
     const nearmiss = all.filter(r => r.type === 'nearmiss').sort(byTimestampDesc);
+    const incident = all.filter(r => r.type === 'incident').sort(byTimestampDesc);
 
     content.innerHTML = '';
 
@@ -64,6 +66,7 @@
     if (toolbox.length)  renderGroup('Toolbox Talks', toolbox);
     if (jsha.length)     renderGroup('Hazard Assessments', jsha);
     if (nearmiss.length) renderGroup('Near-Miss Reports', nearmiss);
+    if (incident.length) renderGroup('Incident Reports', incident);
   }
 
   function renderEmpty() {
@@ -120,20 +123,26 @@
 
     if (rec.type === 'toolbox') {
       card.querySelector('.sub-btn-edit').addEventListener('click', () => {
-        document.querySelector('[data-tab="toolbox"]').click();
+        window.openFormPanel('toolbox');
         if (window.ToolboxForm) window.ToolboxForm.loadForEdit(rec);
       });
     }
     if (rec.type === 'jsha') {
       card.querySelector('.sub-btn-edit').addEventListener('click', () => {
-        document.querySelector('[data-tab="hazard"]').click();
+        window.openFormPanel('hazard');
         if (window.JSHAForm) window.JSHAForm.loadForEdit(rec);
       });
     }
     if (rec.type === 'nearmiss') {
       card.querySelector('.sub-btn-edit').addEventListener('click', () => {
-        document.querySelector('[data-tab="nearmiss"]').click();
+        window.openFormPanel('nearmiss');
         if (window.NearMissForm) window.NearMissForm.loadForEdit(rec);
+      });
+    }
+    if (rec.type === 'incident') {
+      card.querySelector('.sub-btn-edit').addEventListener('click', () => {
+        window.openFormPanel('incident');
+        if (window.IncidentForm) window.IncidentForm.loadForEdit(rec);
       });
     }
     card.querySelector('.sub-btn-view')  .addEventListener('click', () => openModal(rec));
@@ -342,6 +351,106 @@
       }
     }
 
+    if (rec.type === 'incident') {
+      out.push(
+        '<div class="modal-meta-grid">' +
+          '<span><b>Date/Time:</b> ' + esc(d.datetime || '—') + '</span>' +
+          '<span><b>Project:</b> '   + esc(d.project  || '—') + '</span>' +
+          '<span><b>Site:</b> '      + esc(d.site     || '—') + '</span>' +
+          '<span><b>Type:</b> '      + esc(d.type     || '—') + '</span>' +
+          '<span><b>Reporter:</b> '  + esc(d.reporter || '—') + '</span>' +
+          '<span><b>Supervisor:</b> '+ esc(d.supervisor|| '—') + '</span>' +
+        '</div>'
+      );
+
+      if (d.persons && d.persons.length) {
+        out.push(mSection('Person(s) Involved'));
+        out.push('<div class="modal-signoff-table">');
+        d.persons.forEach(p => {
+          out.push(
+            '<div class="modal-signoff-row">' +
+              '<span class="modal-sig-name">'     + esc(p.name     || '—') + '</span>' +
+              '<span class="modal-sig-initials">' + esc(p.jobTitle || '') + '</span>' +
+              '<span class="modal-sig-date">'     + esc(p.company  || '') + '</span>' +
+            '</div>'
+          );
+        });
+        out.push('</div>');
+      }
+
+      if (d.description) {
+        out.push(mSection('What Happened'));
+        out.push('<p class="modal-comments">' + esc(d.description) + '</p>');
+      }
+
+      const hasInjury = d.injuryNature || d.bodyPart || d.medicalTreatment || d.wcbReportable;
+      if (hasInjury) {
+        out.push(mSection('Injury / Illness'));
+        if (d.injuryNature)     out.push('<p class="modal-comments"><b>Nature:</b> '   + esc(d.injuryNature)     + '</p>');
+        if (d.bodyPart)         out.push('<p class="modal-comments"><b>Body Part:</b> '+ esc(d.bodyPart)         + '</p>');
+        if (d.medicalTreatment) out.push('<p class="modal-comments"><b>Treatment:</b> '+ esc(d.medicalTreatment) + '</p>');
+        if (d.wcbReportable)    out.push('<p class="modal-comments"><b>WorkSafe BC:</b> '+ esc(d.wcbReportable)  + '</p>');
+      }
+
+      if (d.damageDesc || d.damageCost) {
+        out.push(mSection('Property / Equipment Damage'));
+        if (d.damageDesc) out.push('<p class="modal-comments">' + esc(d.damageDesc) + '</p>');
+        if (d.damageCost) out.push('<p class="modal-comments"><b>Est. cost:</b> ' + esc(d.damageCost) + '</p>');
+      }
+
+      const factors = d.factors || {};
+      const allFactors = [...(factors.env||[]), ...(factors.human||[]), ...(factors.equip||[]), ...(factors.org||[])];
+      if (allFactors.length) {
+        out.push(mSection('Contributing Factors'));
+        out.push('<ul class="modal-ppe-list">' + allFactors.map(f => '<li>' + esc(f) + '</li>').join('') + '</ul>');
+      }
+
+      if (d.witnesses && d.witnesses.length) {
+        out.push(mSection('Witnesses'));
+        out.push('<ul class="modal-ppe-list">' + d.witnesses.map(w => '<li>' + esc(w.name || '—') + (w.contact ? ' — ' + esc(w.contact) : '') + '</li>').join('') + '</ul>');
+      }
+
+      if (d.immediateActions) {
+        out.push(mSection('Immediate Actions'));
+        out.push('<p class="modal-comments">' + esc(d.immediateActions) + '</p>');
+      }
+
+      if (d.correctiveActions && d.correctiveActions.length) {
+        out.push(mSection('Corrective / Preventive Actions'));
+        out.push('<div class="modal-signoff-table">');
+        d.correctiveActions.forEach(c => {
+          out.push(
+            '<div class="modal-signoff-row">' +
+              '<span class="modal-sig-name">'     + esc(c.action      || '—') + '</span>' +
+              '<span class="modal-sig-initials">' + esc(c.responsible || '')  + '</span>' +
+              '<span class="modal-sig-date">'     + esc(c.targetDate  || '')  + '</span>' +
+            '</div>'
+          );
+        });
+        out.push('</div>');
+      }
+
+      if (d.additionalNotes) {
+        out.push(mSection('Additional Notes'));
+        out.push('<p class="modal-comments">' + esc(d.additionalNotes) + '</p>');
+      }
+
+      if (d.signOffs && d.signOffs.length) {
+        out.push(mSection('Sign-Off'));
+        out.push('<div class="modal-signoff-table">');
+        d.signOffs.forEach(s => {
+          out.push(
+            '<div class="modal-signoff-row">' +
+              '<span class="modal-sig-name">'     + esc(s.name     || '—') + '</span>' +
+              '<span class="modal-sig-initials">' + esc(s.initials || '')  + '</span>' +
+              '<span class="modal-sig-date">'     + esc(s.date     || '')  + '</span>' +
+            '</div>'
+          );
+        });
+        out.push('</div>');
+      }
+    }
+
     return out.join('');
   }
 
@@ -385,6 +494,8 @@
       buildJSHAPDF(d).save(pdfFilename('HazardAssessment', d));
     } else if (rec.type === 'nearmiss') {
       buildNearMissPDF(d).save(nmPdfFilename(d));
+    } else if (rec.type === 'incident') {
+      buildIncidentPDF(d).save(incPdfFilename(d));
     }
   }
 
@@ -394,6 +505,94 @@
     const parts = ['Fraxinus', 'NearMiss', dt];
     if (proj) parts.push(proj);
     return parts.join('_') + '.pdf';
+  }
+
+  function incPdfFilename(d) {
+    const dt   = (d.datetime || '').slice(0, 10) || new Date().toISOString().slice(0, 10);
+    const proj = (d.project || '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+    const parts = ['Fraxinus', 'Incident', dt];
+    if (proj) parts.push(proj);
+    return parts.join('_') + '.pdf';
+  }
+
+  function buildIncidentPDF(d) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'letter' });
+    const ctx = pdfCtx(doc, [123, 36, 28]);
+
+    ctx.docHeader('Incident Report');
+
+    ctx.section('Incident Details');
+    ctx.field('Date & Time',         d.datetime ? d.datetime.replace('T', '  ') : '');
+    ctx.field('Project Name / No.',  d.project);
+    ctx.field('Site / Location',     d.site);
+    ctx.field('GPS Coordinates',     d.gps);
+    ctx.field('Incident Type',       d.type);
+    ctx.field('Reported By',         d.reporter);
+    ctx.field('Supervisor / Lead',   d.supervisor);
+
+    if (d.persons && d.persons.length) {
+      ctx.section('Person(s) Involved');
+      ctx.personsTable(d.persons);
+    }
+
+    ctx.section('Incident Description');
+    ctx.field('Activity at Time',    d.activity);
+    ctx.field('What Happened',       d.description);
+    ctx.field('Conditions at Time',  d.conditions);
+
+    const hasInjury = d.injuryNature || d.bodyPart || d.medicalTreatment || d.wcbReportable;
+    if (hasInjury) {
+      ctx.section('Injury / Illness Details');
+      ctx.field('Nature of Injury',  d.injuryNature);
+      ctx.field('Body Part(s)',       d.bodyPart);
+      ctx.field('Medical Treatment',  d.medicalTreatment);
+      ctx.field('WorkSafe BC',        d.wcbReportable);
+    }
+
+    if (d.damageDesc || d.damageCost) {
+      ctx.section('Property / Equipment Damage');
+      ctx.field('Description',        d.damageDesc);
+      ctx.field('Estimated Cost',     d.damageCost);
+    }
+
+    const factors = d.factors || {};
+    const allFactors = [...(factors.env||[]), ...(factors.human||[]), ...(factors.equip||[]), ...(factors.org||[])];
+    if (allFactors.length) {
+      ctx.section('Contributing Factors');
+      if (factors.env   && factors.env.length)   ctx.bulletGroup('Environmental',  factors.env);
+      if (factors.human && factors.human.length) ctx.bulletGroup('Human Factors',  factors.human);
+      if (factors.equip && factors.equip.length) ctx.bulletGroup('Equipment',      factors.equip);
+      if (factors.org   && factors.org.length)   ctx.bulletGroup('Organizational', factors.org);
+    }
+
+    if (d.witnesses && d.witnesses.length) {
+      ctx.section('Witnesses');
+      ctx.witnessTable(d.witnesses);
+    }
+
+    if (d.immediateActions) {
+      ctx.section('Immediate Actions Taken');
+      ctx.field('', d.immediateActions);
+    }
+
+    if (d.correctiveActions && d.correctiveActions.length) {
+      ctx.section('Corrective / Preventive Actions');
+      ctx.correctiveTable(d.correctiveActions);
+    }
+
+    if (d.additionalNotes) {
+      ctx.section('Additional Notes');
+      ctx.field('', d.additionalNotes);
+    }
+
+    if (d.signOffs && d.signOffs.length) {
+      ctx.section('Sign-Off');
+      ctx.signoffTable(d.signOffs);
+    }
+
+    ctx.pageFooters();
+    return doc;
   }
 
   function buildToolboxPDF(d) {
@@ -547,13 +746,14 @@
     return doc;
   }
 
-  function pdfCtx(doc) {
+  function pdfCtx(doc, ruleColor) {
     const W  = doc.internal.pageSize.getWidth();
     const H  = doc.internal.pageSize.getHeight();
     const ML = 15, MR = 15, MB = 20;
     const CW = W - ML - MR;
 
     const ORANGE = [232, 115,  26];
+    const RULE   = ruleColor || ORANGE;
     const DARK   = [ 28,  26,  22];
     const DGRAY  = [107, 100,  87];
     const LGRAY  = [200, 195, 188];
@@ -564,6 +764,35 @@
 
     function guard(need) {
       if (y + need > H - MB) { doc.addPage(); y = 15; }
+    }
+
+    function simpleTable(hdrs, colWidths, rows, cellFn) {
+      guard(10);
+      doc.setFillColor(...BGRAY);
+      doc.rect(ML, y - 4, CW, 6, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...DARK);
+      let x = ML;
+      hdrs.forEach((h, i) => { doc.text(h, x + 2, y); x += colWidths[i]; });
+      doc.setDrawColor(...LGRAY);
+      doc.setLineWidth(0.25);
+      doc.line(ML, y + 2, ML + CW, y + 2);
+      y += 6;
+      rows.forEach(r => {
+        guard(7);
+        x = ML;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(...DARK);
+        cellFn(r, colWidths, x);
+        y += 6;
+        doc.setDrawColor(...LGRAY);
+        doc.setLineWidth(0.15);
+        doc.line(ML, y, ML + CW, y);
+        y += 1;
+      });
+      y += 2;
     }
 
     return {
@@ -580,7 +809,7 @@
         doc.text(formTitle, ML, y);
         y += 5;
 
-        doc.setDrawColor(...ORANGE);
+        doc.setDrawColor(...RULE);
         doc.setLineWidth(0.6);
         doc.line(ML, y, W - MR, y);
         y += 9;
@@ -731,6 +960,31 @@
           y += 5;
         });
         y += 1;
+      },
+
+      personsTable(rows) {
+        const cols = [CW * 0.28, CW * 0.22, CW * 0.22, CW * 0.28];
+        simpleTable(
+          ['Name', 'Job Title / Role', 'Company', 'Contact'], cols, rows,
+          (r, c, x0) => {
+            let x = x0;
+            doc.text(r.name     || '—', x + 2, y); x += c[0];
+            doc.text(r.jobTitle || '—', x + 2, y); x += c[1];
+            doc.text(r.company  || '—', x + 2, y); x += c[2];
+            doc.text(r.contact  || '—', x + 2, y);
+          }
+        );
+      },
+
+      witnessTable(rows) {
+        const cols = [CW * 0.55, CW * 0.45];
+        simpleTable(
+          ['Name', 'Contact'], cols, rows,
+          (r, c, x0) => {
+            doc.text(r.name    || '—', x0 + 2,      y);
+            doc.text(r.contact || '—', x0 + c[0] + 2, y);
+          }
+        );
       },
 
       correctiveTable(rows) {
