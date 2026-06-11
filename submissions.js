@@ -12,8 +12,9 @@
   // ── Type metadata ────────────────────────────────────────────
 
   const TYPE_META = {
-    toolbox: { label: 'Toolbox Talk',      badge: 'badge-toolbox' },
-    jsha:    { label: 'Hazard Assessment', badge: 'badge-jsha'    },
+    toolbox:  { label: 'Toolbox Talk',      badge: 'badge-toolbox'  },
+    jsha:     { label: 'Hazard Assessment', badge: 'badge-jsha'     },
+    nearmiss: { label: 'Near-Miss Report',  badge: 'badge-nearmiss' },
   };
 
   // ── Utilities ────────────────────────────────────────────────
@@ -27,9 +28,10 @@
   }
 
   function recordDate(rec) {
-    return (rec.data && rec.data.date) ? rec.data.date
-         : rec.date                    ? rec.date.slice(0, 10)
-         : '—';
+    const d = rec.data || {};
+    if (d.date)     return d.date;
+    if (d.datetime) return d.datetime.slice(0, 10);
+    return rec.date ? rec.date.slice(0, 10) : '—';
   }
 
   function byTimestampDesc(a, b) { return b.id - a.id; }
@@ -48,8 +50,9 @@
       return;
     }
 
-    const toolbox = all.filter(r => r.type === 'toolbox').sort(byTimestampDesc);
-    const jsha    = all.filter(r => r.type === 'jsha').sort(byTimestampDesc);
+    const toolbox  = all.filter(r => r.type === 'toolbox').sort(byTimestampDesc);
+    const jsha     = all.filter(r => r.type === 'jsha').sort(byTimestampDesc);
+    const nearmiss = all.filter(r => r.type === 'nearmiss').sort(byTimestampDesc);
 
     content.innerHTML = '';
 
@@ -58,8 +61,9 @@
       return;
     }
 
-    if (toolbox.length) renderGroup('Toolbox Talks', toolbox);
-    if (jsha.length)    renderGroup('Hazard Assessments', jsha);
+    if (toolbox.length)  renderGroup('Toolbox Talks', toolbox);
+    if (jsha.length)     renderGroup('Hazard Assessments', jsha);
+    if (nearmiss.length) renderGroup('Near-Miss Reports', nearmiss);
   }
 
   function renderEmpty() {
@@ -95,7 +99,7 @@
 
     const card = document.createElement('article');
     card.className = 'sub-card';
-    const editBtnHTML = (rec.type === 'toolbox' || rec.type === 'jsha')
+    const editBtnHTML = (rec.type === 'toolbox' || rec.type === 'jsha' || rec.type === 'nearmiss')
       ? '<button class="sub-btn sub-btn-edit" aria-label="Edit submission">Edit</button>'
       : '';
 
@@ -124,6 +128,12 @@
       card.querySelector('.sub-btn-edit').addEventListener('click', () => {
         document.querySelector('[data-tab="hazard"]').click();
         if (window.JSHAForm) window.JSHAForm.loadForEdit(rec);
+      });
+    }
+    if (rec.type === 'nearmiss') {
+      card.querySelector('.sub-btn-edit').addEventListener('click', () => {
+        document.querySelector('[data-tab="nearmiss"]').click();
+        if (window.NearMissForm) window.NearMissForm.loadForEdit(rec);
       });
     }
     card.querySelector('.sub-btn-view')  .addEventListener('click', () => openModal(rec));
@@ -263,6 +273,70 @@
       out.push('<p class="modal-comments">' + esc(d.comments) + '</p>');
     }
 
+    // Near-miss specific sections
+    if (rec.type === 'nearmiss') {
+      out.push(mField('Date & Time',       d.datetime ? d.datetime.replace('T', '  ') : ''));
+      out.push(mField('Reported By',       d.reporter));
+      out.push(mField('Supervisor / Lead', d.supervisor));
+
+      out.push(mSection('Incident Description'));
+      out.push(mField('Near-Miss Type',    d.type));
+      out.push(mField('Activity at Time',  d.activity));
+      out.push(mField('What Happened',     d.description,   true));
+      out.push(mField('Conditions',        d.conditions,    true));
+
+      out.push(mSection('Potential Consequences'));
+      out.push(mField('Potential Severity', d.severity));
+      out.push(mField('Potential Harm',     d.potentialHarm, true));
+
+      const factors = d.factors || {};
+      const allFactors = [
+        ...(factors.env   || []),
+        ...(factors.human || []),
+        ...(factors.equip || []),
+        ...(factors.org   || []),
+      ];
+      if (allFactors.length) {
+        out.push(mSection('Contributing Factors'));
+        out.push('<ul class="modal-ppe-list">' + allFactors.map(f => '<li>' + esc(f) + '</li>').join('') + '</ul>');
+      }
+
+      if (d.immediateActions) {
+        out.push(mSection('Immediate Actions'));
+        out.push('<p class="modal-comments">' + esc(d.immediateActions) + '</p>');
+      }
+
+      if (d.correctiveActions && d.correctiveActions.length) {
+        out.push(mSection('Corrective / Preventive Actions'));
+        out.push('<div class="modal-signoff-table">');
+        d.correctiveActions.forEach(c => {
+          out.push(
+            '<div class="modal-signoff-row">' +
+              '<span class="modal-sig-name">'     + esc(c.action      || '—') + '</span>' +
+              '<span class="modal-sig-initials">' + esc(c.responsible || '')  + '</span>' +
+              '<span class="modal-sig-date">'     + esc(c.targetDate  || '')  + '</span>' +
+            '</div>'
+          );
+        });
+        out.push('</div>');
+      }
+
+      if (d.signOffs && d.signOffs.length) {
+        out.push(mSection('Sign-Off'));
+        out.push('<div class="modal-signoff-table">');
+        d.signOffs.forEach(s => {
+          out.push(
+            '<div class="modal-signoff-row">' +
+              '<span class="modal-sig-name">'     + esc(s.name     || '—') + '</span>' +
+              '<span class="modal-sig-initials">' + esc(s.initials || '')  + '</span>' +
+              '<span class="modal-sig-date">'     + esc(s.date     || '')  + '</span>' +
+            '</div>'
+          );
+        });
+        out.push('</div>');
+      }
+    }
+
     return out.join('');
   }
 
@@ -304,7 +378,17 @@
       buildToolboxPDF(d).save(pdfFilename('ToolboxTalk', d));
     } else if (rec.type === 'jsha') {
       buildJSHAPDF(d).save(pdfFilename('HazardAssessment', d));
+    } else if (rec.type === 'nearmiss') {
+      buildNearMissPDF(d).save(nmPdfFilename(d));
     }
+  }
+
+  function nmPdfFilename(d) {
+    const dt   = (d.datetime || '').slice(0, 10) || new Date().toISOString().slice(0, 10);
+    const proj = (d.project || '').replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '').slice(0, 30);
+    const parts = ['Fraxinus', 'NearMiss', dt];
+    if (proj) parts.push(proj);
+    return parts.join('_') + '.pdf';
   }
 
   function buildToolboxPDF(d) {
@@ -388,6 +472,65 @@
     if (d.externalSignOns && d.externalSignOns.length) {
       ctx.section('External / Contractor Sign-On');
       ctx.extSignonTable(d.externalSignOns);
+    }
+
+    ctx.pageFooters();
+    return doc;
+  }
+
+  function buildNearMissPDF(d) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'letter' });
+    const ctx = pdfCtx(doc);
+
+    ctx.docHeader('Near-Miss Report');
+
+    ctx.section('Incident Details');
+    ctx.field('Date & Time',         d.datetime ? d.datetime.replace('T', '  ') : '');
+    ctx.field('Project Name / No.',  d.project);
+    ctx.field('Site / Location',     d.site);
+    ctx.field('GPS Coordinates',     d.gps);
+    ctx.field('Reported By',         d.reporter);
+    ctx.field('Supervisor / Lead',   d.supervisor);
+
+    ctx.section('Incident Description');
+    ctx.field('Near-Miss Type',      d.type);
+    ctx.field('Activity at Time',    d.activity);
+    ctx.field('What Happened',       d.description);
+    ctx.field('Conditions at Time',  d.conditions);
+
+    ctx.section('Potential Consequences');
+    ctx.field('Potential Severity',  d.severity);
+    ctx.field('Potential Harm',      d.potentialHarm);
+
+    const factors = d.factors || {};
+    const allFactors = [
+      ...(factors.env   || []),
+      ...(factors.human || []),
+      ...(factors.equip || []),
+      ...(factors.org   || []),
+    ];
+    if (allFactors.length) {
+      ctx.section('Contributing Factors');
+      if (factors.env   && factors.env.length)   ctx.bulletGroup('Environmental',  factors.env);
+      if (factors.human && factors.human.length) ctx.bulletGroup('Human Factors',  factors.human);
+      if (factors.equip && factors.equip.length) ctx.bulletGroup('Equipment',      factors.equip);
+      if (factors.org   && factors.org.length)   ctx.bulletGroup('Organizational', factors.org);
+    }
+
+    if (d.immediateActions) {
+      ctx.section('Immediate Actions Taken');
+      ctx.field('', d.immediateActions);
+    }
+
+    if (d.correctiveActions && d.correctiveActions.length) {
+      ctx.section('Corrective / Preventive Actions');
+      ctx.correctiveTable(d.correctiveActions);
+    }
+
+    if (d.signOffs && d.signOffs.length) {
+      ctx.section('Sign-Off');
+      ctx.signoffTable(d.signOffs);
     }
 
     ctx.pageFooters();
@@ -559,6 +702,62 @@
           if (col >= 3) { col = 0; y += 10; }
         });
         if (col > 0) y += 10;
+        y += 2;
+      },
+
+      bulletGroup(groupLabel, items) {
+        guard(8);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(...DGRAY);
+        doc.text(groupLabel, ML + 2, y);
+        y += 5;
+        items.forEach(item => {
+          guard(5);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8.5);
+          doc.setTextColor(...DARK);
+          doc.text('•  ' + item, ML + 6, y);
+          y += 5;
+        });
+        y += 1;
+      },
+
+      correctiveTable(rows) {
+        const cols = [CW * 0.48, CW * 0.32, CW * 0.20];
+        const hdrs = ['Action Required', 'Responsible', 'Target Date'];
+        guard(10);
+
+        doc.setFillColor(...BGRAY);
+        doc.rect(ML, y - 4, CW, 6, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(...DARK);
+        let x = ML;
+        hdrs.forEach((h, i) => { doc.text(h, x + 2, y); x += cols[i]; });
+        doc.setDrawColor(...LGRAY);
+        doc.setLineWidth(0.25);
+        doc.line(ML, y + 2, ML + CW, y + 2);
+        y += 6;
+
+        rows.forEach(r => {
+          const actionLines = doc.splitTextToSize(r.action || '—', cols[0] - 4);
+          const rowH = Math.max(actionLines.length * 5, 6);
+          guard(rowH + 2);
+          x = ML;
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8.5);
+          doc.setTextColor(...DARK);
+          doc.text(actionLines, x + 2, y);               x += cols[0];
+          doc.text(r.responsible || '—', x + 2, y);      x += cols[1];
+          doc.text(r.targetDate  || '—', x + 2, y);
+          y += rowH;
+          doc.setDrawColor(...LGRAY);
+          doc.setLineWidth(0.15);
+          doc.line(ML, y, ML + CW, y);
+          y += 1;
+        });
+
         y += 2;
       },
 
